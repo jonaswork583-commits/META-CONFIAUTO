@@ -1,0 +1,8 @@
+{
+  "name": "Remix: Remix: AEG Media | Confiauto Performance",
+  "description": "Relatório de performance de tráfego pago para Confiauto Proteção Veicular - Fase de Testes",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
