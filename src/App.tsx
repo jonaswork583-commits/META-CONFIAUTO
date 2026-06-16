@@ -18,7 +18,9 @@ import {
   ArrowDownRight,
   MapPin,
   Calendar,
-  Search
+  Search,
+  Filter,
+  Layers
 } from 'lucide-react';
 import { 
   ComposedChart, 
@@ -53,7 +55,7 @@ const SlideWrapper = ({ children, slideKey }: { children: React.ReactNode; slide
 
 export default function App() {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const totalSlides = 8; // Capa Meta + 6 Campanhas Meta + 1 Pareto
+  const totalSlides = 9; // Capa Meta + 6 Campanhas Meta + 1 Pareto + Funil Consolidado de Vendas
 
   const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % totalSlides);
   const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
@@ -576,11 +578,187 @@ export default function App() {
                     </div>
                   </div>
 
+                </div>
 
+              </div>
+            </div>
+          )}
+
+          {/* SLIDE 8: FUNIL CONSOLIDADO DE VENDAS */}
+          {currentSlide === 8 && (
+            <div className="w-full max-w-4xl px-4 flex flex-col justify-center gap-6 animate-fade-in select-none py-2" id="slide-8-funnel">
+              
+              {/* Header do Slide */}
+              <div className="flex flex-col sm:flex-row justify-between sm:items-end gap-3 border-b border-white/5 pb-4">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="px-2 sm:px-2.5 py-0.5 rounded text-[8px] sm:text-[9px] font-black tracking-widest uppercase bg-brand-cyan/10 text-brand-cyan border border-brand-cyan/20">
+                      MARCO HISTÓRICO • JUNHO ACUMULADO
+                    </span>
+                    <span className="text-white/40 text-[9px] font-mono tracking-wider">
+                      Slide 8 de {totalSlides - 1} • Funil de Marketing Integrado
+                    </span>
+                  </div>
+                  <h2 className="text-2xl md:text-3xl font-black italic uppercase tracking-tighter text-white font-display mt-2 sm:mt-2.5">
+                    FUNIL CONSOLIDADO DE VENDAS
+                  </h2>
+                  <p className="text-white/40 text-[10px] md:text-sm tracking-wide font-medium mt-1 uppercase font-mono">
+                    Estrutura Completa de Conversão (01 a 15 de Junho)
+                  </p>
+                </div>
+
+                {/* Valor investido destacado no topo do slide */}
+                <div className="bg-brand-cyan/10 border border-brand-cyan/30 rounded-xl px-5 py-2.5 flex flex-col justify-center items-end shrink-0 relative overflow-hidden shadow-[0_0_15px_rgba(34,211,238,0.05)] text-right">
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-brand-cyan/15 blur-2xl rounded-full pointer-events-none" />
+                  <span className="text-[8px] text-brand-cyan font-black uppercase tracking-[0.15em] relative z-10 block">INVESTIMENTO TOTAL DO MÊS</span>
+                  <span className="text-xl font-black text-white cyan-glow font-mono mt-0.5 relative z-10 leading-none">R$ 66.373,00</span>
+                </div>
+              </div>
+
+              {/* Corpo Principal: Lado Esquerdo Grafico do Funil / Lado Direito Comentários de Performance */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center w-full">
+                
+                {/* LADO ESQUERDO: O DESENHO DO FUNIL */}
+                <div className="lg:col-span-7 flex flex-col items-center justify-center py-2 relative">
+                  
+                  {/* ETAPA 1: ALCANCE - TOPO DO FUNIL */}
+                  <div className="w-full max-w-[460px] relative transition-all hover:scale-[1.01] duration-300">
+                    <div className="absolute inset-0 bg-gradient-to-r from-brand-cyan/20 via-brand-cyan/5 to-brand-cyan/20 rounded-2xl border-t border-x border-brand-cyan/30 blur-sm pointer-events-none" />
+                    <div className="relative bg-[#0d121c]/80 border border-brand-cyan/30 rounded-2xl p-4 md:py-5 md:px-6 shadow-[0_4px_30px_rgba(0,0,0,0.5)] overflow-hidden">
+                      <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-brand-cyan/60 to-transparent" />
+                      
+                      <div className="flex justify-between items-center relative z-10">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-xl bg-brand-cyan/10 border border-brand-cyan/20 flex items-center justify-center text-brand-cyan shrink-0">
+                            <Layers size={18} />
+                          </div>
+                          <div>
+                            <span className="text-[10px] text-brand-cyan font-mono font-black uppercase tracking-wider block">TOPO DO FUNIL</span>
+                            <h3 className="text-sm font-bold text-white uppercase tracking-tight">Alcance & Impressões</h3>
+                          </div>
+                        </div>
+
+                        <div className="text-right">
+                          <span className="text-[8px] text-white/30 uppercase font-mono block">Mês Completo</span>
+                          <span className="text-2xl font-black font-mono text-white tracking-tight cyan-glow">671.724</span>
+                          <span className="text-[9px] text-white/50 block font-medium -mt-1">Pessoas</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Transition Indicator 1 */}
+                  <div className="my-1.5 flex flex-col items-center relative z-20">
+                    <div className="w-[1.5px] h-6 bg-gradient-to-b from-brand-cyan/50 to-brand-cyan/10 animate-pulse" />
+                    <span className="absolute text-[8px] font-mono font-bold text-brand-cyan/60 bg-[#07090e] px-1.5 py-0.5 rounded-full border border-brand-cyan/10 -translate-y-0.5">
+                      Atração para o Perfil
+                    </span>
+                  </div>
+
+                  {/* ETAPA 2: TRÁFEGO PARA PERFIL - MEIO DO FUNIL */}
+                  <div className="w-full max-w-[370px] relative transition-all hover:scale-[1.01] duration-300">
+                    <div className="absolute inset-0 bg-gradient-to-r from-brand-cyan/15 via-transparent to-brand-cyan/15 rounded-2xl border-t border-x border-brand-cyan/20 blur-xs pointer-events-none" />
+                    <div className="relative bg-[#0b0e15]/90 border border-brand-cyan/20 rounded-2xl p-3.5 md:py-4.5 md:px-5 shadow-[0_4px_30px_rgba(0,0,0,0.6)]">
+                      
+                      <div className="flex justify-between items-center relative z-10">
+                        <div className="flex items-center gap-3">
+                          <div className="w-9 h-9 rounded-xl bg-brand-cyan/5 border border-brand-cyan/15 flex items-center justify-center text-brand-cyan shrink-0">
+                            <Users size={16} />
+                          </div>
+                          <div>
+                            <span className="text-[9px] text-white/50 font-mono font-black uppercase tracking-wider block">MEIO DO FUNIL</span>
+                            <h3 className="text-xs sm:text-sm font-bold text-white/90 uppercase tracking-tight">Tráfego de Perfil</h3>
+                          </div>
+                        </div>
+
+                        <div className="text-right">
+                          <span className="text-[8px] text-white/30 uppercase font-mono block">Volume Ativo</span>
+                          <span className="text-xl font-black font-mono text-brand-cyan">2.432</span>
+                          <span className="text-[8px] text-brand-cyan/70 block font-medium">Visitas</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Transition Indicator 2 */}
+                  <div className="my-1.5 flex flex-col items-center relative z-20">
+                    <div className="w-[1.5px] h-6 bg-gradient-to-b from-brand-cyan/40 to-brand-cyan/10" />
+                    <span className="absolute text-[8px] font-mono font-black text-brand-cyan bg-[#07090e] px-2 py-0.5 rounded-full border border-brand-cyan/30 -translate-y-0.5 shadow-[0_0_10px_rgba(34,211,238,0.1)] animate-pulse">
+                      23,85% Conversão Final
+                    </span>
+                  </div>
+
+                  {/* ETAPA 3: CONVERSÃO - BASE DO FUNIL */}
+                  <div className="w-full max-w-[280px] relative transition-all hover:scale-[1.01] duration-300">
+                    <div className="absolute inset-0 bg-brand-cyan/10 blur-xl rounded-2xl opacity-40 pointer-events-none" />
+                    <div className="relative bg-brand-cyan/[0.04] border-2 border-brand-cyan/50 rounded-2xl p-4 shadow-[0_10px_40px_rgba(34,211,238,0.1)] overflow-hidden">
+                      <div className="absolute -right-16 -bottom-16 w-32 h-32 bg-brand-cyan/10 blur-2xl rounded-full pointer-events-none" />
+                      
+                      <div className="flex justify-between items-center relative z-10">
+                        <div className="flex items-center gap-2.5">
+                          <div className="w-10 h-10 rounded-xl bg-brand-cyan/15 border border-brand-cyan/30 flex items-center justify-center text-brand-cyan shrink-0 animate-bounce">
+                            <Target size={20} />
+                          </div>
+                          <div>
+                            <span className="text-[10px] text-brand-cyan font-mono font-black uppercase tracking-wider block">BASE DO FUNIL</span>
+                            <h3 className="text-xs sm:text-sm font-black text-white uppercase tracking-tight">Conversão</h3>
+                          </div>
+                        </div>
+
+                        <div className="text-right">
+                          <span className="text-[8px] text-white/40 uppercase font-mono block font-black">Meta de Leads</span>
+                          <span className="text-2xl sm:text-3xl font-black font-mono text-brand-cyan cyan-glow">580</span>
+                          <span className="text-[10px] text-brand-cyan font-black block -mt-1 font-sans">Leads Gerados</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
+                {/* LADO DIREITO: COMENTÁRIOS E INSIGHTS EXECUTIVOS */}
+                <div className="lg:col-span-12 xl:col-span-5 flex flex-col gap-4">
+                  
+                  {/* Card 1: Eficiência do Funil */}
+                  <div className="bg-white/[0.010] border border-white/5 rounded-2xl p-5 hover:border-brand-cyan/15 transition-all duration-300">
+                    <div className="flex items-center gap-2.5 mb-3">
+                      <TrendingUp size={18} className="text-brand-cyan" />
+                      <h4 className="text-xs font-black uppercase tracking-widest text-white">Eficiência Comercial</h4>
+                    </div>
+                    <ul className="space-y-3">
+                      <li className="flex justify-between items-start text-xs border-b border-white/[0.02] pb-2">
+                        <span className="text-white/40 font-mono">Custo Médio / Lead:</span>
+                        <span className="font-bold font-mono text-brand-cyan">R$ 114,44</span>
+                      </li>
+                      <li className="flex justify-between items-start text-xs border-b border-white/[0.02] pb-2">
+                        <span className="text-white/40 font-mono">Taxa de Conversão:</span>
+                        <span className="font-bold font-mono text-emerald-400">23,85%</span>
+                      </li>
+                      <li className="flex justify-between items-start text-xs">
+                        <span className="text-white/40 font-mono">Custo por Visita Perfil:</span>
+                        <span className="font-bold font-mono text-white/90">R$ 27,29</span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  {/* Card 2: Diretriz Estratégica */}
+                  <div className="bg-white/[0.010] border border-white/5 rounded-2xl p-5 hover:border-[#ffffff10] transition-all duration-300">
+                    <div className="flex items-center gap-2.5 mb-2 border-b border-white/5 pb-2">
+                      <Filter size={16} className="text-white/50" />
+                      <h4 className="text-xs font-black uppercase tracking-widest text-white/80">Comentário Analítico</h4>
+                    </div>
+                    <p className="text-[11px] leading-relaxed text-white/60">
+                      O aporte financeiro estratégico de <span className="text-white font-mono font-bold">R$ 66.373,00</span> gerou um impacto expressivo, somando mais de <span className="text-white font-bold">671.724 impressões qualificadas</span> (alcance amplo no topo).
+                    </p>
+                    <p className="text-[11px] leading-relaxed text-white/60 mt-1.5">
+                      No nível médio de consideração, registramos <span className="text-brand-cyan font-bold">2.432 visitas no perfil</span>. A base converteu com alta eficiência, resultando no volume histórico consolidado de <span className="text-brand-cyan font-mono font-bold">580 leads qualificados gerados</span> para a Confiauto até o dia 15 deste mês.
+                    </p>
+                  </div>
 
                 </div>
 
               </div>
+              
             </div>
           )}
 
