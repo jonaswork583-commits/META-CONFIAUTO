@@ -29,47 +29,35 @@ export interface CampaignData {
   unitLabel: string; // "CPL", "CPV", "CPM"
   week1: MetricSet;
   week2: MetricSet;
-  week2Bases?: BaseDetail[]; // Detailed bases specifically for Contratação
+  week3: MetricSet;
+  week1Bases?: BaseDetail[]; // Detailed bases specifically for Contratação in Semana 2
 }
 
 export const PERFORMANCE_DATA = {
   client: "Confiauto Proteção Veicular",
-  period: "01 a 15 de Junho de 2026",
+  period: "01 a 22 de Junho de 2026",
   campaigns: [
     {
       id: "lp_original",
-      name: "Campanha LP Original (LPA)",
+      name: "Campanha LP A",
       objective: "Geração de Leads Qualificados na LP Principal",
       tag: "Líder de Conversões",
       metricLabel: "Leads",
       unitLabel: "CPL",
       week1: {
-        investment: 12770.76,
-        leads: 138,
-        cpl: 92.54
+        investment: 15713.00,
+        leads: 160,
+        cpl: 98.21
       },
       week2: {
-        investment: 16994.51,
-        leads: 174,
-        cpl: 97.38
-      }
-    },
-    {
-      id: "lp_b",
-      name: "Campanha LP B",
-      objective: "Geração de Leads na Landing Page B (Teste de Funil)",
-      tag: "Ambiente de Teste A/B",
-      metricLabel: "Leads",
-      unitLabel: "CPL",
-      week1: {
-        investment: 2942.24,
-        leads: 22,
-        cpl: 133.73
+        investment: 19767.70,
+        leads: 192,
+        cpl: 102.96
       },
-      week2: {
-        investment: 2773.19,
-        leads: 18,
-        cpl: 154.07
+      week3: {
+        investment: 13442.86,
+        leads: 148,
+        cpl: 90.83
       }
     },
     {
@@ -82,12 +70,17 @@ export const PERFORMANCE_DATA = {
       week1: {
         investment: 5764.96,
         leads: 23,
-        cpl: 250.60
+        cpl: 250.6
       },
       week2: {
         investment: 6867.68,
         leads: 81,
         cpl: 82.53
+      },
+      week3: {
+        investment: 13839.89,
+        leads: 269,
+        cpl: 51.45
       }
     },
     {
@@ -107,7 +100,12 @@ export const PERFORMANCE_DATA = {
         leads: 126,
         cpl: 3.82
       },
-      week2Bases: [
+      week3: {
+        investment: 307.68,
+        leads: 80,
+        cpl: 3.85
+      },
+      week1Bases: [
         {
           name: "Base Cachoeiro",
           investment: 73.26,
@@ -144,6 +142,11 @@ export const PERFORMANCE_DATA = {
         investment: 693.85,
         visits: 561,
         cpv: 1.24
+      },
+      week3: {
+        investment: 724.06,
+        visits: 1980,
+        cpv: 0.37
       }
     },
     {
@@ -154,14 +157,19 @@ export const PERFORMANCE_DATA = {
       metricLabel: "Pessoas Alcançadas",
       unitLabel: "CPM",
       week1: {
-        investment: 1128.80,
+        investment: 1128.8,
         reach: 491540,
-        cpm: 2.30
+        cpm: 2.3
       },
       week2: {
         investment: 1073.39,
         reach: 180184,
         cpm: 5.96
+      },
+      week3: {
+        investment: 1149.26,
+        reach: 210140,
+        cpm: 5.47
       }
     }
   ] as CampaignData[]
