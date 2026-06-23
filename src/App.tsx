@@ -56,6 +56,45 @@ const SlideWrapper = ({ children, slideKey }: { children: React.ReactNode; slide
 export default function App() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [funnelWeek, setFunnelWeek] = useState<'week1' | 'week2' | 'week3'>('week3');
+  const [funnelSource, setFunnelSource] = useState<'consolidated' | 'meta' | 'google'>('consolidated');
+
+  const unifiedFunnelData = {
+    consolidated: {
+      label: "Formatos Unificados (Meta + Google)",
+      investment: 113221.59,
+      reach: 1261198,
+      clicks: 69328,
+      visits: 9518,
+      leads: 1162,
+      ctr: "5.50%",
+      loadingRate: "13.73%",
+      conversionRate: "12.21%"
+    },
+    meta: {
+      label: "Meta Ads unicamente",
+      investment: 89474.60,
+      reach: 1222764,
+      clicks: 66029,
+      visits: 9415,
+      leads: 951,
+      ctr: "5.40%",
+      loadingRate: "14.26%",
+      conversionRate: "10.10%"
+    },
+    google: {
+      label: "Google Ads unicamente",
+      investment: 23746.99,
+      reach: 38434,
+      clicks: 3299,
+      visits: 103,
+      leads: 211,
+      ctr: "8.58%",
+      loadingRate: "3.12%",
+      conversionRate: "204.85%"
+    }
+  };
+
+  const selectedUnified = unifiedFunnelData[funnelSource];
 
   const funnelData = {
     week1: {
@@ -685,45 +724,45 @@ export default function App() {
                 <div>
                   <div className="flex items-center gap-2">
                     <span className="px-2 sm:px-2.5 py-0.5 rounded text-[8px] sm:text-[9px] font-black tracking-widest uppercase bg-brand-cyan/10 text-brand-cyan border border-brand-cyan/20">
-                      DESEMPENHO SEMANAL • FUNIL INTEGRADO
+                      DESEMPENHO TOTAL • FUNIL DE TRÁFEGO UNIFICADO
                     </span>
                     <span className="text-white/40 text-[9px] font-mono tracking-wider">
-                      Slide {currentSlide} de {totalSlides - 1} • Funil de Marketing Integrado
+                      Slide {currentSlide} de {totalSlides - 1} • Funil de Tráfego Integrado
                     </span>
                   </div>
                   <h2 className="text-2xl md:text-3xl font-black italic uppercase tracking-tighter text-white font-display mt-2 sm:mt-2.5">
-                    FUNIL CONSOLIDADO DE TRÁFEGO
+                    FUNIL DE TRÁFEGO UNIFICADO
                   </h2>
                   <p className="text-white/40 text-[10px] md:text-xs tracking-wide font-medium mt-1 uppercase font-mono">
-                    Estrutura de Tráfego e Conversão ({selectedFunnel.label})
+                    Consolidação de Métricas ({selectedUnified.label})
                   </p>
                 </div>
 
                 {/* Valor investido destacado no topo do slide */}
-                <div className="bg-brand-cyan/10 border border-brand-cyan/30 rounded-xl px-5 py-2 flex flex-col justify-center items-end shrink-0 relative overflow-hidden shadow-[0_0_15px_rgba(34,211,238,0.05)] text-right" key={funnelWeek + 'inv'}>
+                <div className="bg-brand-cyan/10 border border-brand-cyan/30 rounded-xl px-5 py-2 flex flex-col justify-center items-end shrink-0 relative overflow-hidden shadow-[0_0_15px_rgba(34,211,238,0.05)] text-right" key={funnelSource + 'inv'}>
                   <div className="absolute top-0 right-0 w-24 h-24 bg-brand-cyan/15 blur-2xl rounded-full pointer-events-none" />
                   <span className="text-[8px] text-brand-cyan font-black uppercase tracking-[0.15em] relative z-10 block">INVESTIMENTO NO PERÍODO</span>
                   <span className="text-xl font-black text-white cyan-glow font-mono mt-0.5 relative z-10 leading-none">
-                    R$ {selectedFunnel.investment.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                    R$ {selectedUnified.investment.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                   </span>
-                  <span className="text-[7.5px] text-white/50 block font-medium mt-0.5">Meta Ads Consolidado</span>
+                  <span className="text-[7.5px] text-white/50 block font-medium mt-0.5">Canais Combinados</span>
                 </div>
               </div>
 
-              {/* Segmented Selector for Weeks */}
+              {/* Segmented Selector for Channels */}
               <div className="flex bg-[#0b0e14] border border-white/5 rounded-xl p-1 gap-2 self-start mb-1">
-                {(['week1', 'week2', 'week3'] as const).map((wk, index) => (
+                {(['consolidated', 'meta', 'google'] as const).map((source) => (
                   <button
-                    key={wk}
-                    onClick={() => setFunnelWeek(wk)}
+                    key={source}
+                    onClick={() => setFunnelSource(source)}
                     className={cn(
                       "px-4 py-1.5 rounded-lg text-[10px] font-bold font-mono tracking-wide transition-all uppercase",
-                      funnelWeek === wk
+                      funnelSource === source
                         ? "bg-brand-cyan text-[#07090e] font-black italic shadow-md shadow-brand-cyan/10"
                         : "text-white/40 hover:text-white/80"
                     )}
                   >
-                    Semana {index + 1}
+                    {source === 'consolidated' ? 'Formatos Unificados (Meta + Google)' : source === 'meta' ? 'Meta Ads' : 'Google Ads'}
                   </button>
                 ))}
               </div>
@@ -732,7 +771,7 @@ export default function App() {
               <div className="flex flex-col items-center justify-center w-full">
                 
                 {/* DESENHO DO FUNIL */}
-                <div className="w-full flex flex-col items-center justify-center py-2 relative" key={funnelWeek}>
+                <div className="w-full flex flex-col items-center justify-center py-2 relative" key={funnelSource}>
                   
                   {/* ETAPA 1: INVESTIMENTO - TOPO REAL DO FUNIL */}
                   <div className="w-full max-w-[460px] relative transition-all hover:scale-[1.01] duration-300">
@@ -741,24 +780,36 @@ export default function App() {
                       <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-brand-cyan/60 to-transparent" />
                       
                       <div className="flex justify-between items-center relative z-10">
-                        <div className="flex items-center gap-2.5">
+                        <div className="flex items-center gap-2.5 font-sans">
                           <div className="w-7 h-7 rounded-md bg-brand-cyan/15 border border-brand-cyan/35 flex items-center justify-center text-brand-cyan shrink-0">
                             <DollarSign size={14} />
                           </div>
                           <div>
-                            <span className="text-[7.5px] text-brand-cyan font-mono font-black uppercase tracking-wider block">01. ENTRADA DO FUNIL</span>
-                            <h3 className="text-xs font-bold text-white uppercase tracking-tight">Investimento Total</h3>
+                            <h3 className="text-xs font-bold text-white uppercase tracking-tight font-sans">Investimento Total</h3>
                           </div>
                         </div>
 
                         <div className="text-right">
-                          <span className="text-[7px] text-white/30 uppercase font-mono block font-bold">Período</span>
+                          <span className="text-[7px] text-white/30 uppercase font-mono block font-bold">Investido</span>
                           <span className="text-lg font-black font-mono text-white tracking-tight cyan-glow">
-                            R$ {selectedFunnel.investment.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                            R$ {selectedUnified.investment.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                           </span>
-                          <span className="text-[7.5px] text-white/50 block font-medium -mt-0.5">Meta Ads Consolidado</span>
+                          <span className="text-[7.5px] text-white/50 block font-medium -mt-0.5">Junho de 2026</span>
                         </div>
                       </div>
+
+                      {funnelSource === 'consolidated' && (
+                        <div className="flex justify-between w-full mt-2 pt-2 border-t border-white/[0.04] text-[8.5px] font-mono text-white/50">
+                          <span className="flex items-center gap-1">
+                            <span className="h-1.5 w-1.5 bg-brand-cyan rounded-full shrink-0" />
+                            Meta Ads: <strong className="text-white/80 font-mono">R$ 89.474,60</strong> (79,0%)
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <span className="h-1.5 w-1.5 bg-emerald-400 rounded-full shrink-0" />
+                            Google Ads: <strong className="text-white/80 font-mono">R$ 23.746,99</strong> (21.0%)
+                          </span>
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -773,24 +824,36 @@ export default function App() {
                     <div className="relative bg-[#0b0e15]/90 border border-brand-cyan/25 rounded-2xl p-2.5 md:py-3 md:px-4.5 shadow-[0_4px_30px_rgba(0,0,0,0.6)]">
                       
                       <div className="flex justify-between items-center relative z-10">
-                        <div className="flex items-center gap-2.5">
+                        <div className="flex items-center gap-2.5 font-sans">
                           <div className="w-7 h-7 rounded-md bg-brand-cyan/10 border border-brand-cyan/20 flex items-center justify-center text-brand-cyan shrink-0">
                             <Users size={14} />
                           </div>
                           <div>
-                            <span className="text-[7.5px] text-white/40 font-mono font-black uppercase tracking-wider block">02. PERFORMANCE BRANDING</span>
-                            <h3 className="text-xs font-bold text-white/90 uppercase tracking-tight">Alcance</h3>
+                            <h3 className="text-xs font-bold text-white/90 uppercase tracking-tight font-sans">Alcance</h3>
                           </div>
                         </div>
 
                         <div className="text-right">
                           <span className="text-[7px] text-white/30 uppercase font-mono block font-bold">Público Único</span>
                           <span className="text-lg font-black font-mono text-brand-cyan">
-                            {selectedFunnel.reach.toLocaleString('pt-BR')}
+                            {selectedUnified.reach.toLocaleString('pt-BR')}
                           </span>
                           <span className="text-[7.5px] text-brand-cyan/70 block font-medium -mt-0.5">Pessoas</span>
                         </div>
                       </div>
+
+                      {funnelSource === 'consolidated' && (
+                        <div className="flex justify-between w-full mt-2 pt-2 border-t border-white/[0.04] text-[8.5px] font-mono text-white/50">
+                          <span className="flex items-center gap-1">
+                            <span className="h-1.5 w-1.5 bg-brand-cyan rounded-full shrink-0" />
+                            Meta: <strong className="text-white/80 font-mono">1.222.764</strong> (97,0%)
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <span className="h-1.5 w-1.5 bg-emerald-400 rounded-full shrink-0" />
+                            Google: <strong className="text-white/80 font-mono">38.434</strong> (3,0%)
+                          </span>
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -798,7 +861,7 @@ export default function App() {
                   <div className="my-[4px] flex flex-col items-center relative z-20">
                     <div className="w-[1.2px] h-3.5 bg-gradient-to-b from-brand-cyan/40 to-brand-cyan/20" />
                     <span className="absolute text-[6.5px] font-mono font-black text-brand-cyan/70 bg-[#07090e] px-1.5 py-[1px] rounded border border-brand-cyan/10 -translate-y-0.5 whitespace-nowrap">
-                      CTR Geral: {selectedFunnel.ctr}
+                      CTR Geral: {selectedUnified.ctr}
                     </span>
                   </div>
 
@@ -808,24 +871,36 @@ export default function App() {
                     <div className="relative bg-[#080a0f]/95 border border-brand-cyan/15 rounded-2xl p-2.5 md:py-3 md:px-4 shadow-[0_4px_30px_rgba(0,0,0,0.6)]">
                       
                       <div className="flex justify-between items-center relative z-10">
-                        <div className="flex items-center gap-2.5">
+                        <div className="flex items-center gap-2.5 font-sans">
                           <div className="w-7 h-7 rounded-md bg-brand-cyan/5 border border-brand-cyan/10 flex items-center justify-center text-brand-cyan shrink-0">
                             <MousePointer2 size={13} className="-rotate-90" />
                           </div>
                           <div>
-                            <span className="text-[7.5px] text-white/40 font-mono font-black uppercase tracking-wider block">03. CLIQUE DE SAÍDA</span>
-                            <h3 className="text-xs font-bold text-white/80 uppercase tracking-tight">Clique no Link</h3>
+                            <h3 className="text-xs font-bold text-white/80 uppercase tracking-tight font-sans">Clique no Link</h3>
                           </div>
                         </div>
 
                         <div className="text-right">
                           <span className="text-[7px] text-white/30 uppercase font-mono block font-bold">Volume</span>
                           <span className="text-base font-black font-mono text-white/90">
-                            {selectedFunnel.clicks.toLocaleString('pt-BR')}
+                            {selectedUnified.clicks.toLocaleString('pt-BR')}
                           </span>
                           <span className="text-[7.5px] text-white/50 block font-medium -mt-0.5 font-sans">Cliques</span>
                         </div>
                       </div>
+
+                      {funnelSource === 'consolidated' && (
+                        <div className="flex justify-between w-full mt-2 pt-2 border-t border-white/[0.04] text-[8.5px] font-mono text-white/50">
+                          <span className="flex items-center gap-1">
+                            <span className="h-1.5 w-1.5 bg-brand-cyan rounded-full shrink-0" />
+                            Meta: <strong className="text-white/80 font-mono">66.029</strong> (CTR: 5,40%)
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <span className="h-1.5 w-1.5 bg-emerald-400 rounded-full shrink-0" />
+                            Google: <strong className="text-white/80 font-mono">3.299</strong> (CTR: 8,58%)
+                          </span>
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -833,7 +908,7 @@ export default function App() {
                   <div className="my-[4px] flex flex-col items-center relative z-20">
                     <div className="w-[1.2px] h-3.5 bg-gradient-to-b from-brand-cyan/30 to-brand-cyan/10" />
                     <span className="absolute text-[6.5px] font-mono font-black text-brand-cyan/70 bg-[#07090e] px-1.5 py-[1px] rounded border border-brand-cyan/10 -translate-y-0.5 whitespace-nowrap">
-                      Tx. Carregamento: {selectedFunnel.loadingRate}
+                      Tx. Carregamento (Loading): {selectedUnified.loadingRate}
                     </span>
                   </div>
 
@@ -843,24 +918,36 @@ export default function App() {
                     <div className="relative bg-[#07090e]/95 border border-brand-cyan/10 rounded-2xl p-2.5 md:py-3 md:px-3 shadow-[0_4px_30px_rgba(0,0,0,0.6)]">
                       
                       <div className="flex justify-between items-center relative z-10">
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 font-sans">
                           <div className="w-6 h-6 rounded-md bg-brand-cyan/5 border border-brand-cyan/10 flex items-center justify-center text-brand-cyan shrink-0">
                             <Layers size={11} />
                           </div>
                           <div>
-                            <span className="text-[7px] text-white/40 font-mono font-black uppercase tracking-wider block">04. FLUXO DESTINO</span>
-                            <h3 className="text-[11px] font-bold text-white/70 uppercase tracking-tight">Vis. Página Destino</h3>
+                            <h3 className="text-[11px] font-bold text-white/70 uppercase tracking-tight font-sans">Page Views</h3>
                           </div>
                         </div>
 
                         <div className="text-right">
-                          <span className="text-[7px] text-white/30 uppercase font-mono block font-bold">Visitas LP</span>
+                          <span className="text-[7px] text-white/30 uppercase font-mono block font-bold">Visualizações</span>
                           <span className="text-sm font-black font-mono text-white/80">
-                            {selectedFunnel.visits.toLocaleString('pt-BR')}
+                            {selectedUnified.visits.toLocaleString('pt-BR')}
                           </span>
-                          <span className="text-[7.5px] text-white/50 block font-medium -mt-0.5 font-sans">Acessos</span>
+                          <span className="text-[7.5px] text-white/50 block font-medium -mt-0.5 font-sans">Visualizações</span>
                         </div>
                       </div>
+
+                      {funnelSource === 'consolidated' && (
+                        <div className="flex justify-between w-full mt-2 pt-2 border-t border-white/[0.04] text-[8.5px] font-mono text-white/50">
+                          <span className="flex items-center gap-1">
+                            <span className="h-1.5 w-1.5 bg-brand-cyan rounded-full shrink-0" />
+                            Meta: <strong className="text-white/80 font-mono">9.415</strong> (Tx: 14,26%)
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <span className="h-1.5 w-1.5 bg-emerald-400 rounded-full shrink-0" />
+                            Google: <strong className="text-white/80 font-mono">103</strong> (Tx: 3,12%)
+                          </span>
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -868,7 +955,7 @@ export default function App() {
                   <div className="my-[4px] flex flex-col items-center relative z-20">
                     <div className="w-[1.2px] h-3.5 bg-gradient-to-b from-brand-cyan/25 to-brand-cyan/10" />
                     <span className="absolute text-[6.5px] font-mono font-black text-emerald-400 bg-[#07090e] px-1.5 py-[1px] rounded border border-emerald-500/10 -translate-y-0.5 whitespace-nowrap">
-                      Conversão LP: {selectedFunnel.conversionRate}
+                      Conversão LP: {selectedUnified.conversionRate}
                     </span>
                   </div>
 
@@ -879,24 +966,36 @@ export default function App() {
                       <div className="absolute -right-12 -bottom-12 w-24 h-24 bg-brand-cyan/10 blur-2xl rounded-full pointer-events-none" />
                       
                       <div className="flex justify-between items-center relative z-10">
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 font-sans">
                           <div className="w-6 h-6 rounded-md bg-[#22d3ee]/[0.15] border border-brand-cyan/[0.35] flex items-center justify-center text-brand-cyan shrink-0 animate-pulse">
                             <Target size={12} />
                           </div>
                           <div>
-                            <span className="text-[7px] text-brand-cyan font-mono font-black uppercase tracking-wider block">05. CADASTRO ATIVO</span>
-                            <h3 className="text-[11px] font-black text-white uppercase tracking-tight">Leads</h3>
+                            <h3 className="text-[11px] font-black text-white uppercase tracking-tight font-sans">Conversões</h3>
                           </div>
                         </div>
 
                         <div className="text-right">
-                          <span className="text-[7px] text-white/40 uppercase font-mono block font-black">Meta</span>
+                          <span className="text-[7px] text-white/40 uppercase font-mono block font-black">Total Leads</span>
                           <span className="text-lg font-black font-mono text-brand-cyan cyan-glow">
-                            {selectedFunnel.leads.toLocaleString('pt-BR')}
+                            {selectedUnified.leads.toLocaleString('pt-BR')}
                           </span>
                           <span className="text-[7.5px] text-brand-cyan font-black block -mt-0.5 font-sans">Leads</span>
                         </div>
                       </div>
+
+                      {funnelSource === 'consolidated' && (
+                        <div className="flex justify-between w-full mt-2 pt-2 border-t border-white/[0.04] text-[8.5px] font-mono text-white/50">
+                          <span className="flex items-center gap-1">
+                            <span className="h-1.5 w-1.5 bg-brand-cyan rounded-full shrink-0" />
+                            Meta: <strong className="text-white/80 font-mono">951</strong> (81,8%)
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <span className="h-1.5 w-1.5 bg-emerald-400 rounded-full shrink-0" />
+                            Google: <strong className="text-white/80 font-mono">211</strong> (18,2%)
+                          </span>
+                        </div>
+                      )}
                     </div>
                   </div>
 
