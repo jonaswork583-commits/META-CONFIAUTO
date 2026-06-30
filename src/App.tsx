@@ -61,36 +61,36 @@ export default function App() {
   const unifiedFunnelData = {
     consolidated: {
       label: "Formatos Unificados (Meta + Google)",
-      investment: 113221.59,
-      reach: 1261198,
-      clicks: 69328,
-      visits: 9518,
-      leads: 1162,
-      ctr: "5.50%",
-      loadingRate: "13.73%",
-      conversionRate: "12.21%"
+      investment: 128092.40,
+      reach: 1578851,
+      clicks: 79557,
+      visits: 10966,
+      leads: 1464,
+      ctr: "5,04%",
+      loadingRate: "13,78%",
+      conversionRate: "13,35%"
     },
     meta: {
       label: "Meta Ads unicamente",
-      investment: 89474.60,
-      reach: 1222764,
-      clicks: 66029,
-      visits: 9415,
-      leads: 951,
-      ctr: "5.40%",
-      loadingRate: "14.26%",
-      conversionRate: "10.10%"
+      investment: 97379.56,
+      reach: 809461,
+      clicks: 75385,
+      visits: 10436,
+      leads: 1391,
+      ctr: "9,31%",
+      loadingRate: "13,84%",
+      conversionRate: "13,33%"
     },
     google: {
       label: "Google Ads unicamente",
-      investment: 23746.99,
-      reach: 38434,
-      clicks: 3299,
-      visits: 103,
-      leads: 211,
-      ctr: "8.58%",
-      loadingRate: "3.12%",
-      conversionRate: "204.85%"
+      investment: 30712.84,
+      reach: 769390,
+      clicks: 4172,
+      visits: 530,
+      leads: 73,
+      ctr: "0,54%",
+      loadingRate: "12,70%",
+      conversionRate: "13,77%"
     }
   };
 
@@ -924,11 +924,11 @@ export default function App() {
                         <div className="flex justify-between w-full mt-2 pt-2 border-t border-white/[0.04] text-[8.5px] font-mono text-white/50">
                           <span className="flex items-center gap-1">
                             <span className="h-1.5 w-1.5 bg-brand-cyan rounded-full shrink-0" />
-                            Meta: <strong className="text-white/80 font-mono">1.222.764</strong> (97,0%)
+                            Meta: <strong className="text-white/80 font-mono">809.461</strong> (51,3%)
                           </span>
                           <span className="flex items-center gap-1">
                             <span className="h-1.5 w-1.5 bg-emerald-400 rounded-full shrink-0" />
-                            Google: <strong className="text-white/80 font-mono">38.434</strong> (3,0%)
+                            Google: <strong className="text-white/80 font-mono">769.390</strong> (48,7%)
                           </span>
                         </div>
                       )}
@@ -971,11 +971,11 @@ export default function App() {
                         <div className="flex justify-between w-full mt-2 pt-2 border-t border-white/[0.04] text-[8.5px] font-mono text-white/50">
                           <span className="flex items-center gap-1">
                             <span className="h-1.5 w-1.5 bg-brand-cyan rounded-full shrink-0" />
-                            Meta: <strong className="text-white/80 font-mono">66.029</strong> (CTR: 5,40%)
+                            Meta: <strong className="text-white/80 font-mono">75.385</strong> (CTR: 9,31%)
                           </span>
                           <span className="flex items-center gap-1">
                             <span className="h-1.5 w-1.5 bg-emerald-400 rounded-full shrink-0" />
-                            Google: <strong className="text-white/80 font-mono">3.299</strong> (CTR: 8,58%)
+                            Google: <strong className="text-white/80 font-mono">4.172</strong> (CTR: 0,54%)
                           </span>
                         </div>
                       )}
@@ -1018,11 +1018,11 @@ export default function App() {
                         <div className="flex justify-between w-full mt-2 pt-2 border-t border-white/[0.04] text-[8.5px] font-mono text-white/50">
                           <span className="flex items-center gap-1">
                             <span className="h-1.5 w-1.5 bg-brand-cyan rounded-full shrink-0" />
-                            Meta: <strong className="text-white/80 font-mono">9.415</strong> (Tx: 14,26%)
+                            Meta: <strong className="text-white/80 font-mono">10.436</strong> (Tx: 13,84%)
                           </span>
                           <span className="flex items-center gap-1">
                             <span className="h-1.5 w-1.5 bg-emerald-400 rounded-full shrink-0" />
-                            Google: <strong className="text-white/80 font-mono">103</strong> (Tx: 3,12%)
+                            Google: <strong className="text-white/80 font-mono">530</strong> (Tx: 12,70%)
                           </span>
                         </div>
                       )}
@@ -1066,11 +1066,11 @@ export default function App() {
                         <div className="flex justify-between w-full mt-2 pt-2 border-t border-white/[0.04] text-[8.5px] font-mono text-white/50">
                           <span className="flex items-center gap-1">
                             <span className="h-1.5 w-1.5 bg-brand-cyan rounded-full shrink-0" />
-                            Meta: <strong className="text-white/80 font-mono">951</strong> (81,8%)
+                            Meta: <strong className="text-white/80 font-mono">1.391</strong> (95,0%)
                           </span>
                           <span className="flex items-center gap-1">
                             <span className="h-1.5 w-1.5 bg-emerald-400 rounded-full shrink-0" />
-                            Google: <strong className="text-white/80 font-mono">211</strong> (18,2%)
+                            Google: <strong className="text-white/80 font-mono">73</strong> (5,0%)
                           </span>
                         </div>
                       )}
