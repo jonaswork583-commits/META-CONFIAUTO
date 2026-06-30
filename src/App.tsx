@@ -163,7 +163,8 @@ export default function App() {
   const totalWeek1Investment = PERFORMANCE_DATA.campaigns.reduce((sum, c) => sum + (c.week1.investment || 0), 0);
   const totalWeek2Investment = PERFORMANCE_DATA.campaigns.reduce((sum, c) => sum + (c.week2.investment || 0), 0);
   const totalWeek3Investment = PERFORMANCE_DATA.campaigns.reduce((sum, c) => sum + (c.week3.investment || 0), 0);
-  const totalJuneInvestment = totalWeek1Investment + totalWeek2Investment + totalWeek3Investment;
+  const totalWeek4Investment = PERFORMANCE_DATA.campaigns.reduce((sum, c) => sum + (c.week4?.investment || 0), 0);
+  const totalJuneInvestment = totalWeek1Investment + totalWeek2Investment + totalWeek3Investment + totalWeek4Investment;
 
   // Calculador de variação para KPI
   function getChange(val1: number | undefined, val2: number | undefined, invertColor = false) {
@@ -241,7 +242,7 @@ export default function App() {
                   <span className="text-[10px] font-mono font-bold text-brand-cyan">Junho 2026</span>
                 </div>
 
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
                   <div className="bg-white/[0.015] border border-white/5 p-4 rounded-xl flex flex-col justify-between">
                     <span className="text-[9px] text-white/40 font-bold uppercase tracking-wider">Semana 1 (01-08 Jun)</span>
                     <span className="text-base font-bold font-mono mt-2 text-white/80">
@@ -258,12 +259,19 @@ export default function App() {
 
                   <div className="bg-white/[0.015] border border-white/5 p-4 rounded-xl flex flex-col justify-between">
                     <span className="text-[9px] text-white/40 font-bold uppercase tracking-wider">Semana 3 (16-22 Jun)</span>
-                    <span className="text-base font-black font-mono mt-2 text-brand-cyan">
+                    <span className="text-base font-bold font-mono mt-2 text-white/95">
                       R$ {totalWeek3Investment.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </span>
                   </div>
 
-                  <div className="bg-brand-cyan/5 border border-brand-cyan/20 p-4 rounded-xl flex flex-col justify-between">
+                  <div className="bg-white/[0.015] border border-white/5 p-4 rounded-xl flex flex-col justify-between">
+                    <span className="text-[9px] text-white/40 font-bold uppercase tracking-wider">Semana 4 (23-29 Jun)</span>
+                    <span className="text-base font-black font-mono mt-2 text-brand-cyan">
+                      R$ {totalWeek4Investment.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    </span>
+                  </div>
+
+                  <div className="bg-brand-cyan/5 border border-brand-cyan/20 p-4 rounded-xl flex flex-col justify-between col-span-2 md:col-span-1">
                     <span className="text-[9px] text-brand-cyan font-black uppercase tracking-wider">Consolidado Total</span>
                     <span className="text-lg font-black font-mono mt-2 text-brand-cyan cyan-glow">
                       R$ {totalJuneInvestment.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
@@ -277,8 +285,11 @@ export default function App() {
                     <span className="px-2 py-0.5 rounded-md border border-white/10 bg-white/5 text-white/75 font-semibold">
                       S1 ➔ S2: {totalWeek2Investment >= totalWeek1Investment ? '+' : ''}{(((totalWeek2Investment - totalWeek1Investment) / totalWeek1Investment) * 100).toFixed(1)}%
                     </span>
-                    <span className="px-2 py-0.5 rounded-md border border-brand-cyan/20 bg-brand-cyan/10 text-brand-cyan font-bold">
+                    <span className="px-2 py-0.5 rounded-md border border-white/10 bg-white/5 text-white/75 font-semibold">
                       S2 ➔ S3: {totalWeek3Investment >= totalWeek2Investment ? '+' : ''}{(((totalWeek3Investment - totalWeek2Investment) / totalWeek2Investment) * 100).toFixed(1)}%
+                    </span>
+                    <span className="px-2 py-0.5 rounded-md border border-brand-cyan/20 bg-brand-cyan/10 text-brand-cyan font-bold">
+                      S3 ➔ S4: {totalWeek4Investment >= totalWeek3Investment ? '+' : ''}{(((totalWeek4Investment - totalWeek3Investment) / totalWeek3Investment) * 100).toFixed(1)}%
                     </span>
                   </div>
                 </div>
@@ -314,6 +325,12 @@ export default function App() {
                 ? campaign.week3.visits 
                 : campaign.week3.leads;
 
+            const w4Val = campaign.id === 'alcance' 
+              ? campaign.week4?.reach 
+              : campaign.id === 'trafego_perfil' 
+                ? campaign.week4?.visits 
+                : campaign.week4?.leads;
+
             const w1UnitVal = campaign.id === 'alcance' 
               ? campaign.week1.cpm 
               : campaign.id === 'trafego_perfil' 
@@ -332,6 +349,12 @@ export default function App() {
                 ? campaign.week3.cpv 
                 : campaign.week3.cpl;
 
+            const w4UnitVal = campaign.id === 'alcance' 
+              ? campaign.week4?.cpm 
+              : campaign.id === 'trafego_perfil' 
+                ? campaign.week4?.cpv 
+                : campaign.week4?.cpl;
+
             // Variações de Semana 1 para Semana 2
             const varInvestS1S2 = getChange(campaign.week1.investment, campaign.week2.investment);
             const varVolumeS1S2 = getChange(w1Val, w2Val);
@@ -342,8 +365,13 @@ export default function App() {
             const varVolumeS2S3 = getChange(w2Val, w3Val);
             const varUnitS2S3 = getChange(w2UnitVal, w3UnitVal, true);
 
-            // Budget Weight em relação à semana 3 (atual corrente)
-            const budgetShareWeek3 = ((campaign.week3.investment / totalWeek3Investment) * 100).toFixed(1);
+            // Variações de Semana 3 para Semana 4
+            const varInvestS3S4 = getChange(campaign.week3.investment, campaign.week4?.investment);
+            const varVolumeS3S4 = getChange(w3Val, w4Val);
+            const varUnitS3S4 = getChange(w3UnitVal, w4UnitVal, true);
+
+            // Budget Weight em relação à semana 4 (atual corrente)
+            const budgetShareWeek4 = campaign.week4 ? ((campaign.week4.investment / totalWeek4Investment) * 100).toFixed(1) : "0.0";
 
             return (
               <div className="w-full max-w-5xl px-4 flex flex-col justify-center gap-6 md:gap-8 animate-fade-in select-none" id={`slide-campaign-${campaign.id}`}>
@@ -369,20 +397,20 @@ export default function App() {
 
                   <div className="bg-white/[0.015] border border-white/5 rounded-xl px-4 py-2 flex items-center gap-4 shrink-0">
                     <div className="text-right">
-                      <span className="text-[8px] text-white/30 uppercase tracking-[0.15em] font-extrabold block">Participação da Verba (S3)</span>
-                      <span className="text-sm md:text-base font-black text-brand-cyan cyan-glow font-mono leading-none">{budgetShareWeek3}%</span>
+                      <span className="text-[8px] text-white/30 uppercase tracking-[0.15em] font-extrabold block">Participação da Verba (S4)</span>
+                      <span className="text-sm md:text-base font-black text-brand-cyan cyan-glow font-mono leading-none">{budgetShareWeek4}%</span>
                     </div>
                     <div className="h-6 w-[1px] bg-white/15" />
                     <div className="text-right">
                       <span className="text-[8px] text-white/30 uppercase tracking-[0.15em] font-extrabold block">Investido Acumulado</span>
                       <span className="text-[11px] md:text-xs font-mono font-bold text-white/80">
-                        R$ {(campaign.week1.investment + campaign.week2.investment + campaign.week3.investment).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        R$ {(campaign.week1.investment + campaign.week2.investment + campaign.week3.investment + (campaign.week4?.investment || 0)).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </span>
                     </div>
                   </div>
                 </div>
 
-                {/* Grid de KPIs Centrais - COMPARATIVO S1 vs S2 vs S3 */}
+                {/* Grid de KPIs Centrais - COMPARATIVO S1 vs S2 vs S3 vs S4 */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-5 w-full" id={`kpi-grid-${campaign.id}`}>
                   
                   {/* KPI 1: INVESTIMENTO DIRETO */}
@@ -394,38 +422,49 @@ export default function App() {
                       </span>
                     </div>
                     
-                    <div className="grid grid-cols-3 gap-1.5 mt-2 pt-1.5 border-t border-white/[0.03]">
+                    <div className="grid grid-cols-4 gap-1 mt-2 pt-1.5 border-t border-white/[0.03]">
                       <div>
-                        <span className="text-[7.5px] text-white/30 uppercase font-mono block">Semana 1</span>
-                        <p className="text-[10px] md:text-xs font-semibold font-mono text-white/70 leading-none mt-1">
+                        <span className="text-[7px] text-white/30 uppercase font-mono block">Semana 1</span>
+                        <p className="text-[9.5px] font-semibold font-mono text-white/60 leading-none mt-1">
                           R$ {campaign.week1.investment.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                         </p>
                       </div>
                       <div>
-                        <span className="text-[7.5px] text-white/40 uppercase font-mono block">Semana 2</span>
-                        <p className="text-[10px] md:text-xs font-bold font-mono text-white/85 leading-none mt-1">
+                        <span className="text-[7px] text-white/40 uppercase font-mono block">Semana 2</span>
+                        <p className="text-[9.5px] font-semibold font-mono text-white/70 leading-none mt-1">
                           R$ {campaign.week2.investment.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                         </p>
                       </div>
                       <div>
-                        <span className="text-[7.5px] text-brand-cyan uppercase font-mono block">Semana 3</span>
-                        <p className="text-[10.5px] md:text-xs font-black font-mono text-brand-cyan leading-none mt-1">
+                        <span className="text-[7px] text-white/40 uppercase font-mono block">Semana 3</span>
+                        <p className="text-[9.5px] font-semibold font-mono text-white/70 leading-none mt-1">
                           R$ {campaign.week3.investment.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                        </p>
+                      </div>
+                      <div>
+                        <span className="text-[7px] text-brand-cyan uppercase font-mono block">Semana 4</span>
+                        <p className="text-[9.5px] font-black font-mono text-brand-cyan leading-none mt-1">
+                          R$ {campaign.week4?.investment.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                         </p>
                       </div>
                     </div>
 
                     <div className="mt-2.5 pt-1.5 border-t border-white/[0.02] flex items-center justify-between gap-1">
                       <span className="text-[7px] text-white/20 uppercase font-mono tracking-wider shrink-0">Variação s./s.</span>
-                      <div className="flex gap-1.5 text-[7.5px]">
+                      <div className="flex gap-1 text-[7px]">
                         {varInvestS1S2 && (
-                          <span className={cn("px-1.5 py-0.5 rounded-md border text-[7.5px] font-mono", varInvestS1S2.colorClass)}>
+                          <span className={cn("px-1 py-0.25 rounded border font-mono", varInvestS1S2.colorClass)}>
                             S2: {varInvestS1S2.pct}
                           </span>
                         )}
                         {varInvestS2S3 && (
-                          <span className={cn("px-1.5 py-0.5 rounded-md border text-[7.5px] font-mono", varInvestS2S3.colorClass)}>
+                          <span className={cn("px-1 py-0.25 rounded border font-mono", varInvestS2S3.colorClass)}>
                             S3: {varInvestS2S3.pct}
+                          </span>
+                        )}
+                        {varInvestS3S4 && (
+                          <span className={cn("px-1 py-0.25 rounded border font-mono", varInvestS3S4.colorClass)}>
+                            S4: {varInvestS3S4.pct}
                           </span>
                         )}
                       </div>
@@ -443,38 +482,49 @@ export default function App() {
                       </span>
                     </div>
 
-                    <div className="grid grid-cols-3 gap-1.5 mt-2 pt-1.5 border-t border-white/[0.03]">
+                    <div className="grid grid-cols-4 gap-1 mt-2 pt-1.5 border-t border-white/[0.03]">
                       <div>
-                        <span className="text-[7.5px] text-white/30 uppercase font-mono block">Semana 1</span>
-                        <p className="text-[10px] md:text-xs font-semibold font-mono text-white/70 leading-none mt-1">
+                        <span className="text-[7px] text-white/30 uppercase font-mono block">Semana 1</span>
+                        <p className="text-[9.5px] font-semibold font-mono text-white/60 leading-none mt-1">
                           {w1Val?.toLocaleString('pt-BR')}
                         </p>
                       </div>
                       <div>
-                        <span className="text-[7.5px] text-white/40 uppercase font-mono block">Semana 2</span>
-                        <p className="text-[10px] md:text-xs font-bold font-mono text-white/85 leading-none mt-1">
+                        <span className="text-[7px] text-white/40 uppercase font-mono block">Semana 2</span>
+                        <p className="text-[9.5px] font-semibold font-mono text-white/70 leading-none mt-1">
                           {w2Val?.toLocaleString('pt-BR')}
                         </p>
                       </div>
                       <div>
-                        <span className="text-[7.5px] text-brand-cyan uppercase font-mono block">Semana 3</span>
-                        <p className="text-[10.5px] md:text-xs font-black font-mono text-brand-cyan leading-none mt-1">
+                        <span className="text-[7px] text-white/40 uppercase font-mono block">Semana 3</span>
+                        <p className="text-[9.5px] font-semibold font-mono text-white/70 leading-none mt-1">
                           {w3Val?.toLocaleString('pt-BR')}
+                        </p>
+                      </div>
+                      <div>
+                        <span className="text-[7px] text-brand-cyan uppercase font-mono block">Semana 4</span>
+                        <p className="text-[9.5px] font-black font-mono text-brand-cyan leading-none mt-1">
+                          {w4Val?.toLocaleString('pt-BR')}
                         </p>
                       </div>
                     </div>
 
                     <div className="mt-2.5 pt-1.5 border-t border-white/[0.02] flex items-center justify-between gap-1">
                       <span className="text-[7px] text-white/20 uppercase font-mono tracking-wider shrink-0">Variação s./s.</span>
-                      <div className="flex gap-1.5 text-[7.5px]">
+                      <div className="flex gap-1 text-[7px]">
                         {varVolumeS1S2 && (
-                          <span className={cn("px-1.5 py-0.5 rounded-md border text-[7.5px] font-mono", varVolumeS1S2.colorClass)}>
+                          <span className={cn("px-1 py-0.25 rounded border font-mono", varVolumeS1S2.colorClass)}>
                             S2: {varVolumeS1S2.pct}
                           </span>
                         )}
                         {varVolumeS2S3 && (
-                          <span className={cn("px-1.5 py-0.5 rounded-md border text-[7.5px] font-mono", varVolumeS2S3.colorClass)}>
+                          <span className={cn("px-1 py-0.25 rounded border font-mono", varVolumeS2S3.colorClass)}>
                             S3: {varVolumeS2S3.pct}
+                          </span>
+                        )}
+                        {varVolumeS3S4 && (
+                          <span className={cn("px-1 py-0.25 rounded border font-mono", varVolumeS3S4.colorClass)}>
+                            S4: {varVolumeS3S4.pct}
                           </span>
                         )}
                       </div>
@@ -492,38 +542,49 @@ export default function App() {
                       </span>
                     </div>
 
-                    <div className="grid grid-cols-3 gap-1.5 mt-2 pt-1.5 border-t border-white/[0.03]">
+                    <div className="grid grid-cols-4 gap-1 mt-2 pt-1.5 border-t border-white/[0.03]">
                       <div>
-                        <span className="text-[7.5px] text-white/30 uppercase font-mono block">Semana 1</span>
-                        <p className="text-[10px] md:text-xs font-semibold font-mono text-white/70 leading-none mt-1">
+                        <span className="text-[7px] text-white/30 uppercase font-mono block">Semana 1</span>
+                        <p className="text-[9.5px] font-semibold font-mono text-white/60 leading-none mt-1">
                           R$ {w1UnitVal?.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                         </p>
                       </div>
                       <div>
-                        <span className="text-[7.5px] text-white/40 uppercase font-mono block">Semana 2</span>
-                        <p className="text-[10px] md:text-xs font-bold font-mono text-white/85 leading-none mt-1">
+                        <span className="text-[7px] text-white/40 uppercase font-mono block">Semana 2</span>
+                        <p className="text-[9.5px] font-semibold font-mono text-white/70 leading-none mt-1">
                           R$ {w2UnitVal?.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                         </p>
                       </div>
                       <div>
-                        <span className="text-[7.5px] text-emerald-400 uppercase font-mono block">Semana 3</span>
-                        <p className="text-[10.5px] md:text-xs font-black font-mono text-emerald-400 leading-none mt-1">
+                        <span className="text-[7px] text-white/40 uppercase font-mono block">Semana 3</span>
+                        <p className="text-[9.5px] font-semibold font-mono text-white/70 leading-none mt-1">
                           R$ {w3UnitVal?.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        </p>
+                      </div>
+                      <div>
+                        <span className="text-[7px] text-emerald-400 uppercase font-mono block">Semana 4</span>
+                        <p className="text-[9.5px] font-black font-mono text-emerald-400 leading-none mt-1">
+                          R$ {w4UnitVal?.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                         </p>
                       </div>
                     </div>
 
                     <div className="mt-2.5 pt-1.5 border-t border-white/[0.02] flex items-center justify-between gap-1">
                       <span className="text-[7px] text-white/20 uppercase font-mono tracking-wider shrink-0">Desempenho s./s.</span>
-                      <div className="flex gap-1.5 text-[7.5px]">
+                      <div className="flex gap-1 text-[7px]">
                         {varUnitS1S2 && (
-                          <span className={cn("px-1.5 py-0.5 rounded-md border text-[7.5px] font-mono font-bold", varUnitS1S2.colorClass)}>
+                          <span className={cn("px-1 py-0.25 rounded border font-mono font-bold", varUnitS1S2.colorClass)}>
                             S2: {varUnitS1S2.label}
                           </span>
                         )}
                         {varUnitS2S3 && (
-                          <span className={cn("px-1.5 py-0.5 rounded-md border text-[7.5px] font-mono font-bold", varUnitS2S3.colorClass)}>
+                          <span className={cn("px-1 py-0.25 rounded border font-mono font-bold", varUnitS2S3.colorClass)}>
                             S3: {varUnitS2S3.label}
+                          </span>
+                        )}
+                        {varUnitS3S4 && (
+                          <span className={cn("px-1 py-0.25 rounded border font-mono font-bold", varUnitS3S4.colorClass)}>
+                            S4: {varUnitS3S4.label}
                           </span>
                         )}
                       </div>
@@ -563,12 +624,12 @@ export default function App() {
                 <div className="bg-white/[0.015] border border-white/5 rounded-xl px-4 py-2 flex items-center gap-4 shrink-0">
                   <div className="text-right">
                     <span className="text-[8px] text-white/30 uppercase tracking-[0.15em] font-extrabold block">Acumulado de Leads</span>
-                    <span className="text-base font-black text-brand-cyan cyan-glow font-mono leading-none">873 Leads</span>
+                    <span className="text-base font-black text-brand-cyan cyan-glow font-mono leading-none">1.311 Leads</span>
                   </div>
                   <div className="h-6 w-[1px] bg-white/10" />
                   <div className="text-right">
                     <span className="text-[8px] text-white/30 uppercase tracking-[0.15em] font-extrabold block">Média de Leads</span>
-                    <span className="text-xs font-mono font-bold text-white/70">~39.7 leads/dia</span>
+                    <span className="text-xs font-mono font-bold text-white/70">~46.8 leads/dia</span>
                   </div>
                 </div>
               </div>
@@ -591,23 +652,24 @@ export default function App() {
                         data={[
                           { name: 'Semana 1', leads: 183, trend: 183 },
                           { name: 'Semana 2', leads: 273, trend: 273 },
-                          { name: 'Semana 3', leads: 417, trend: 417 }
+                          { name: 'Semana 3', leads: 417, trend: 417 },
+                          { name: 'Semana 4', leads: 438, trend: 438 }
                         ]}
                         margin={{ top: 15, right: 15, bottom: 0, left: -20 }}
                       >
                         <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
                         <XAxis 
-                          dataKey="name" 
-                          stroke="rgba(255,255,255,0.3)" 
-                          fontSize={11} 
-                          fontFamily="Inter"
-                          fontWeight="bold"
+                           dataKey="name" 
+                           stroke="rgba(255,255,255,0.3)" 
+                           fontSize={11} 
+                           fontFamily="Inter"
+                           fontWeight="bold"
                         />
                         <YAxis 
                           stroke="rgba(255,255,255,0.3)" 
                           fontSize={9} 
                           fontFamily="monospace"
-                          domain={[0, 480]}
+                          domain={[0, 500]}
                           label={{ value: 'Vol. Leads em Tráfego', angle: -90, position: 'insideLeft', fill: 'rgba(255,255,255,0.4)', fontSize: 9, offset: 5 }}
                         />
                         <Tooltip 
@@ -626,7 +688,7 @@ export default function App() {
                           name="Volume de Leads"
                           fill="#00f2ff" 
                           radius={[6, 6, 0, 0]} 
-                          barSize={50}
+                          barSize={40}
                         />
                         <Line 
                           type="monotone" 
@@ -660,43 +722,59 @@ export default function App() {
                   <div className="bg-[#0b0e14] border border-white/5 rounded-2xl p-5 hover:border-brand-cyan/25 transition-all duration-300">
                     <span className="text-[8px] text-white/40 font-black uppercase tracking-widest block mb-3 font-mono">Evolução do Volume de Leads em Tráfego (LPA + CRM)</span>
                     
-                    <div className="flex flex-col sm:flex-row justify-between items-center bg-white/[0.015] p-3 rounded-xl border border-white/[0.03] gap-3">
+                    <div className="flex flex-col sm:flex-row justify-between items-center bg-white/[0.015] p-3 rounded-xl border border-white/[0.03] gap-2">
                       <div className="text-center flex-1">
-                        <span className="text-[8px] text-white/40 font-bold uppercase tracking-wider block">Semana 1</span>
-                        <p className="text-2xl font-black font-mono text-white mt-1">183</p>
-                        <span className="text-[7px] text-white/30 font-mono block">01 a 08 Jun</span>
+                        <span className="text-[8px] text-white/40 font-bold uppercase tracking-wider block">S1</span>
+                        <p className="text-xl font-black font-mono text-white mt-1">183</p>
+                        <span className="text-[6.5px] text-white/30 font-mono block">01-08 Jun</span>
                       </div>
 
-                      <div className="flex flex-col items-center px-1 relative min-w-[60px] shrink-0">
-                        <span className="text-[8px] font-black text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20 mb-0.5">
+                      <div className="flex flex-col items-center px-1 relative min-w-[50px] shrink-0">
+                        <span className="text-[7.5px] font-black text-emerald-400 bg-emerald-500/10 px-1 py-0.5 rounded border border-emerald-500/20 mb-0.5">
                           +49,2%
                         </span>
-                        <svg className="w-8 h-4 hidden sm:block" viewBox="0 0 50 20" fill="none">
+                        <svg className="w-6 h-4 hidden sm:block" viewBox="0 0 50 20" fill="none">
                           <path d="M5 10H42" stroke="rgba(16, 185, 129, 0.4)" strokeWidth="2" strokeDasharray="3 3"/>
                           <path d="M38 6L44 10L38 14" stroke="#10b981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
                       </div>
 
                       <div className="text-center flex-1">
-                        <span className="text-[8px] text-white/50 font-bold uppercase tracking-wider block">Semana 2</span>
-                        <p className="text-2xl font-black font-mono text-white mt-1">273</p>
-                        <span className="text-[7px] text-white/30 font-mono block">09 a 15 Jun</span>
+                        <span className="text-[8px] text-white/40 font-bold uppercase tracking-wider block">S2</span>
+                        <p className="text-xl font-black font-mono text-white mt-1">273</p>
+                        <span className="text-[6.5px] text-white/30 font-mono block">09-15 Jun</span>
                       </div>
 
-                      <div className="flex flex-col items-center px-1 relative min-w-[60px] shrink-0">
-                        <span className="text-[8px] font-black text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20 mb-0.5 animate-pulse">
+                      <div className="flex flex-col items-center px-1 relative min-w-[50px] shrink-0">
+                        <span className="text-[7.5px] font-black text-emerald-400 bg-emerald-500/10 px-1 py-0.5 rounded border border-emerald-500/20 mb-0.5">
                           +52,7%
                         </span>
-                        <svg className="w-8 h-4 hidden sm:block" viewBox="0 0 50 20" fill="none">
+                        <svg className="w-6 h-4 hidden sm:block" viewBox="0 0 50 20" fill="none">
                           <path d="M5 10H42" stroke="rgba(16, 185, 129, 0.4)" strokeWidth="2" strokeDasharray="3 3"/>
                           <path d="M38 6L44 10L38 14" stroke="#10b981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
                       </div>
 
                       <div className="text-center flex-1">
-                        <span className="text-[8px] text-brand-cyan font-bold uppercase tracking-wider block">Semana 3</span>
-                        <p className="text-2xl font-black font-mono text-brand-cyan cyan-glow mt-1">417</p>
-                        <span className="text-[7px] text-brand-cyan/40 font-mono block font-bold">16 a 22 Jun</span>
+                        <span className="text-[8px] text-white/40 font-bold uppercase tracking-wider block">S3</span>
+                        <p className="text-xl font-black font-mono text-white mt-1">417</p>
+                        <span className="text-[6.5px] text-white/30 font-mono block">16-22 Jun</span>
+                      </div>
+
+                      <div className="flex flex-col items-center px-1 relative min-w-[50px] shrink-0">
+                        <span className="text-[7.5px] font-black text-emerald-400 bg-emerald-500/10 px-1 py-0.5 rounded border border-emerald-500/20 mb-0.5 animate-pulse">
+                          +5,0%
+                        </span>
+                        <svg className="w-6 h-4 hidden sm:block" viewBox="0 0 50 20" fill="none">
+                          <path d="M5 10H42" stroke="rgba(16, 185, 129, 0.4)" strokeWidth="2" strokeDasharray="3 3"/>
+                          <path d="M38 6L44 10L38 14" stroke="#10b981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </div>
+
+                      <div className="text-center flex-1">
+                        <span className="text-[8px] text-brand-cyan font-bold uppercase tracking-wider block">S4</span>
+                        <p className="text-xl font-black font-mono text-brand-cyan cyan-glow mt-1">438</p>
+                        <span className="text-[6.5px] text-brand-cyan/40 font-mono block font-bold">23-29 Jun</span>
                       </div>
                     </div>
 
@@ -704,7 +782,7 @@ export default function App() {
                     <div className="mt-3 bg-white/[0.01] border border-white/[0.03] p-2.5 rounded-lg flex gap-2 items-center">
                       <TrendingUp size={14} className="text-brand-cyan shrink-0" />
                       <p className="text-[9.5px] leading-snug text-white/60">
-                        <strong className="text-brand-cyan font-semibold">Crescimento Diário Exponencial:</strong> A média de geração diária de leads acelerou expressivamente a cada ciclo, saltando de <span className="text-white font-mono font-bold">26,1 leads/dia</span> na Semana 1 para <span className="text-white font-mono font-bold">39,0 leads/dia</span> na Semana 2, atingindo o pico histórico de <span className="text-brand-cyan font-mono font-bold">59,6 leads/dia</span> na Semana 3. Um avanço consistente na velocidade de captação.
+                        <strong className="text-brand-cyan font-semibold">Crescimento Diário Consistente:</strong> A geração diária média saltou de <span className="text-white font-mono font-bold">26,1 leads/dia</span> na Semana 1 para <span className="text-white font-mono font-bold">39,0 leads/dia</span> na Semana 2, e <span className="text-white font-mono font-bold">59,6 leads/dia</span> na Semana 3, consolidando o ritmo elevado com <span className="text-brand-cyan font-mono font-bold">62,6 leads/dia</span> na Semana 4. Um avanço de <span className="text-brand-cyan font-mono font-bold">+139,3%</span> desde o início.
                       </p>
                     </div>
                   </div>
