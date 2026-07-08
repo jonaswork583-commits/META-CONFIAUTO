@@ -56,72 +56,117 @@ const SlideWrapper = ({ children, slideKey }: { children: React.ReactNode; slide
 export default function App() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [funnelWeek, setFunnelWeek] = useState<'week1' | 'week2' | 'week3'>('week3');
-  const [funnelSource, setFunnelSource] = useState<'consolidated' | 'meta' | 'google'>('consolidated');
-  const [funnelMode, setFunnelMode] = useState<'channels' | 'comparison'>('channels');
+  const [funnelCampaign, setFunnelCampaign] = useState<'lp' | 'crm'>('lp');
 
-  const unifiedFunnelData = {
-    consolidated: {
-      label: "Formatos Unificados (Meta + Google)",
-      investment: 128092.40,
-      reach: 1578851,
-      clicks: 79557,
-      visits: 10966,
-      leads: 1464,
-      ctr: "5,04%",
-      loadingRate: "13,78%",
-      conversionRate: "13,35%"
+  const lpFullFunnel = {
+    label: "Campanha LP A (Landing Page)",
+    period: "01 a 08 de Julho de 2026",
+    color: "brand-cyan",
+    colorHex: "#22d3ee",
+    investment: {
+      total: 13729.59,
+      meta: 5185.00,
+      google: 8544.59,
+      metaPercent: "37,8%",
+      googlePercent: "62,2%"
     },
-    meta: {
-      label: "Meta Ads unicamente",
-      investment: 97379.56,
-      reach: 809461,
-      clicks: 75385,
-      visits: 10436,
-      leads: 1391,
-      ctr: "9,31%",
-      loadingRate: "13,84%",
-      conversionRate: "13,33%"
+    reach: {
+      total: 127064,
+      meta: 117707,
+      google: 9357,
+      metaPercent: "92,6%",
+      googlePercent: "7,4%"
     },
-    google: {
-      label: "Google Ads unicamente",
-      investment: 30712.84,
-      reach: 769390,
-      clicks: 4172,
-      visits: 530,
-      leads: 73,
-      ctr: "0,54%",
-      loadingRate: "12,70%",
-      conversionRate: "13,77%"
+    clicks: {
+      total: 2342,
+      meta: 1229,
+      google: 1113,
+      metaPercent: "52,5%",
+      googlePercent: "47,5%",
+      ctrGeral: "1,84%",
+      metaCtr: "1,04%",
+      googleCtr: "11,89%"
+    },
+    visits: {
+      total: 720,
+      meta: 720,
+      google: 0,
+      metaPercent: "100,0%",
+      googlePercent: "0,0%",
+      loadingRate: "30,74%",
+      metaRate: "58,58%",
+      googleRate: "0,00%"
+    },
+    leads: {
+      total: 199,
+      meta: 107,
+      google: 92,
+      metaPercent: "53,8%",
+      googlePercent: "46,2%",
+      conversionRate: "27,64%",
+      metaConversion: "14,86%",
+      googleConversion: "—",
+      cplGeral: 69.00,
+      metaCpl: 48.46,
+      googleCpl: 92.88
     }
   };
 
-  const lpFunnelData = {
-    label: "Campanha de LP (Landing Page)",
-    investment: 57724.39,
-    reach: 460000,
-    clicks: 36800,
-    visits: 5520,
-    leads: 702,
-    ctr: "8,00%",
-    loadingRate: "15,00%",
-    conversionRate: "12,72%",
-    cpl: 82.23
-  };
-
-  const crmFunnelData = {
+  const crmFullFunnel = {
     label: "Campanha de CRM (Esteira Direta)",
-    investment: 43558.09,
-    reach: 349461,
-    clicks: 38585,
-    visits: 4916,
-    leads: 750,
-    ctr: "11,04%",
-    loadingRate: "12,74%",
-    conversionRate: "15,26%",
-    cpl: 58.08
+    period: "01 a 08 de Julho de 2026",
+    color: "emerald-400",
+    colorHex: "#34d399",
+    investment: {
+      total: 7070.68,
+      meta: 4992.85,
+      google: 2077.83,
+      metaPercent: "70,6%",
+      googlePercent: "29,4%"
+    },
+    reach: {
+      total: 126547,
+      meta: 122368,
+      google: 4179,
+      metaPercent: "96,7%",
+      googlePercent: "3,3%"
+    },
+    clicks: {
+      total: 1375,
+      meta: 1077,
+      google: 298,
+      metaPercent: "78,3%",
+      googlePercent: "21,7%",
+      ctrGeral: "1,09%",
+      metaCtr: "0,88%",
+      googleCtr: "7,13%"
+    },
+    visits: {
+      total: 35,
+      meta: 35,
+      google: 0,
+      metaPercent: "100,0%",
+      googlePercent: "0,0%",
+      loadingRate: "2,55%",
+      metaRate: "3,25%",
+      googleRate: "0,00%"
+    },
+    leads: {
+      total: 35,
+      meta: 35,
+      google: 0,
+      metaPercent: "100,0%",
+      googlePercent: "0,0%",
+      conversionRate: "100,00%",
+      metaConversion: "100,00%",
+      googleConversion: "0,00%",
+      cplGeral: 202.02,
+      metaCpl: 142.65,
+      googleCpl: 0.00
+    }
   };
 
-  const selectedUnified = unifiedFunnelData[funnelSource];
+  const selectedCampaignFunnel = funnelCampaign === 'lp' ? lpFullFunnel : crmFullFunnel;
 
   const funnelData = {
     week1: {
@@ -891,562 +936,425 @@ export default function App() {
                 <div>
                   <div className="flex items-center gap-2">
                     <span className="px-2 sm:px-2.5 py-0.5 rounded text-[8px] sm:text-[9px] font-black tracking-widest uppercase bg-brand-cyan/10 text-brand-cyan border border-brand-cyan/20">
-                      {funnelMode === 'channels' ? 'DESEMPENHO TOTAL • FUNIL DE TRÁFEGO UNIFICADO' : 'ANÁLISE COMPARATIVA • LP VS CRM'}
+                      DESEMPENHO POR CAMPANHA • FUNIL DE TRÁFEGO UNIFICADO
                     </span>
                     <span className="text-white/40 text-[9px] font-mono tracking-wider">
                       Slide {currentSlide} de {totalSlides - 1} • Funil de Tráfego Integrado
                     </span>
                   </div>
                   <h2 className="text-2xl md:text-3xl font-black italic uppercase tracking-tighter text-white font-display mt-2 sm:mt-2.5">
-                    {funnelMode === 'channels' ? 'FUNIL DE TRÁFEGO UNIFICADO' : 'COMPARATIVO LP VS CRM'}
+                    FUNIL DE TRÁFEGO POR CAMPANHA
                   </h2>
                   <p className="text-white/40 text-[10px] md:text-xs tracking-wide font-medium mt-1 uppercase font-mono">
-                    {funnelMode === 'channels' 
-                      ? `Consolidação de Métricas (${selectedUnified.label})` 
-                      : 'Análise detalhada das etapas de conversão e eficiência das campanhas de leads'}
+                    Análise das etapas de conversão e eficiência com divisão de Meta & Google
                   </p>
                 </div>
 
                 {/* Valor investido destacado no topo do slide */}
-                <div className="bg-brand-cyan/10 border border-brand-cyan/30 rounded-xl px-5 py-2 flex flex-col justify-center items-end shrink-0 relative overflow-hidden shadow-[0_0_15px_rgba(34,211,238,0.05)] text-right" key={funnelMode === 'channels' ? funnelSource + 'inv' : 'comp_inv'}>
-                  <div className="absolute top-0 right-0 w-24 h-24 bg-brand-cyan/15 blur-2xl rounded-full pointer-events-none" />
-                  <span className="text-[8px] text-brand-cyan font-black uppercase tracking-[0.15em] relative z-10 block">INVESTIMENTO NO PERÍODO</span>
+                <div 
+                  className={cn(
+                    "border rounded-xl px-5 py-2 flex flex-col justify-center items-end shrink-0 relative overflow-hidden text-right shadow-lg transition-all duration-300",
+                    funnelCampaign === 'lp' 
+                      ? "bg-brand-cyan/10 border-brand-cyan/30 shadow-brand-cyan/5" 
+                      : "bg-[#34d399]/10 border-emerald-500/30 shadow-emerald-500/5"
+                  )} 
+                  key={funnelCampaign + '_inv'}
+                >
+                  <div className={cn(
+                    "absolute top-0 right-0 w-24 h-24 blur-2xl rounded-full pointer-events-none transition-all duration-300",
+                    funnelCampaign === 'lp' ? "bg-brand-cyan/15" : "bg-emerald-500/15"
+                  )} />
+                  <span className={cn(
+                    "text-[8px] font-black uppercase tracking-[0.15em] relative z-10 block",
+                    funnelCampaign === 'lp' ? "text-brand-cyan" : "text-[#34d399]"
+                  )}>INVESTIMENTO NO PERÍODO</span>
                   <span className="text-xl font-black text-white cyan-glow font-mono mt-0.5 relative z-10 leading-none">
-                    R$ {funnelMode === 'channels' 
-                      ? selectedUnified.investment.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) 
-                      : (lpFunnelData.investment + crmFunnelData.investment).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                    R$ {selectedCampaignFunnel.investment.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                   </span>
                   <span className="text-[7.5px] text-white/50 block font-medium mt-0.5">
-                    {funnelMode === 'channels' ? 'Canais Combinados' : 'Soma de LP e CRM'}
+                    Canais Combinados (Meta + Google)
                   </span>
                 </div>
               </div>
 
-              {/* Seletor de Modo de Visualização do Funil */}
-              <div className="flex bg-[#0b0e14] border border-white/5 rounded-xl p-1 gap-2 self-start mb-1" id="funnel-mode-tabs">
+              {/* Seletor de Campanhas */}
+              <div className="flex bg-[#0b0e14] border border-white/5 rounded-xl p-1 gap-2 self-start mb-1" id="funnel-campaign-tabs">
                 <button
-                  onClick={() => setFunnelMode('channels')}
+                  onClick={() => setFunnelCampaign('lp')}
                   className={cn(
                     "px-4 py-1.5 rounded-lg text-[10px] font-bold font-mono tracking-wide transition-all uppercase",
-                    funnelMode === 'channels'
+                    funnelCampaign === 'lp'
                       ? "bg-brand-cyan text-[#07090e] font-black italic shadow-md shadow-brand-cyan/10"
                       : "text-white/40 hover:text-white/80"
                   )}
-                  id="btn-mode-channels"
+                  id="btn-campaign-lp"
                 >
-                  Visualizar por Canais
+                  Campanha LP A (Meta + Google)
                 </button>
                 <button
-                  onClick={() => setFunnelMode('comparison')}
+                  onClick={() => setFunnelCampaign('crm')}
                   className={cn(
                     "px-4 py-1.5 rounded-lg text-[10px] font-bold font-mono tracking-wide transition-all uppercase",
-                    funnelMode === 'comparison'
-                      ? "bg-brand-cyan text-[#07090e] font-black italic shadow-md shadow-brand-cyan/10"
+                    funnelCampaign === 'crm'
+                      ? "bg-[#34d399] text-[#07090e] font-black italic shadow-md shadow-emerald-500/10"
                       : "text-white/40 hover:text-white/80"
                   )}
-                  id="btn-mode-comparison"
+                  id="btn-campaign-crm"
                 >
-                  Comparativo LP vs CRM
+                  Campanha CRM (Meta + Google)
                 </button>
               </div>
 
-              {funnelMode === 'channels' ? (
-                <>
-                  {/* Segmented Selector for Channels */}
-                  <div className="flex bg-[#0b0e14] border border-white/5 rounded-xl p-1 gap-2 self-start mb-1">
-                    {(['consolidated', 'meta', 'google'] as const).map((source) => (
-                      <button
-                        key={source}
-                        onClick={() => setFunnelSource(source)}
-                        className={cn(
-                          "px-4 py-1.5 rounded-lg text-[10px] font-bold font-mono tracking-wide transition-all uppercase",
-                          funnelSource === source
-                            ? "bg-brand-cyan text-[#07090e] font-black italic shadow-md shadow-brand-cyan/10"
-                            : "text-white/40 hover:text-white/80"
-                        )}
-                      >
-                        {source === 'consolidated' ? 'Formatos Unificados (Meta + Google)' : source === 'meta' ? 'Meta Ads' : 'Google Ads'}
-                      </button>
-                    ))}
-                  </div>
-
-                  {/* Corpo Principal: Funil de Conversão Centralizado */}
-                  <div className="flex flex-col items-center justify-center w-full">
-                    
-                    {/* DESENHO DO FUNIL */}
-                    <div className="w-full flex flex-col items-center justify-center py-2 relative" key={funnelSource}>
+              {/* Corpo Principal: Funil de Conversão Centralizado */}
+              <div className="flex flex-col items-center justify-center w-full">
+                
+                {/* DESENHO DO FUNIL */}
+                <div className="w-full flex flex-col items-center justify-center py-2 relative animate-fade-in" key={funnelCampaign}>
+                  
+                  {/* ETAPA 1: INVESTIMENTO - TOPO REAL DO FUNIL */}
+                  <div className="w-full max-w-[460px] relative transition-all hover:scale-[1.01] duration-300">
+                    <div className={cn(
+                      "absolute inset-0 bg-gradient-to-r rounded-2xl blur-sm pointer-events-none border-t border-x",
+                      funnelCampaign === 'lp' 
+                        ? "from-brand-cyan/25 via-brand-cyan/5 to-brand-cyan/25 border-brand-cyan/35" 
+                        : "from-emerald-500/25 via-emerald-500/5 to-emerald-500/25 border-emerald-500/35"
+                    )} />
+                    <div className={cn(
+                      "relative bg-[#0d121c]/80 border rounded-2xl p-2.5 md:py-3 md:px-4.5 shadow-[0_4px_30px_rgba(0,0,0,0.5)] overflow-hidden",
+                      funnelCampaign === 'lp' ? "border-brand-cyan/35" : "border-emerald-500/35"
+                    )}>
+                      <div className={cn(
+                        "absolute top-0 left-0 right-0 h-[2px]",
+                        funnelCampaign === 'lp' 
+                          ? "bg-gradient-to-r from-transparent via-brand-cyan/60 to-transparent" 
+                          : "bg-gradient-to-r from-transparent via-emerald-400/60 to-transparent"
+                      )} />
                       
-                      {/* ETAPA 1: INVESTIMENTO - TOPO REAL DO FUNIL */}
-                      <div className="w-full max-w-[460px] relative transition-all hover:scale-[1.01] duration-300">
-                        <div className="absolute inset-0 bg-gradient-to-r from-brand-cyan/25 via-brand-cyan/5 to-brand-cyan/25 rounded-2xl border-t border-x border-brand-cyan/35 blur-sm pointer-events-none" />
-                        <div className="relative bg-[#0d121c]/80 border border-brand-cyan/35 rounded-2xl p-2.5 md:py-3 md:px-4.5 shadow-[0_4px_30px_rgba(0,0,0,0.5)] overflow-hidden">
-                          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-brand-cyan/60 to-transparent" />
-                          
-                          <div className="flex justify-between items-center relative z-10">
-                            <div className="flex items-center gap-2.5 font-sans">
-                              <div className="w-7 h-7 rounded-md bg-brand-cyan/15 border border-brand-cyan/35 flex items-center justify-center text-brand-cyan shrink-0">
-                                <DollarSign size={14} />
-                              </div>
-                              <div>
-                                <h3 className="text-xs font-bold text-white uppercase tracking-tight font-sans">Investimento Total</h3>
-                              </div>
-                            </div>
-
-                            <div className="text-right">
-                              <span className="text-[7px] text-white/30 uppercase font-mono block font-bold">Investido</span>
-                              <span className="text-lg font-black font-mono text-white tracking-tight cyan-glow">
-                                R$ {selectedUnified.investment.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
-                              </span>
-                              <span className="text-[7.5px] text-white/50 block font-medium -mt-0.5">Junho de 2026</span>
-                            </div>
+                      <div className="flex justify-between items-center relative z-10">
+                        <div className="flex items-center gap-2.5 font-sans">
+                          <div className={cn(
+                            "w-7 h-7 rounded-md flex items-center justify-center shrink-0 border",
+                            funnelCampaign === 'lp' 
+                              ? "bg-brand-cyan/15 border-brand-cyan/35 text-brand-cyan" 
+                              : "bg-emerald-500/15 border-emerald-500/35 text-emerald-400"
+                          )}>
+                            <DollarSign size={14} />
                           </div>
+                          <div>
+                            <h3 className="text-xs font-bold text-white uppercase tracking-tight font-sans">Investimento Total</h3>
+                          </div>
+                        </div>
 
-                          {funnelSource === 'consolidated' && (
-                            <div className="flex justify-between w-full mt-2 pt-2 border-t border-white/[0.04] text-[8.5px] font-mono text-white/50">
-                              <span className="flex items-center gap-1">
-                                <span className="h-1.5 w-1.5 bg-brand-cyan rounded-full shrink-0" />
-                                Meta Ads: <strong className="text-white/80 font-mono">R$ 97.379,56</strong> (76,0%)
-                              </span>
-                              <span className="flex items-center gap-1">
-                                <span className="h-1.5 w-1.5 bg-emerald-400 rounded-full shrink-0" />
-                                Google Ads: <strong className="text-white/80 font-mono">R$ 30.712,84</strong> (24,0%)
-                              </span>
-                            </div>
-                          )}
+                        <div className="text-right">
+                          <span className="text-[7px] text-white/30 uppercase font-mono block font-bold">Investido</span>
+                          <span className="text-lg font-black font-mono text-white tracking-tight cyan-glow">
+                            R$ {selectedCampaignFunnel.investment.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                          </span>
+                          <span className="text-[7.5px] text-white/50 block font-medium -mt-0.5">Junho de 2026</span>
                         </div>
                       </div>
 
-                      {/* Transition Indicator 1 */}
-                      <div className="my-[4px] flex flex-col items-center relative z-20">
-                        <div className="w-[1.2px] h-3.5 bg-gradient-to-b from-brand-cyan/60 to-brand-cyan/40" />
-                      </div>
-
-                      {/* ETAPA 2: ALCANCE */}
-                      <div className="w-full max-w-[410px] relative transition-all hover:scale-[1.01] duration-300">
-                        <div className="absolute inset-0 bg-gradient-to-r from-brand-cyan/20 via-transparent to-brand-cyan/20 rounded-2xl border-t border-x border-brand-cyan/25 blur-xs pointer-events-none" />
-                        <div className="relative bg-[#0b0e15]/90 border border-brand-cyan/25 rounded-2xl p-2.5 md:py-3 md:px-4.5 shadow-[0_4px_30px_rgba(0,0,0,0.6)]">
-                          
-                          <div className="flex justify-between items-center relative z-10">
-                            <div className="flex items-center gap-2.5 font-sans">
-                              <div className="w-7 h-7 rounded-md bg-brand-cyan/10 border border-brand-cyan/20 flex items-center justify-center text-brand-cyan shrink-0">
-                                <Users size={14} />
-                              </div>
-                              <div>
-                                <h3 className="text-xs font-bold text-white/90 uppercase tracking-tight font-sans">Alcance</h3>
-                              </div>
-                            </div>
-
-                            <div className="text-right">
-                              <span className="text-[7px] text-white/30 uppercase font-mono block font-bold">Público Único</span>
-                              <span className="text-lg font-black font-mono text-brand-cyan">
-                                {selectedUnified.reach.toLocaleString('pt-BR')}
-                              </span>
-                              <span className="text-[7.5px] text-brand-cyan/70 block font-medium -mt-0.5">Pessoas</span>
-                            </div>
-                          </div>
-
-                          {funnelSource === 'consolidated' && (
-                            <div className="flex justify-between w-full mt-2 pt-2 border-t border-white/[0.04] text-[8.5px] font-mono text-white/50">
-                              <span className="flex items-center gap-1">
-                                <span className="h-1.5 w-1.5 bg-brand-cyan rounded-full shrink-0" />
-                                Meta: <strong className="text-white/80 font-mono">809.461</strong> (51,3%)
-                              </span>
-                              <span className="flex items-center gap-1">
-                                <span className="h-1.5 w-1.5 bg-emerald-400 rounded-full shrink-0" />
-                                Google: <strong className="text-white/80 font-mono">769.390</strong> (48,7%)
-                              </span>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Transition Indicator 2 */}
-                      <div className="my-[4px] flex flex-col items-center relative z-20">
-                        <div className="w-[1.2px] h-3.5 bg-gradient-to-b from-brand-cyan/40 to-brand-cyan/20" />
-                        <span className="absolute text-[6.5px] font-mono font-black text-brand-cyan/70 bg-[#07090e] px-1.5 py-[1px] rounded border border-brand-cyan/10 -translate-y-0.5 whitespace-nowrap">
-                          CTR Geral: {selectedUnified.ctr}
+                      {/* Identifiable Channel Breakdown */}
+                      <div className="flex justify-between w-full mt-2 pt-2 border-t border-white/[0.04] text-[8.5px] font-mono text-white/50">
+                        <span className="flex items-center gap-1">
+                          <span className="h-1.5 w-1.5 bg-brand-cyan rounded-full shrink-0" />
+                          Meta Ads: <strong className="text-white/80 font-mono">R$ {selectedCampaignFunnel.investment.meta.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</strong> ({selectedCampaignFunnel.investment.metaPercent})
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <span className="h-1.5 w-1.5 bg-emerald-400 rounded-full shrink-0" />
+                          Google Ads: <strong className="text-white/80 font-mono">R$ {selectedCampaignFunnel.investment.google.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</strong> ({selectedCampaignFunnel.investment.googlePercent})
                         </span>
                       </div>
-
-                      {/* ETAPA 3: CLIQUE NO LINK */}
-                      <div className="w-full max-w-[310px] relative transition-all hover:scale-[1.01] duration-300">
-                        <div className="absolute inset-0 bg-gradient-to-r from-brand-cyan/10 via-transparent to-brand-cyan/10 rounded-2xl border-t border-x border-brand-cyan/15 blur-xs pointer-events-none" />
-                        <div className="relative bg-[#080a0f]/95 border border-brand-cyan/15 rounded-2xl p-2.5 md:py-3 md:px-4 shadow-[0_4px_30px_rgba(0,0,0,0.6)]">
-                          
-                          <div className="flex justify-between items-center relative z-10">
-                            <div className="flex items-center gap-2.5 font-sans">
-                              <div className="w-7 h-7 rounded-md bg-brand-cyan/5 border border-brand-cyan/10 flex items-center justify-center text-brand-cyan shrink-0">
-                                <MousePointer2 size={13} className="-rotate-90" />
-                              </div>
-                              <div>
-                                <h3 className="text-xs font-bold text-white/80 uppercase tracking-tight font-sans">Clique no Link</h3>
-                              </div>
-                            </div>
-
-                            <div className="text-right">
-                              <span className="text-[7px] text-white/30 uppercase font-mono block font-bold">Volume</span>
-                              <span className="text-base font-black font-mono text-white/90">
-                                {selectedUnified.clicks.toLocaleString('pt-BR')}
-                              </span>
-                              <span className="text-[7.5px] text-white/50 block font-medium -mt-0.5 font-sans">Cliques</span>
-                            </div>
-                          </div>
-
-                          {funnelSource === 'consolidated' && (
-                            <div className="flex justify-between w-full mt-2 pt-2 border-t border-white/[0.04] text-[8.5px] font-mono text-white/50">
-                              <span className="flex items-center gap-1">
-                                <span className="h-1.5 w-1.5 bg-brand-cyan rounded-full shrink-0" />
-                                Meta: <strong className="text-white/80 font-mono">75.385</strong> (CTR: 9,31%)
-                              </span>
-                              <span className="flex items-center gap-1">
-                                <span className="h-1.5 w-1.5 bg-emerald-400 rounded-full shrink-0" />
-                                Google: <strong className="text-white/80 font-mono">4.172</strong> (CTR: 0,54%)
-                              </span>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Transition Indicator 3 */}
-                      <div className="my-[4px] flex flex-col items-center relative z-20">
-                        <div className="w-[1.2px] h-3.5 bg-gradient-to-b from-brand-cyan/30 to-brand-cyan/10" />
-                        <span className="absolute text-[6.5px] font-mono font-black text-brand-cyan/70 bg-[#07090e] px-1.5 py-[1px] rounded border border-brand-cyan/10 -translate-y-0.5 whitespace-nowrap">
-                          Tx. Carregamento (Loading): {selectedUnified.loadingRate}
-                        </span>
-                      </div>
-
-                      {/* ETAPA 4: VISUALIZAÇÃO DA PÁGINA DE DESTINO */}
-                      <div className="w-full max-w-[260px] relative transition-all hover:scale-[1.01] duration-300">
-                        <div className="absolute inset-0 bg-gradient-to-r from-brand-cyan/15 via-transparent to-brand-cyan/15 rounded-2xl border-t border-x border-brand-cyan/10 blur-xs pointer-events-none" />
-                        <div className="relative bg-[#07090e]/95 border border-brand-cyan/10 rounded-2xl p-2.5 md:py-3 md:px-3 shadow-[0_4px_30px_rgba(0,0,0,0.6)]">
-                          
-                          <div className="flex justify-between items-center relative z-10">
-                            <div className="flex items-center gap-2 font-sans">
-                              <div className="w-6 h-6 rounded-md bg-brand-cyan/5 border border-brand-cyan/10 flex items-center justify-center text-brand-cyan shrink-0">
-                                <Layers size={11} />
-                              </div>
-                              <div>
-                                <h3 className="text-[11px] font-bold text-white/70 uppercase tracking-tight font-sans">Page Views</h3>
-                              </div>
-                            </div>
-
-                            <div className="text-right">
-                              <span className="text-[7px] text-white/30 uppercase font-mono block font-bold">Visualizações</span>
-                              <span className="text-sm font-black font-mono text-white/80">
-                                {selectedUnified.visits.toLocaleString('pt-BR')}
-                              </span>
-                              <span className="text-[7.5px] text-white/50 block font-medium -mt-0.5 font-sans">Visualizações</span>
-                            </div>
-                          </div>
-
-                          {funnelSource === 'consolidated' && (
-                            <div className="flex justify-between w-full mt-2 pt-2 border-t border-white/[0.04] text-[8.5px] font-mono text-white/50">
-                              <span className="flex items-center gap-1">
-                                <span className="h-1.5 w-1.5 bg-brand-cyan rounded-full shrink-0" />
-                                Meta: <strong className="text-white/80 font-mono">10.436</strong> (Tx: 13,84%)
-                              </span>
-                              <span className="flex items-center gap-1">
-                                <span className="h-1.5 w-1.5 bg-emerald-400 rounded-full shrink-0" />
-                                Google: <strong className="text-white/80 font-mono">530</strong> (Tx: 12,70%)
-                              </span>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Transition Indicator 4 */}
-                      <div className="my-[4px] flex flex-col items-center relative z-20">
-                        <div className="w-[1.2px] h-3.5 bg-gradient-to-b from-brand-cyan/25 to-brand-cyan/10" />
-                        <span className="absolute text-[6.5px] font-mono font-black text-emerald-400 bg-[#07090e] px-1.5 py-[1px] rounded border border-emerald-500/10 -translate-y-0.5 whitespace-nowrap">
-                          Conversão LP: {selectedUnified.conversionRate}
-                        </span>
-                      </div>
-
-                      {/* ETAPA 5: LEADS - BASE DO FUNIL */}
-                      <div className="w-full max-w-[215px] relative transition-all hover:scale-[1.01] duration-300">
-                        <div className="absolute inset-0 bg-brand-cyan/10 blur-md rounded-2xl opacity-40 pointer-events-none" />
-                        <div className="relative bg-[#22d3ee]/[0.02] border-2 border-brand-cyan/45 rounded-2xl p-2.5 md:py-3 md:px-3 shadow-[0_10px_30px_rgba(34,211,238,0.08)] overflow-hidden">
-                          <div className="absolute -right-12 -bottom-12 w-24 h-24 bg-brand-cyan/10 blur-2xl rounded-full pointer-events-none" />
-                          
-                          <div className="flex justify-between items-center relative z-10">
-                            <div className="flex items-center gap-2 font-sans">
-                              <div className="w-6 h-6 rounded-md bg-[#22d3ee]/[0.15] border border-brand-cyan/[0.35] flex items-center justify-center text-brand-cyan shrink-0 animate-pulse">
-                                <Target size={12} />
-                              </div>
-                              <div>
-                                <h3 className="text-[11px] font-black text-white uppercase tracking-tight font-sans">Conversões</h3>
-                              </div>
-                            </div>
-
-                            <div className="text-right">
-                              <span className="text-[7px] text-white/40 uppercase font-mono block font-black">Total Leads</span>
-                              <span className="text-lg font-black font-mono text-brand-cyan cyan-glow">
-                                {selectedUnified.leads.toLocaleString('pt-BR')}
-                              </span>
-                              <span className="text-[7.5px] text-brand-cyan font-black block -mt-0.5 font-sans">Leads</span>
-                            </div>
-                          </div>
-
-                          {funnelSource === 'consolidated' && (
-                            <div className="flex justify-between w-full mt-2 pt-2 border-t border-white/[0.04] text-[8.5px] font-mono text-white/50">
-                              <span className="flex items-center gap-1">
-                                <span className="h-1.5 w-1.5 bg-brand-cyan rounded-full shrink-0" />
-                                Meta: <strong className="text-white/80 font-mono">1.391</strong> (95,0%)
-                              </span>
-                              <span className="flex items-center gap-1">
-                                <span className="h-1.5 w-1.5 bg-emerald-400 rounded-full shrink-0" />
-                                Google: <strong className="text-white/80 font-mono">73</strong> (5,0%)
-                              </span>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-
-                    </div>
-
-                  </div>
-                </>
-              ) : (
-                <>
-                  {/* Side-by-Side LP vs CRM Funnel Comparison */}
-                  <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-5 pt-1" id="funnel-comparison-container">
-                    
-                    {/* COLUNA 1: CAMPANHA LP */}
-                    <div className="bg-[#0b0e14]/60 border border-brand-cyan/15 rounded-2xl p-4 flex flex-col items-center hover:border-brand-cyan/40 transition-all duration-300" id="funnel-col-lp">
-                      <div className="w-full flex items-center justify-between border-b border-white/5 pb-2 mb-3">
-                        <div className="flex items-center gap-1.5">
-                          <span className="h-2 w-2 rounded-full bg-brand-cyan shadow-[0_0_8px_rgba(0,242,255,0.5)]" />
-                          <h4 className="text-[11px] font-black uppercase tracking-wider text-white">Campanha LP A</h4>
-                        </div>
-                        <span className="text-[8px] font-mono font-bold bg-brand-cyan/10 text-brand-cyan px-1.5 py-0.5 rounded border border-brand-cyan/25">
-                          Geração Landing Page
-                        </span>
-                      </div>
-
-                      {/* Funnel LP Diagram */}
-                      <div className="w-full flex flex-col items-center justify-center space-y-1">
-                        
-                        {/* Passo 1: Investimento */}
-                        <div className="w-full relative transition-all hover:scale-[1.01] duration-300">
-                          <div className="relative bg-[#0d121c]/60 border border-brand-cyan/20 rounded-xl p-2">
-                            <div className="flex justify-between items-center text-xs">
-                              <span className="text-[8px] text-white/50 uppercase font-mono font-bold">Investimento</span>
-                              <span className="font-bold font-mono text-white">R$ {lpFunnelData.investment.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Setinha LP 1 */}
-                        <div className="h-2 w-[1px] bg-brand-cyan/25" />
-
-                        {/* Passo 2: Alcance */}
-                        <div className="w-full relative transition-all hover:scale-[1.01] duration-300">
-                          <div className="relative bg-[#0b0e15]/70 border border-brand-cyan/15 rounded-xl p-2">
-                            <div className="flex justify-between items-center text-xs">
-                              <span className="text-[8px] text-white/50 uppercase font-mono font-bold">Alcance</span>
-                              <span className="font-bold font-mono text-white/80">{lpFunnelData.reach.toLocaleString('pt-BR')}</span>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Setinha LP 2 + CTR */}
-                        <div className="flex flex-col items-center relative z-10 w-full">
-                          <div className="h-3.5 w-[1px] bg-brand-cyan/20" />
-                          <span className="absolute text-[6px] font-mono font-black text-brand-cyan/70 bg-[#07090e] px-1 py-[0.5px] rounded border border-brand-cyan/10 -translate-y-0.5">
-                            CTR: {lpFunnelData.ctr}
-                          </span>
-                        </div>
-
-                        {/* Passo 3: Cliques */}
-                        <div className="w-full relative transition-all hover:scale-[1.01] duration-300">
-                          <div className="relative bg-[#080a0f]/80 border border-brand-cyan/10 rounded-xl p-2">
-                            <div className="flex justify-between items-center text-xs">
-                              <span className="text-[8px] text-white/50 uppercase font-mono font-bold">Cliques</span>
-                              <span className="font-bold font-mono text-white/70">{lpFunnelData.clicks.toLocaleString('pt-BR')}</span>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Setinha LP 3 + Loading */}
-                        <div className="flex flex-col items-center relative z-10 w-full">
-                          <div className="h-3.5 w-[1px] bg-brand-cyan/20" />
-                          <span className="absolute text-[6px] font-mono font-black text-brand-cyan/70 bg-[#07090e] px-1 py-[0.5px] rounded border border-brand-cyan/10 -translate-y-0.5">
-                            Carregamento: {lpFunnelData.loadingRate}
-                          </span>
-                        </div>
-
-                        {/* Passo 4: Visitas */}
-                        <div className="w-full relative transition-all hover:scale-[1.01] duration-300">
-                          <div className="relative bg-[#07090e]/90 border border-brand-cyan/10 rounded-xl p-2">
-                            <div className="flex justify-between items-center text-xs">
-                              <span className="text-[8px] text-white/50 uppercase font-mono font-bold">Page Views (Visitas)</span>
-                              <span className="font-bold font-mono text-white/60">{lpFunnelData.visits.toLocaleString('pt-BR')}</span>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Setinha LP 4 + Conversão */}
-                        <div className="flex flex-col items-center relative z-10 w-full">
-                          <div className="h-3.5 w-[1px] bg-brand-cyan/20" />
-                          <span className="absolute text-[6px] font-mono font-black text-emerald-400 bg-[#07090e] px-1 py-[0.5px] rounded border border-emerald-500/10 -translate-y-0.5">
-                            Conversão LP: {lpFunnelData.conversionRate}
-                          </span>
-                        </div>
-
-                        {/* Passo 5: Leads */}
-                        <div className="w-full relative transition-all hover:scale-[1.01] duration-300">
-                          <div className="relative bg-brand-cyan/5 border border-brand-cyan/35 rounded-xl p-2 shadow-[0_0_15px_rgba(34,211,238,0.02)]">
-                            <div className="flex justify-between items-center text-xs">
-                              <span className="text-[8px] text-brand-cyan uppercase font-mono font-bold">Leads Gerados</span>
-                              <span className="font-black font-mono text-brand-cyan cyan-glow">{lpFunnelData.leads.toLocaleString('pt-BR')}</span>
-                            </div>
-                          </div>
-                        </div>
-
-                      </div>
-
-                      {/* Métricas de Eficiência LP */}
-                      <div className="w-full mt-3 pt-2.5 border-t border-white/5 grid grid-cols-2 gap-2 text-center">
-                        <div className="bg-white/[0.015] border border-white/5 rounded-lg p-1.5">
-                          <span className="text-[7px] text-white/40 uppercase block font-mono">CPL Médio</span>
-                          <span className="text-xs font-black font-mono text-white mt-0.5 block">
-                            R$ {lpFunnelData.cpl.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                          </span>
-                        </div>
-                        <div className="bg-white/[0.015] border border-white/5 rounded-lg p-1.5">
-                          <span className="text-[7px] text-white/40 uppercase block font-mono">Conversão Global</span>
-                          <span className="text-xs font-bold text-white/70 block mt-0.5 font-mono">1,91%</span>
-                        </div>
-                      </div>
-
-                    </div>
-
-                    {/* COLUNA 2: CAMPANHA CRM */}
-                    <div className="bg-[#0b0e14]/60 border border-emerald-500/15 rounded-2xl p-4 flex flex-col items-center hover:border-emerald-400/40 transition-all duration-300" id="funnel-col-crm">
-                      <div className="w-full flex items-center justify-between border-b border-white/5 pb-2 mb-3">
-                        <div className="flex items-center gap-1.5">
-                          <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]" />
-                          <h4 className="text-[11px] font-black uppercase tracking-wider text-white">Campanha CRM</h4>
-                        </div>
-                        <span className="text-[8px] font-mono font-bold bg-emerald-400/10 text-emerald-400 px-1.5 py-0.5 rounded border border-emerald-500/25">
-                          Esteira Integrada
-                        </span>
-                      </div>
-
-                      {/* Funnel CRM Diagram */}
-                      <div className="w-full flex flex-col items-center justify-center space-y-1">
-                        
-                        {/* Passo 1: Investimento */}
-                        <div className="w-full relative transition-all hover:scale-[1.01] duration-300">
-                          <div className="relative bg-[#0d121c]/60 border border-emerald-500/20 rounded-xl p-2">
-                            <div className="flex justify-between items-center text-xs">
-                              <span className="text-[8px] text-white/50 uppercase font-mono font-bold">Investimento</span>
-                              <span className="font-bold font-mono text-white">R$ {crmFunnelData.investment.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Setinha CRM 1 */}
-                        <div className="h-2 w-[1px] bg-emerald-500/25" />
-
-                        {/* Passo 2: Alcance */}
-                        <div className="w-full relative transition-all hover:scale-[1.01] duration-300">
-                          <div className="relative bg-[#0b0e15]/70 border border-emerald-500/15 rounded-xl p-2">
-                            <div className="flex justify-between items-center text-xs">
-                              <span className="text-[8px] text-white/50 uppercase font-mono font-bold">Alcance</span>
-                              <span className="font-bold font-mono text-white/80">{crmFunnelData.reach.toLocaleString('pt-BR')}</span>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Setinha CRM 2 + CTR */}
-                        <div className="flex flex-col items-center relative z-10 w-full">
-                          <div className="h-3.5 w-[1px] bg-emerald-500/20" />
-                          <span className="absolute text-[6px] font-mono font-black text-emerald-400 bg-[#07090e] px-1 py-[0.5px] rounded border border-emerald-500/10 -translate-y-0.5">
-                            CTR: {crmFunnelData.ctr}
-                          </span>
-                        </div>
-
-                        {/* Passo 3: Cliques */}
-                        <div className="w-full relative transition-all hover:scale-[1.01] duration-300">
-                          <div className="relative bg-[#080a0f]/80 border border-emerald-500/10 rounded-xl p-2">
-                            <div className="flex justify-between items-center text-xs">
-                              <span className="text-[8px] text-white/50 uppercase font-mono font-bold">Cliques</span>
-                              <span className="font-bold font-mono text-white/70">{crmFunnelData.clicks.toLocaleString('pt-BR')}</span>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Setinha CRM 3 + Loading */}
-                        <div className="flex flex-col items-center relative z-10 w-full">
-                          <div className="h-3.5 w-[1px] bg-emerald-500/20" />
-                          <span className="absolute text-[6px] font-mono font-black text-emerald-400 bg-[#07090e] px-1 py-[0.5px] rounded border border-emerald-500/10 -translate-y-0.5">
-                            Carregamento: {crmFunnelData.loadingRate}
-                          </span>
-                        </div>
-
-                        {/* Passo 4: Visitas */}
-                        <div className="w-full relative transition-all hover:scale-[1.01] duration-300">
-                          <div className="relative bg-[#07090e]/90 border border-emerald-500/10 rounded-xl p-2">
-                            <div className="flex justify-between items-center text-xs">
-                              <span className="text-[8px] text-white/50 uppercase font-mono font-bold">Atendimentos (Visitas)</span>
-                              <span className="font-bold font-mono text-white/60">{crmFunnelData.visits.toLocaleString('pt-BR')}</span>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Setinha CRM 4 + Conversão */}
-                        <div className="flex flex-col items-center relative z-10 w-full">
-                          <div className="h-3.5 w-[1px] bg-emerald-500/20" />
-                          <span className="absolute text-[6px] font-mono font-black text-emerald-400 bg-[#07090e] px-1 py-[0.5px] rounded border border-emerald-500/10 -translate-y-0.5">
-                            Conversão CRM: {crmFunnelData.conversionRate}
-                          </span>
-                        </div>
-
-                        {/* Passo 5: Leads */}
-                        <div className="w-full relative transition-all hover:scale-[1.01] duration-300">
-                          <div className="relative bg-emerald-500/5 border border-emerald-500/35 rounded-xl p-2 shadow-[0_0_15px_rgba(52,211,153,0.02)]">
-                            <div className="flex justify-between items-center text-xs">
-                              <span className="text-[8px] text-emerald-400 uppercase font-mono font-bold">Leads Gerados</span>
-                              <span className="font-black font-mono text-emerald-400 emerald-glow">{crmFunnelData.leads.toLocaleString('pt-BR')}</span>
-                            </div>
-                          </div>
-                        </div>
-
-                      </div>
-
-                      {/* Métricas de Eficiência CRM */}
-                      <div className="w-full mt-3 pt-2.5 border-t border-white/5 grid grid-cols-2 gap-2 text-center">
-                        <div className="bg-white/[0.015] border border-white/5 rounded-lg p-1.5">
-                          <span className="text-[7px] text-white/40 uppercase block font-mono">CPL Médio</span>
-                          <span className="text-xs font-black font-mono text-emerald-400 mt-0.5 block">
-                            R$ {crmFunnelData.cpl.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                          </span>
-                        </div>
-                        <div className="bg-emerald-500/5 border border-emerald-500/10 rounded-lg p-1.5">
-                          <span className="text-[7px] text-emerald-400 uppercase block font-mono">Eficiência Relativa</span>
-                          <span className="text-[10px] font-black text-emerald-400 block mt-0.5">
-                            -29,4% CPL!
-                          </span>
-                        </div>
-                      </div>
-
-                    </div>
-
-                  </div>
-
-                  {/* Comparativo Resumo / Insight */}
-                  <div className="w-full bg-white/[0.015] border border-white/5 p-3 rounded-xl mt-3 flex items-start gap-3" id="funnel-comparison-insight">
-                    <TrendingUp size={16} className="text-brand-cyan shrink-0 mt-0.5" />
-                    <div>
-                      <h5 className="text-[11px] font-bold text-white uppercase tracking-wider">Destaque de Eficiência da Operação</h5>
-                      <p className="text-[9.5px] text-white/60 mt-0.5 leading-relaxed">
-                        A <strong className="text-emerald-400">Campanha de CRM</strong> apresentou alta performance técnica com um <strong className="text-emerald-400">CPL 29.4% menor</strong> (R$ 58,08 vs R$ 82,23 da LP) e uma <strong className="text-emerald-400">taxa de conversão superior (15,26% vs 12,72%)</strong>. Isso se deu principalmente pelo CTR superior de 11,04% em canais de menor fricção, enquanto a <strong className="text-brand-cyan">Campanha de LP A</strong> destaca-se pela alta qualificação do lead gerado, absorvendo maior volume absoluto inicial com robustez de página.
-                      </p>
                     </div>
                   </div>
-                </>
-              )}
+
+                  {/* Transition Indicator 1 */}
+                  <div className="my-[4px] flex flex-col items-center relative z-20">
+                    <div className={cn(
+                      "w-[1.2px] h-3.5 bg-gradient-to-b",
+                      funnelCampaign === 'lp' ? "from-brand-cyan/60 to-brand-cyan/40" : "from-emerald-500/60 to-emerald-500/40"
+                    )} />
+                  </div>
+
+                  {/* ETAPA 2: ALCANCE */}
+                  <div className="w-full max-w-[410px] relative transition-all hover:scale-[1.01] duration-300">
+                    <div className={cn(
+                      "absolute inset-0 bg-gradient-to-r rounded-2xl blur-xs pointer-events-none border-t border-x",
+                      funnelCampaign === 'lp' 
+                        ? "from-brand-cyan/20 via-transparent to-brand-cyan/20 border-brand-cyan/25" 
+                        : "from-emerald-500/20 via-transparent to-emerald-500/20 border-emerald-500/25"
+                    )} />
+                    <div className={cn(
+                      "relative bg-[#0b0e15]/90 border rounded-2xl p-2.5 md:py-3 md:px-4.5 shadow-[0_4px_30px_rgba(0,0,0,0.6)]",
+                      funnelCampaign === 'lp' ? "border-brand-cyan/25" : "border-emerald-500/25"
+                    )}>
+                      
+                      <div className="flex justify-between items-center relative z-10">
+                        <div className="flex items-center gap-2.5 font-sans">
+                          <div className={cn(
+                            "w-7 h-7 rounded-md flex items-center justify-center shrink-0 border",
+                            funnelCampaign === 'lp' 
+                              ? "bg-brand-cyan/10 border-brand-cyan/20 text-brand-cyan" 
+                              : "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
+                          )}>
+                            <Users size={14} />
+                          </div>
+                          <div>
+                            <h3 className="text-xs font-bold text-white/90 uppercase tracking-tight font-sans">Alcance</h3>
+                          </div>
+                        </div>
+
+                        <div className="text-right">
+                          <span className="text-[7px] text-white/30 uppercase font-mono block font-bold">Público Único</span>
+                          <span className={cn(
+                            "text-lg font-black font-mono",
+                            funnelCampaign === 'lp' ? "text-brand-cyan" : "text-emerald-400"
+                          )}>
+                            {selectedCampaignFunnel.reach.total.toLocaleString('pt-BR')}
+                          </span>
+                          <span className="text-[7.5px] text-white/50 block font-medium -mt-0.5">Pessoas</span>
+                        </div>
+                      </div>
+
+                      {/* Identifiable Channel Breakdown */}
+                      <div className="flex justify-between w-full mt-2 pt-2 border-t border-white/[0.04] text-[8.5px] font-mono text-white/50">
+                        <span className="flex items-center gap-1">
+                          <span className="h-1.5 w-1.5 bg-brand-cyan rounded-full shrink-0" />
+                          Meta: <strong className="text-white/80 font-mono">{selectedCampaignFunnel.reach.meta.toLocaleString('pt-BR')}</strong> ({selectedCampaignFunnel.reach.metaPercent})
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <span className="h-1.5 w-1.5 bg-emerald-400 rounded-full shrink-0" />
+                          Google: <strong className="text-white/80 font-mono">{selectedCampaignFunnel.reach.google.toLocaleString('pt-BR')}</strong> ({selectedCampaignFunnel.reach.googlePercent})
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Transition Indicator 2 */}
+                  <div className="my-[4px] flex flex-col items-center relative z-20">
+                    <div className={cn(
+                      "w-[1.2px] h-3.5 bg-gradient-to-b",
+                      funnelCampaign === 'lp' ? "from-brand-cyan/40 to-brand-cyan/20" : "from-emerald-500/40 to-emerald-500/20"
+                    )} />
+                    <span className={cn(
+                      "absolute text-[6.5px] font-mono font-black bg-[#07090e] px-1.5 py-[1px] rounded border -translate-y-0.5 whitespace-nowrap",
+                      funnelCampaign === 'lp' 
+                        ? "text-brand-cyan/90 border-brand-cyan/10" 
+                        : "text-emerald-400/90 border-emerald-500/10"
+                    )}>
+                      CTR Geral: {selectedCampaignFunnel.clicks.ctrGeral} (Meta: {selectedCampaignFunnel.clicks.metaCtr} | Google: {selectedCampaignFunnel.clicks.googleCtr})
+                    </span>
+                  </div>
+
+                  {/* ETAPA 3: CLIQUE NO LINK */}
+                  <div className="w-full max-w-[310px] relative transition-all hover:scale-[1.01] duration-300">
+                    <div className={cn(
+                      "absolute inset-0 bg-gradient-to-r rounded-2xl blur-xs pointer-events-none border-t border-x",
+                      funnelCampaign === 'lp' 
+                        ? "from-brand-cyan/10 via-transparent to-brand-cyan/10 border-brand-cyan/15" 
+                        : "from-emerald-500/10 via-transparent to-emerald-500/10 border-emerald-500/15"
+                    )} />
+                    <div className={cn(
+                      "relative bg-[#080a0f]/95 border rounded-2xl p-2.5 md:py-3 md:px-4 shadow-[0_4px_30px_rgba(0,0,0,0.6)]",
+                      funnelCampaign === 'lp' ? "border-brand-cyan/15" : "border-emerald-500/15"
+                    )}>
+                      
+                      <div className="flex justify-between items-center relative z-10">
+                        <div className="flex items-center gap-2.5 font-sans">
+                          <div className={cn(
+                            "w-7 h-7 rounded-md flex items-center justify-center shrink-0 border",
+                            funnelCampaign === 'lp' 
+                              ? "bg-brand-cyan/5 border-brand-cyan/10 text-brand-cyan" 
+                              : "bg-emerald-500/5 border-emerald-500/10 text-emerald-400"
+                          )}>
+                            <MousePointer2 size={13} className="-rotate-90" />
+                          </div>
+                          <div>
+                            <h3 className="text-xs font-bold text-white/80 uppercase tracking-tight font-sans">Cliques no Link</h3>
+                          </div>
+                        </div>
+
+                        <div className="text-right">
+                          <span className="text-[7px] text-white/30 uppercase font-mono block font-bold">Volume</span>
+                          <span className="text-base font-black font-mono text-white/90">
+                            {selectedCampaignFunnel.clicks.total.toLocaleString('pt-BR')}
+                          </span>
+                          <span className="text-[7.5px] text-white/50 block font-medium -mt-0.5">Cliques</span>
+                        </div>
+                      </div>
+
+                      {/* Identifiable Channel Breakdown */}
+                      <div className="flex justify-between w-full mt-2 pt-2 border-t border-white/[0.04] text-[8.5px] font-mono text-white/50">
+                        <span className="flex items-center gap-1">
+                          <span className="h-1.5 w-1.5 bg-brand-cyan rounded-full shrink-0" />
+                          Meta: <strong className="text-white/80 font-mono">{selectedCampaignFunnel.clicks.meta.toLocaleString('pt-BR')}</strong> ({selectedCampaignFunnel.clicks.metaPercent})
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <span className="h-1.5 w-1.5 bg-emerald-400 rounded-full shrink-0" />
+                          Google: <strong className="text-white/80 font-mono">{selectedCampaignFunnel.clicks.google.toLocaleString('pt-BR')}</strong> ({selectedCampaignFunnel.clicks.googlePercent})
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Transition Indicator 3 */}
+                  <div className="my-[4px] flex flex-col items-center relative z-20">
+                    <div className={cn(
+                      "w-[1.2px] h-3.5 bg-gradient-to-b",
+                      funnelCampaign === 'lp' ? "from-brand-cyan/30 to-brand-cyan/10" : "from-emerald-500/30 to-emerald-500/10"
+                    )} />
+                    <span className={cn(
+                      "absolute text-[6.5px] font-mono font-black bg-[#07090e] px-1.5 py-[1px] rounded border -translate-y-0.5 whitespace-nowrap",
+                      funnelCampaign === 'lp' 
+                        ? "text-brand-cyan/90 border-brand-cyan/10" 
+                        : "text-emerald-400/90 border-emerald-500/10"
+                    )}>
+                      Tx. Carregamento (Loading): {selectedCampaignFunnel.visits.loadingRate} (Meta: {selectedCampaignFunnel.visits.metaRate} | Google: {selectedCampaignFunnel.visits.googleRate})
+                    </span>
+                  </div>
+
+                  {/* ETAPA 4: VISUALIZAÇÃO DA PÁGINA DE DESTINO / ATENDIMENTO */}
+                  <div className="w-full max-w-[260px] relative transition-all hover:scale-[1.01] duration-300">
+                    <div className={cn(
+                      "absolute inset-0 bg-gradient-to-r rounded-2xl blur-xs pointer-events-none border-t border-x",
+                      funnelCampaign === 'lp' 
+                        ? "from-brand-cyan/15 via-transparent to-brand-cyan/15 border-brand-cyan/10" 
+                        : "from-emerald-500/15 via-transparent to-emerald-500/15 border-emerald-500/10"
+                    )} />
+                    <div className={cn(
+                      "relative bg-[#07090e]/95 border rounded-2xl p-2.5 md:py-3 md:px-3 shadow-[0_4px_30px_rgba(0,0,0,0.6)]",
+                      funnelCampaign === 'lp' ? "border-brand-cyan/10" : "border-emerald-500/10"
+                    )}>
+                      
+                      <div className="flex justify-between items-center relative z-10">
+                        <div className="flex items-center gap-2 font-sans">
+                          <div className={cn(
+                            "w-6 h-6 rounded-md flex items-center justify-center shrink-0 border",
+                            funnelCampaign === 'lp' 
+                              ? "bg-brand-cyan/5 border-brand-cyan/10 text-brand-cyan" 
+                              : "bg-emerald-500/5 border-emerald-500/10 text-emerald-400"
+                          )}>
+                            <Layers size={11} />
+                          </div>
+                          <div>
+                            <h3 className="text-[11px] font-bold text-white/70 uppercase tracking-tight font-sans">
+                              Page Views
+                            </h3>
+                          </div>
+                        </div>
+
+                        <div className="text-right">
+                          <span className="text-[7px] text-white/30 uppercase font-mono block font-bold">Volume</span>
+                          <span className="text-sm font-black font-mono text-white/80">
+                            {selectedCampaignFunnel.visits.total.toLocaleString('pt-BR')}
+                          </span>
+                          <span className="text-[7.5px] text-white/50 block font-medium -mt-0.5">Visitas</span>
+                        </div>
+                      </div>
+
+                      {/* Identifiable Channel Breakdown */}
+                      <div className="flex justify-between w-full mt-2 pt-2 border-t border-white/[0.04] text-[8.5px] font-mono text-white/50">
+                        <span className="flex items-center gap-1">
+                          <span className="h-1.5 w-1.5 bg-brand-cyan rounded-full shrink-0" />
+                          Meta: <strong className="text-white/80 font-mono">{selectedCampaignFunnel.visits.meta.toLocaleString('pt-BR')}</strong> ({selectedCampaignFunnel.visits.metaPercent})
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <span className="h-1.5 w-1.5 bg-emerald-400 rounded-full shrink-0" />
+                          Google: <strong className="text-white/80 font-mono">{selectedCampaignFunnel.visits.google.toLocaleString('pt-BR')}</strong> ({selectedCampaignFunnel.visits.googlePercent})
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Transition Indicator 4 */}
+                  <div className="my-[4px] flex flex-col items-center relative z-20">
+                    <div className={cn(
+                      "w-[1.2px] h-3.5 bg-gradient-to-b",
+                      funnelCampaign === 'lp' ? "from-brand-cyan/25 to-brand-cyan/10" : "from-emerald-500/25 to-emerald-500/10"
+                    )} />
+                    <span className={cn(
+                      "absolute text-[6.5px] font-mono font-black bg-[#07090e] px-1.5 py-[1px] rounded border -translate-y-0.5 whitespace-nowrap",
+                      funnelCampaign === 'lp' 
+                        ? "text-brand-cyan/90 border-brand-cyan/10" 
+                        : "text-emerald-400/90 border-emerald-500/10"
+                    )}>
+                      Conversão: {selectedCampaignFunnel.leads.conversionRate} (Meta: {selectedCampaignFunnel.leads.metaConversion} | Google: {selectedCampaignFunnel.leads.googleConversion})
+                    </span>
+                  </div>
+
+                  {/* ETAPA 5: LEADS - BASE DO FUNIL */}
+                  <div className="w-full max-w-[215px] relative transition-all hover:scale-[1.01] duration-300">
+                    <div className={cn(
+                      "absolute inset-0 blur-md rounded-2xl opacity-40 pointer-events-none",
+                      funnelCampaign === 'lp' ? "bg-brand-cyan/10" : "bg-emerald-400/10"
+                    )} />
+                    <div className={cn(
+                      "relative bg-[#22d3ee]/[0.02] border-2 rounded-2xl p-2.5 md:py-3 md:px-3 overflow-hidden shadow-2xl",
+                      funnelCampaign === 'lp' 
+                        ? "border-brand-cyan/45 shadow-brand-cyan/5" 
+                        : "border-emerald-500/45 shadow-emerald-500/5"
+                    )}>
+                      <div className={cn(
+                        "absolute -right-12 -bottom-12 w-24 h-24 blur-2xl rounded-full pointer-events-none",
+                        funnelCampaign === 'lp' ? "bg-brand-cyan/10" : "bg-emerald-500/10"
+                      )} />
+                      
+                      <div className="flex justify-between items-center relative z-10">
+                        <div className="flex items-center gap-2 font-sans">
+                          <div className={cn(
+                            "w-6 h-6 rounded-md flex items-center justify-center shrink-0 animate-pulse border",
+                            funnelCampaign === 'lp' 
+                              ? "bg-[#22d3ee]/[0.15] border-brand-cyan/[0.35] text-brand-cyan" 
+                              : "bg-[#34d399]/[0.15] border-emerald-500/[0.35] text-emerald-400"
+                          )}>
+                            <Target size={12} />
+                          </div>
+                          <div>
+                            <h3 className="text-[11px] font-black text-white uppercase tracking-tight font-sans">Conversões</h3>
+                          </div>
+                        </div>
+
+                        <div className="text-right">
+                          <span className="text-[7px] text-white/40 uppercase font-mono block font-black">Total Leads</span>
+                          <span className={cn(
+                            "text-lg font-black font-mono cyan-glow",
+                            funnelCampaign === 'lp' ? "text-brand-cyan" : "text-emerald-400"
+                          )}>
+                            {selectedCampaignFunnel.leads.total.toLocaleString('pt-BR')}
+                          </span>
+                          <span className="text-[7.5px] text-white/50 block font-medium -mt-0.5">Leads</span>
+                        </div>
+                      </div>
+
+                      {/* Identifiable Channel Breakdown with customized CPL! */}
+                      <div className="flex flex-col gap-1.5 w-full mt-2 pt-2 border-t border-white/[0.04] text-[8.5px] font-mono text-white/50">
+                        <div className="flex justify-between">
+                          <span className="flex items-center gap-1">
+                            <span className="h-1.5 w-1.5 bg-brand-cyan rounded-full shrink-0" />
+                            Meta Leads: <strong className="text-white/80 font-mono">{selectedCampaignFunnel.leads.meta.toLocaleString('pt-BR')}</strong>
+                          </span>
+                          <span className="text-[8px] text-brand-cyan font-bold font-mono">
+                            CPL: {selectedCampaignFunnel.leads.meta > 0 ? `R$ ${selectedCampaignFunnel.leads.metaCpl.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '—'}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="flex items-center gap-1">
+                            <span className="h-1.5 w-1.5 bg-emerald-400 rounded-full shrink-0" />
+                            Google Leads: <strong className="text-white/80 font-mono">{selectedCampaignFunnel.leads.google.toLocaleString('pt-BR')}</strong>
+                          </span>
+                          <span className="text-[8px] text-emerald-400 font-bold font-mono">
+                            CPL: {selectedCampaignFunnel.leads.google > 0 ? `R$ ${selectedCampaignFunnel.leads.googleCpl.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '—'}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+
+
               
             </div>
           )}
