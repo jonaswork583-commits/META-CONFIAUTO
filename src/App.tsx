@@ -57,6 +57,7 @@ export default function App() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [funnelWeek, setFunnelWeek] = useState<'week1' | 'week2' | 'week3'>('week3');
   const [funnelSource, setFunnelSource] = useState<'consolidated' | 'meta' | 'google'>('consolidated');
+  const [funnelMode, setFunnelMode] = useState<'channels' | 'comparison'>('channels');
 
   const unifiedFunnelData = {
     consolidated: {
@@ -92,6 +93,32 @@ export default function App() {
       loadingRate: "12,70%",
       conversionRate: "13,77%"
     }
+  };
+
+  const lpFunnelData = {
+    label: "Campanha de LP (Landing Page)",
+    investment: 57724.39,
+    reach: 460000,
+    clicks: 36800,
+    visits: 5520,
+    leads: 702,
+    ctr: "8,00%",
+    loadingRate: "15,00%",
+    conversionRate: "12,72%",
+    cpl: 82.23
+  };
+
+  const crmFunnelData = {
+    label: "Campanha de CRM (Esteira Direta)",
+    investment: 43558.09,
+    reach: 349461,
+    clicks: 38585,
+    visits: 4916,
+    leads: 750,
+    ctr: "11,04%",
+    loadingRate: "12,74%",
+    conversionRate: "15,26%",
+    cpl: 58.08
   };
 
   const selectedUnified = unifiedFunnelData[funnelSource];
@@ -164,7 +191,8 @@ export default function App() {
   const totalWeek2Investment = PERFORMANCE_DATA.campaigns.reduce((sum, c) => sum + (c.week2.investment || 0), 0);
   const totalWeek3Investment = PERFORMANCE_DATA.campaigns.reduce((sum, c) => sum + (c.week3.investment || 0), 0);
   const totalWeek4Investment = PERFORMANCE_DATA.campaigns.reduce((sum, c) => sum + (c.week4?.investment || 0), 0);
-  const totalJuneInvestment = totalWeek1Investment + totalWeek2Investment + totalWeek3Investment + totalWeek4Investment;
+  const totalWeek5Investment = PERFORMANCE_DATA.campaigns.reduce((sum, c) => sum + (c.week5?.investment || 0), 0);
+  const totalPeriodInvestment = totalWeek1Investment + totalWeek2Investment + totalWeek3Investment + totalWeek4Investment + totalWeek5Investment;
 
   // Calculador de variação para KPI
   function getChange(val1: number | undefined, val2: number | undefined, invertColor = false) {
@@ -227,7 +255,7 @@ export default function App() {
                 </h1>
                 
                 <p className="text-white/40 font-mono tracking-widest text-[9px] uppercase">
-                  Foco total no resultado consolidado de junho
+                  Foco no resultado consolidado de Junho e início de Julho
                 </p>
               </div>
 
@@ -239,10 +267,10 @@ export default function App() {
                     <Calendar size={18} className="text-brand-cyan" />
                     <span className="text-xs font-bold uppercase tracking-wider text-white">Investimento Acumulado por Semana</span>
                   </div>
-                  <span className="text-[10px] font-mono font-bold text-brand-cyan">Junho 2026</span>
+                  <span className="text-[10px] font-mono font-bold text-brand-cyan">Junho e Julho 2026</span>
                 </div>
 
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                   <div className="bg-white/[0.015] border border-white/5 p-4 rounded-xl flex flex-col justify-between">
                     <span className="text-[9px] text-white/40 font-bold uppercase tracking-wider">Semana 1 (01-08 Jun)</span>
                     <span className="text-base font-bold font-mono mt-2 text-white/80">
@@ -266,15 +294,22 @@ export default function App() {
 
                   <div className="bg-white/[0.015] border border-white/5 p-4 rounded-xl flex flex-col justify-between">
                     <span className="text-[9px] text-white/40 font-bold uppercase tracking-wider">Semana 4 (23-29 Jun)</span>
-                    <span className="text-base font-black font-mono mt-2 text-brand-cyan">
+                    <span className="text-base font-bold font-mono mt-2 text-white/95">
                       R$ {totalWeek4Investment.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    </span>
+                  </div>
+
+                  <div className="bg-white/[0.015] border border-white/5 p-4 rounded-xl flex flex-col justify-between">
+                    <span className="text-[9px] text-white/40 font-bold uppercase tracking-wider">Semana 5 (01-07 Jul)</span>
+                    <span className="text-base font-black font-mono mt-2 text-brand-cyan">
+                      R$ {totalWeek5Investment.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </span>
                   </div>
 
                   <div className="bg-brand-cyan/5 border border-brand-cyan/20 p-4 rounded-xl flex flex-col justify-between col-span-2 md:col-span-1">
                     <span className="text-[9px] text-brand-cyan font-black uppercase tracking-wider">Consolidado Total</span>
                     <span className="text-lg font-black font-mono mt-2 text-brand-cyan cyan-glow">
-                      R$ {totalJuneInvestment.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      R$ {totalPeriodInvestment.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </span>
                   </div>
                 </div>
@@ -288,8 +323,11 @@ export default function App() {
                     <span className="px-2 py-0.5 rounded-md border border-white/10 bg-white/5 text-white/75 font-semibold">
                       S2 ➔ S3: {totalWeek3Investment >= totalWeek2Investment ? '+' : ''}{(((totalWeek3Investment - totalWeek2Investment) / totalWeek2Investment) * 100).toFixed(1)}%
                     </span>
-                    <span className="px-2 py-0.5 rounded-md border border-brand-cyan/20 bg-brand-cyan/10 text-brand-cyan font-bold">
+                    <span className="px-2 py-0.5 rounded-md border border-white/10 bg-white/5 text-white/75 font-semibold">
                       S3 ➔ S4: {totalWeek4Investment >= totalWeek3Investment ? '+' : ''}{(((totalWeek4Investment - totalWeek3Investment) / totalWeek3Investment) * 100).toFixed(1)}%
+                    </span>
+                    <span className="px-2 py-0.5 rounded-md border border-brand-cyan/20 bg-brand-cyan/10 text-brand-cyan font-bold">
+                      S4 ➔ S5: {totalWeek5Investment >= totalWeek4Investment ? '+' : ''}{(((totalWeek5Investment - totalWeek4Investment) / totalWeek4Investment) * 100).toFixed(1)}%
                     </span>
                   </div>
                 </div>
@@ -331,6 +369,12 @@ export default function App() {
                 ? campaign.week4?.visits 
                 : campaign.week4?.leads;
 
+            const w5Val = campaign.id === 'alcance' 
+              ? campaign.week5?.reach 
+              : campaign.id === 'trafego_perfil' 
+                ? campaign.week5?.visits 
+                : campaign.week5?.leads;
+
             const w1UnitVal = campaign.id === 'alcance' 
               ? campaign.week1.cpm 
               : campaign.id === 'trafego_perfil' 
@@ -355,6 +399,12 @@ export default function App() {
                 ? campaign.week4?.cpv 
                 : campaign.week4?.cpl;
 
+            const w5UnitVal = campaign.id === 'alcance' 
+              ? campaign.week5?.cpm 
+              : campaign.id === 'trafego_perfil' 
+                ? campaign.week5?.cpv 
+                : campaign.week5?.cpl;
+
             // Variações de Semana 1 para Semana 2
             const varInvestS1S2 = getChange(campaign.week1.investment, campaign.week2.investment);
             const varVolumeS1S2 = getChange(w1Val, w2Val);
@@ -370,8 +420,13 @@ export default function App() {
             const varVolumeS3S4 = getChange(w3Val, w4Val);
             const varUnitS3S4 = getChange(w3UnitVal, w4UnitVal, true);
 
-            // Budget Weight em relação à semana 4 (atual corrente)
-            const budgetShareWeek4 = campaign.week4 ? ((campaign.week4.investment / totalWeek4Investment) * 100).toFixed(1) : "0.0";
+            // Variações de Semana 4 para Semana 5
+            const varInvestS4S5 = getChange(campaign.week4?.investment, campaign.week5?.investment);
+            const varVolumeS4S5 = getChange(w4Val, w5Val);
+            const varUnitS4S5 = getChange(w4UnitVal, w5UnitVal, true);
+
+            // Budget Weight em relação à semana 5 (atual corrente)
+            const budgetShareWeek5 = campaign.week5 ? ((campaign.week5.investment / totalWeek5Investment) * 100).toFixed(1) : "0.0";
 
             return (
               <div className="w-full max-w-5xl px-4 flex flex-col justify-center gap-6 md:gap-8 animate-fade-in select-none" id={`slide-campaign-${campaign.id}`}>
@@ -397,20 +452,20 @@ export default function App() {
 
                   <div className="bg-white/[0.015] border border-white/5 rounded-xl px-4 py-2 flex items-center gap-4 shrink-0">
                     <div className="text-right">
-                      <span className="text-[8px] text-white/30 uppercase tracking-[0.15em] font-extrabold block">Participação da Verba (S4)</span>
-                      <span className="text-sm md:text-base font-black text-brand-cyan cyan-glow font-mono leading-none">{budgetShareWeek4}%</span>
+                      <span className="text-[8px] text-white/30 uppercase tracking-[0.15em] font-extrabold block">Participação da Verba (S5)</span>
+                      <span className="text-sm md:text-base font-black text-brand-cyan cyan-glow font-mono leading-none">{budgetShareWeek5}%</span>
                     </div>
                     <div className="h-6 w-[1px] bg-white/15" />
                     <div className="text-right">
                       <span className="text-[8px] text-white/30 uppercase tracking-[0.15em] font-extrabold block">Investido Acumulado</span>
                       <span className="text-[11px] md:text-xs font-mono font-bold text-white/80">
-                        R$ {(campaign.week1.investment + campaign.week2.investment + campaign.week3.investment + (campaign.week4?.investment || 0)).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        R$ {(campaign.week1.investment + campaign.week2.investment + campaign.week3.investment + (campaign.week4?.investment || 0) + (campaign.week5?.investment || 0)).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </span>
                     </div>
                   </div>
                 </div>
 
-                {/* Grid de KPIs Centrais - COMPARATIVO S1 vs S2 vs S3 vs S4 */}
+                {/* Grid de KPIs Centrais - COMPARATIVO S1 vs S2 vs S3 vs S4 vs S5 */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-5 w-full" id={`kpi-grid-${campaign.id}`}>
                   
                   {/* KPI 1: INVESTIMENTO DIRETO */}
@@ -422,7 +477,7 @@ export default function App() {
                       </span>
                     </div>
                     
-                    <div className="grid grid-cols-4 gap-1 mt-2 pt-1.5 border-t border-white/[0.03]">
+                    <div className="grid grid-cols-5 gap-0.5 mt-2 pt-1.5 border-t border-white/[0.03]">
                       <div>
                         <span className="text-[7px] text-white/30 uppercase font-mono block">Semana 1</span>
                         <p className="text-[9.5px] font-semibold font-mono text-white/60 leading-none mt-1">
@@ -442,16 +497,22 @@ export default function App() {
                         </p>
                       </div>
                       <div>
-                        <span className="text-[7px] text-brand-cyan uppercase font-mono block">Semana 4</span>
-                        <p className="text-[9.5px] font-black font-mono text-brand-cyan leading-none mt-1">
+                        <span className="text-[7px] text-white/40 uppercase font-mono block">Semana 4</span>
+                        <p className="text-[9.5px] font-semibold font-mono text-white/70 leading-none mt-1">
                           R$ {campaign.week4?.investment.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                        </p>
+                      </div>
+                      <div>
+                        <span className="text-[7px] text-brand-cyan uppercase font-mono block">Semana 5</span>
+                        <p className="text-[9.5px] font-black font-mono text-brand-cyan leading-none mt-1">
+                          R$ {campaign.week5?.investment.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                         </p>
                       </div>
                     </div>
 
                     <div className="mt-2.5 pt-1.5 border-t border-white/[0.02] flex items-center justify-between gap-1">
                       <span className="text-[7px] text-white/20 uppercase font-mono tracking-wider shrink-0">Variação s./s.</span>
-                      <div className="flex gap-1 text-[7px]">
+                      <div className="flex gap-0.5 text-[7px] flex-wrap">
                         {varInvestS1S2 && (
                           <span className={cn("px-1 py-0.25 rounded border font-mono", varInvestS1S2.colorClass)}>
                             S2: {varInvestS1S2.pct}
@@ -465,6 +526,11 @@ export default function App() {
                         {varInvestS3S4 && (
                           <span className={cn("px-1 py-0.25 rounded border font-mono", varInvestS3S4.colorClass)}>
                             S4: {varInvestS3S4.pct}
+                          </span>
+                        )}
+                        {varInvestS4S5 && (
+                          <span className={cn("px-1 py-0.25 rounded border font-mono", varInvestS4S5.colorClass)}>
+                            S5: {varInvestS4S5.pct}
                           </span>
                         )}
                       </div>
@@ -482,7 +548,7 @@ export default function App() {
                       </span>
                     </div>
 
-                    <div className="grid grid-cols-4 gap-1 mt-2 pt-1.5 border-t border-white/[0.03]">
+                    <div className="grid grid-cols-5 gap-0.5 mt-2 pt-1.5 border-t border-white/[0.03]">
                       <div>
                         <span className="text-[7px] text-white/30 uppercase font-mono block">Semana 1</span>
                         <p className="text-[9.5px] font-semibold font-mono text-white/60 leading-none mt-1">
@@ -502,16 +568,22 @@ export default function App() {
                         </p>
                       </div>
                       <div>
-                        <span className="text-[7px] text-brand-cyan uppercase font-mono block">Semana 4</span>
-                        <p className="text-[9.5px] font-black font-mono text-brand-cyan leading-none mt-1">
+                        <span className="text-[7px] text-white/40 uppercase font-mono block">Semana 4</span>
+                        <p className="text-[9.5px] font-semibold font-mono text-white/70 leading-none mt-1">
                           {w4Val?.toLocaleString('pt-BR')}
+                        </p>
+                      </div>
+                      <div>
+                        <span className="text-[7px] text-brand-cyan uppercase font-mono block">Semana 5</span>
+                        <p className="text-[9.5px] font-black font-mono text-brand-cyan leading-none mt-1">
+                          {w5Val?.toLocaleString('pt-BR')}
                         </p>
                       </div>
                     </div>
 
                     <div className="mt-2.5 pt-1.5 border-t border-white/[0.02] flex items-center justify-between gap-1">
                       <span className="text-[7px] text-white/20 uppercase font-mono tracking-wider shrink-0">Variação s./s.</span>
-                      <div className="flex gap-1 text-[7px]">
+                      <div className="flex gap-0.5 text-[7px] flex-wrap">
                         {varVolumeS1S2 && (
                           <span className={cn("px-1 py-0.25 rounded border font-mono", varVolumeS1S2.colorClass)}>
                             S2: {varVolumeS1S2.pct}
@@ -525,6 +597,11 @@ export default function App() {
                         {varVolumeS3S4 && (
                           <span className={cn("px-1 py-0.25 rounded border font-mono", varVolumeS3S4.colorClass)}>
                             S4: {varVolumeS3S4.pct}
+                          </span>
+                        )}
+                        {varVolumeS4S5 && (
+                          <span className={cn("px-1 py-0.25 rounded border font-mono", varVolumeS4S5.colorClass)}>
+                            S5: {varVolumeS4S5.pct}
                           </span>
                         )}
                       </div>
@@ -542,7 +619,7 @@ export default function App() {
                       </span>
                     </div>
 
-                    <div className="grid grid-cols-4 gap-1 mt-2 pt-1.5 border-t border-white/[0.03]">
+                    <div className="grid grid-cols-5 gap-0.5 mt-2 pt-1.5 border-t border-white/[0.03]">
                       <div>
                         <span className="text-[7px] text-white/30 uppercase font-mono block">Semana 1</span>
                         <p className="text-[9.5px] font-semibold font-mono text-white/60 leading-none mt-1">
@@ -562,16 +639,22 @@ export default function App() {
                         </p>
                       </div>
                       <div>
-                        <span className="text-[7px] text-emerald-400 uppercase font-mono block">Semana 4</span>
-                        <p className="text-[9.5px] font-black font-mono text-emerald-400 leading-none mt-1">
+                        <span className="text-[7px] text-white/40 uppercase font-mono block">Semana 4</span>
+                        <p className="text-[9.5px] font-semibold font-mono text-white/70 leading-none mt-1">
                           R$ {w4UnitVal?.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        </p>
+                      </div>
+                      <div>
+                        <span className="text-[7px] text-emerald-400 uppercase font-mono block">Semana 5</span>
+                        <p className="text-[9.5px] font-black font-mono text-emerald-400 leading-none mt-1">
+                          R$ {w5UnitVal?.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                         </p>
                       </div>
                     </div>
 
                     <div className="mt-2.5 pt-1.5 border-t border-white/[0.02] flex items-center justify-between gap-1">
                       <span className="text-[7px] text-white/20 uppercase font-mono tracking-wider shrink-0">Desempenho s./s.</span>
-                      <div className="flex gap-1 text-[7px]">
+                      <div className="flex gap-0.5 text-[7px] flex-wrap">
                         {varUnitS1S2 && (
                           <span className={cn("px-1 py-0.25 rounded border font-mono font-bold", varUnitS1S2.colorClass)}>
                             S2: {varUnitS1S2.label}
@@ -585,6 +668,11 @@ export default function App() {
                         {varUnitS3S4 && (
                           <span className={cn("px-1 py-0.25 rounded border font-mono font-bold", varUnitS3S4.colorClass)}>
                             S4: {varUnitS3S4.label}
+                          </span>
+                        )}
+                        {varUnitS4S5 && (
+                          <span className={cn("px-1 py-0.25 rounded border font-mono font-bold", varUnitS4S5.colorClass)}>
+                            S5: {varUnitS4S5.label}
                           </span>
                         )}
                       </div>
@@ -617,19 +705,19 @@ export default function App() {
                     DIRECIONAL DE CRESCIMENTO DE LEADS EM TRÁFEGO
                   </h2>
                   <p className="text-white/50 text-[10px] md:text-xs tracking-wide font-medium mt-1">
-                    Análise comparativa do volume de leads no tráfego pago (LPA e CRM) de Junho de 2026
+                    Análise comparativa do volume de leads no tráfego pago (LPA e CRM) de Junho e início de Julho de 2026
                   </p>
                 </div>
 
                 <div className="bg-white/[0.015] border border-white/5 rounded-xl px-4 py-2 flex items-center gap-4 shrink-0">
                   <div className="text-right">
                     <span className="text-[8px] text-white/30 uppercase tracking-[0.15em] font-extrabold block">Acumulado de Leads</span>
-                    <span className="text-base font-black text-brand-cyan cyan-glow font-mono leading-none">1.311 Leads</span>
+                    <span className="text-base font-black text-brand-cyan cyan-glow font-mono leading-none">1.452 Leads</span>
                   </div>
                   <div className="h-6 w-[1px] bg-white/10" />
                   <div className="text-right">
                     <span className="text-[8px] text-white/30 uppercase tracking-[0.15em] font-extrabold block">Média de Leads</span>
-                    <span className="text-xs font-mono font-bold text-white/70">~46.8 leads/dia</span>
+                    <span className="text-xs font-mono font-bold text-white/70">~39.2 leads/dia</span>
                   </div>
                 </div>
               </div>
@@ -653,7 +741,8 @@ export default function App() {
                           { name: 'Semana 1', leads: 183, trend: 183 },
                           { name: 'Semana 2', leads: 273, trend: 273 },
                           { name: 'Semana 3', leads: 417, trend: 417 },
-                          { name: 'Semana 4', leads: 438, trend: 438 }
+                          { name: 'Semana 4', leads: 438, trend: 438 },
+                          { name: 'Semana 5', leads: 141, trend: 141 }
                         ]}
                         margin={{ top: 15, right: 15, bottom: 0, left: -20 }}
                       >
@@ -688,7 +777,7 @@ export default function App() {
                           name="Volume de Leads"
                           fill="#00f2ff" 
                           radius={[6, 6, 0, 0]} 
-                          barSize={40}
+                          barSize={32}
                         />
                         <Line 
                           type="monotone" 
@@ -710,7 +799,7 @@ export default function App() {
                     </div>
                     <div className="flex items-center gap-1.5 font-bold">
                       <div className="w-2.5 h-[2px] bg-white" />
-                      <span>Linha de Tendência de Leads (Crescente)</span>
+                      <span>Linha de Tendência de Leads</span>
                     </div>
                   </div>
                 </div>
@@ -722,59 +811,59 @@ export default function App() {
                   <div className="bg-[#0b0e14] border border-white/5 rounded-2xl p-5 hover:border-brand-cyan/25 transition-all duration-300">
                     <span className="text-[8px] text-white/40 font-black uppercase tracking-widest block mb-3 font-mono">Evolução do Volume de Leads em Tráfego (LPA + CRM)</span>
                     
-                    <div className="flex flex-col sm:flex-row justify-between items-center bg-white/[0.015] p-3 rounded-xl border border-white/[0.03] gap-2">
-                      <div className="text-center flex-1">
+                    <div className="flex flex-wrap justify-between items-center bg-white/[0.015] p-3 rounded-xl border border-white/[0.03] gap-y-3 gap-x-1">
+                      <div className="text-center flex-1 min-w-[45px]">
                         <span className="text-[8px] text-white/40 font-bold uppercase tracking-wider block">S1</span>
-                        <p className="text-xl font-black font-mono text-white mt-1">183</p>
-                        <span className="text-[6.5px] text-white/30 font-mono block">01-08 Jun</span>
+                        <p className="text-sm font-black font-mono text-white mt-1">183</p>
+                        <span className="text-[6px] text-white/30 font-mono block">01-08 Jun</span>
                       </div>
 
-                      <div className="flex flex-col items-center px-1 relative min-w-[50px] shrink-0">
-                        <span className="text-[7.5px] font-black text-emerald-400 bg-emerald-500/10 px-1 py-0.5 rounded border border-emerald-500/20 mb-0.5">
-                          +49,2%
+                      <div className="flex flex-col items-center px-0.5 min-w-[30px]">
+                        <span className="text-[6.5px] font-black text-emerald-400 bg-emerald-500/10 px-0.5 py-0.25 rounded border border-emerald-500/20 mb-0.5">
+                          +49%
                         </span>
-                        <svg className="w-6 h-4 hidden sm:block" viewBox="0 0 50 20" fill="none">
-                          <path d="M5 10H42" stroke="rgba(16, 185, 129, 0.4)" strokeWidth="2" strokeDasharray="3 3"/>
-                          <path d="M38 6L44 10L38 14" stroke="#10b981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
                       </div>
 
-                      <div className="text-center flex-1">
+                      <div className="text-center flex-1 min-w-[45px]">
                         <span className="text-[8px] text-white/40 font-bold uppercase tracking-wider block">S2</span>
-                        <p className="text-xl font-black font-mono text-white mt-1">273</p>
-                        <span className="text-[6.5px] text-white/30 font-mono block">09-15 Jun</span>
+                        <p className="text-sm font-black font-mono text-white mt-1">273</p>
+                        <span className="text-[6px] text-white/30 font-mono block">09-15 Jun</span>
                       </div>
 
-                      <div className="flex flex-col items-center px-1 relative min-w-[50px] shrink-0">
-                        <span className="text-[7.5px] font-black text-emerald-400 bg-emerald-500/10 px-1 py-0.5 rounded border border-emerald-500/20 mb-0.5">
-                          +52,7%
+                      <div className="flex flex-col items-center px-0.5 min-w-[30px]">
+                        <span className="text-[6.5px] font-black text-emerald-400 bg-emerald-500/10 px-0.5 py-0.25 rounded border border-emerald-500/20 mb-0.5">
+                          +52%
                         </span>
-                        <svg className="w-6 h-4 hidden sm:block" viewBox="0 0 50 20" fill="none">
-                          <path d="M5 10H42" stroke="rgba(16, 185, 129, 0.4)" strokeWidth="2" strokeDasharray="3 3"/>
-                          <path d="M38 6L44 10L38 14" stroke="#10b981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
                       </div>
 
-                      <div className="text-center flex-1">
+                      <div className="text-center flex-1 min-w-[45px]">
                         <span className="text-[8px] text-white/40 font-bold uppercase tracking-wider block">S3</span>
-                        <p className="text-xl font-black font-mono text-white mt-1">417</p>
-                        <span className="text-[6.5px] text-white/30 font-mono block">16-22 Jun</span>
+                        <p className="text-sm font-black font-mono text-white mt-1">417</p>
+                        <span className="text-[6px] text-white/30 font-mono block">16-22 Jun</span>
                       </div>
 
-                      <div className="flex flex-col items-center px-1 relative min-w-[50px] shrink-0">
-                        <span className="text-[7.5px] font-black text-emerald-400 bg-emerald-500/10 px-1 py-0.5 rounded border border-emerald-500/20 mb-0.5 animate-pulse">
-                          +5,0%
+                      <div className="flex flex-col items-center px-0.5 min-w-[30px]">
+                        <span className="text-[6.5px] font-black text-emerald-400 bg-emerald-500/10 px-0.5 py-0.25 rounded border border-emerald-500/20 mb-0.5">
+                          +5%
                         </span>
-                        <svg className="w-6 h-4 hidden sm:block" viewBox="0 0 50 20" fill="none">
-                          <path d="M5 10H42" stroke="rgba(16, 185, 129, 0.4)" strokeWidth="2" strokeDasharray="3 3"/>
-                          <path d="M38 6L44 10L38 14" stroke="#10b981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
                       </div>
 
-                      <div className="text-center flex-1">
-                        <span className="text-[8px] text-brand-cyan font-bold uppercase tracking-wider block">S4</span>
-                        <p className="text-xl font-black font-mono text-brand-cyan cyan-glow mt-1">438</p>
-                        <span className="text-[6.5px] text-brand-cyan/40 font-mono block font-bold">23-29 Jun</span>
+                      <div className="text-center flex-1 min-w-[45px]">
+                        <span className="text-[8px] text-white/40 font-bold uppercase tracking-wider block">S4</span>
+                        <p className="text-sm font-black font-mono text-white mt-1">438</p>
+                        <span className="text-[6px] text-white/30 font-mono block">23-29 Jun</span>
+                      </div>
+
+                      <div className="flex flex-col items-center px-0.5 min-w-[30px]">
+                        <span className="text-[6.5px] font-black text-amber-400 bg-amber-500/10 px-0.5 py-0.25 rounded border border-amber-500/20 mb-0.5">
+                          Parcial
+                        </span>
+                      </div>
+
+                      <div className="text-center flex-1 min-w-[45px]">
+                        <span className="text-[8px] text-brand-cyan font-bold uppercase tracking-wider block">S5</span>
+                        <p className="text-sm font-black font-mono text-brand-cyan cyan-glow mt-1">141</p>
+                        <span className="text-[6px] text-brand-cyan/40 font-mono block font-bold">01-07 Jul</span>
                       </div>
                     </div>
 
@@ -782,7 +871,7 @@ export default function App() {
                     <div className="mt-3 bg-white/[0.01] border border-white/[0.03] p-2.5 rounded-lg flex gap-2 items-center">
                       <TrendingUp size={14} className="text-brand-cyan shrink-0" />
                       <p className="text-[9.5px] leading-snug text-white/60">
-                        <strong className="text-brand-cyan font-semibold">Crescimento Diário Consistente:</strong> A geração diária média saltou de <span className="text-white font-mono font-bold">26,1 leads/dia</span> na Semana 1 para <span className="text-white font-mono font-bold">39,0 leads/dia</span> na Semana 2, e <span className="text-white font-mono font-bold">59,6 leads/dia</span> na Semana 3, consolidando o ritmo elevado com <span className="text-brand-cyan font-mono font-bold">62,6 leads/dia</span> na Semana 4. Um avanço de <span className="text-brand-cyan font-mono font-bold">+139,3%</span> desde o início.
+                        <strong className="text-brand-cyan font-semibold">Início de Julho (Semana 5):</strong> A geração de leads manteve-se ativa com <span className="text-brand-cyan font-mono font-bold">141 novos leads</span> entre 01 e 07 de Julho. A média acumulada no período de Junho a Julho consolida-se em <span className="text-white font-mono font-bold">39,2 leads/dia</span>, mostrando estabilidade na tração e prontidão dos canais.
                       </p>
                     </div>
                   </div>
@@ -793,7 +882,7 @@ export default function App() {
             </div>
           )}
 
-                        {/* SLIDE 7: FUNIL CONSOLIDADO DE TRÁFEGO */}
+            {/* SLIDE 7: FUNIL CONSOLIDADO DE TRÁFEGO */}
           {currentSlide === 7 && (
             <div className="w-full max-w-4xl px-4 flex flex-col justify-center gap-4 animate-fade-in select-none py-2" id="slide-7-funnel">
               
@@ -802,284 +891,562 @@ export default function App() {
                 <div>
                   <div className="flex items-center gap-2">
                     <span className="px-2 sm:px-2.5 py-0.5 rounded text-[8px] sm:text-[9px] font-black tracking-widest uppercase bg-brand-cyan/10 text-brand-cyan border border-brand-cyan/20">
-                      DESEMPENHO TOTAL • FUNIL DE TRÁFEGO UNIFICADO
+                      {funnelMode === 'channels' ? 'DESEMPENHO TOTAL • FUNIL DE TRÁFEGO UNIFICADO' : 'ANÁLISE COMPARATIVA • LP VS CRM'}
                     </span>
                     <span className="text-white/40 text-[9px] font-mono tracking-wider">
                       Slide {currentSlide} de {totalSlides - 1} • Funil de Tráfego Integrado
                     </span>
                   </div>
                   <h2 className="text-2xl md:text-3xl font-black italic uppercase tracking-tighter text-white font-display mt-2 sm:mt-2.5">
-                    FUNIL DE TRÁFEGO UNIFICADO
+                    {funnelMode === 'channels' ? 'FUNIL DE TRÁFEGO UNIFICADO' : 'COMPARATIVO LP VS CRM'}
                   </h2>
                   <p className="text-white/40 text-[10px] md:text-xs tracking-wide font-medium mt-1 uppercase font-mono">
-                    Consolidação de Métricas ({selectedUnified.label})
+                    {funnelMode === 'channels' 
+                      ? `Consolidação de Métricas (${selectedUnified.label})` 
+                      : 'Análise detalhada das etapas de conversão e eficiência das campanhas de leads'}
                   </p>
                 </div>
 
                 {/* Valor investido destacado no topo do slide */}
-                <div className="bg-brand-cyan/10 border border-brand-cyan/30 rounded-xl px-5 py-2 flex flex-col justify-center items-end shrink-0 relative overflow-hidden shadow-[0_0_15px_rgba(34,211,238,0.05)] text-right" key={funnelSource + 'inv'}>
+                <div className="bg-brand-cyan/10 border border-brand-cyan/30 rounded-xl px-5 py-2 flex flex-col justify-center items-end shrink-0 relative overflow-hidden shadow-[0_0_15px_rgba(34,211,238,0.05)] text-right" key={funnelMode === 'channels' ? funnelSource + 'inv' : 'comp_inv'}>
                   <div className="absolute top-0 right-0 w-24 h-24 bg-brand-cyan/15 blur-2xl rounded-full pointer-events-none" />
                   <span className="text-[8px] text-brand-cyan font-black uppercase tracking-[0.15em] relative z-10 block">INVESTIMENTO NO PERÍODO</span>
                   <span className="text-xl font-black text-white cyan-glow font-mono mt-0.5 relative z-10 leading-none">
-                    R$ {selectedUnified.investment.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                    R$ {funnelMode === 'channels' 
+                      ? selectedUnified.investment.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) 
+                      : (lpFunnelData.investment + crmFunnelData.investment).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                   </span>
-                  <span className="text-[7.5px] text-white/50 block font-medium mt-0.5">Canais Combinados</span>
+                  <span className="text-[7.5px] text-white/50 block font-medium mt-0.5">
+                    {funnelMode === 'channels' ? 'Canais Combinados' : 'Soma de LP e CRM'}
+                  </span>
                 </div>
               </div>
 
-              {/* Segmented Selector for Channels */}
-              <div className="flex bg-[#0b0e14] border border-white/5 rounded-xl p-1 gap-2 self-start mb-1">
-                {(['consolidated', 'meta', 'google'] as const).map((source) => (
-                  <button
-                    key={source}
-                    onClick={() => setFunnelSource(source)}
-                    className={cn(
-                      "px-4 py-1.5 rounded-lg text-[10px] font-bold font-mono tracking-wide transition-all uppercase",
-                      funnelSource === source
-                        ? "bg-brand-cyan text-[#07090e] font-black italic shadow-md shadow-brand-cyan/10"
-                        : "text-white/40 hover:text-white/80"
-                    )}
-                  >
-                    {source === 'consolidated' ? 'Formatos Unificados (Meta + Google)' : source === 'meta' ? 'Meta Ads' : 'Google Ads'}
-                  </button>
-                ))}
+              {/* Seletor de Modo de Visualização do Funil */}
+              <div className="flex bg-[#0b0e14] border border-white/5 rounded-xl p-1 gap-2 self-start mb-1" id="funnel-mode-tabs">
+                <button
+                  onClick={() => setFunnelMode('channels')}
+                  className={cn(
+                    "px-4 py-1.5 rounded-lg text-[10px] font-bold font-mono tracking-wide transition-all uppercase",
+                    funnelMode === 'channels'
+                      ? "bg-brand-cyan text-[#07090e] font-black italic shadow-md shadow-brand-cyan/10"
+                      : "text-white/40 hover:text-white/80"
+                  )}
+                  id="btn-mode-channels"
+                >
+                  Visualizar por Canais
+                </button>
+                <button
+                  onClick={() => setFunnelMode('comparison')}
+                  className={cn(
+                    "px-4 py-1.5 rounded-lg text-[10px] font-bold font-mono tracking-wide transition-all uppercase",
+                    funnelMode === 'comparison'
+                      ? "bg-brand-cyan text-[#07090e] font-black italic shadow-md shadow-brand-cyan/10"
+                      : "text-white/40 hover:text-white/80"
+                  )}
+                  id="btn-mode-comparison"
+                >
+                  Comparativo LP vs CRM
+                </button>
               </div>
 
-              {/* Corpo Principal: Funil de Conversão Centralizado */}
-              <div className="flex flex-col items-center justify-center w-full">
-                
-                {/* DESENHO DO FUNIL */}
-                <div className="w-full flex flex-col items-center justify-center py-2 relative" key={funnelSource}>
-                  
-                  {/* ETAPA 1: INVESTIMENTO - TOPO REAL DO FUNIL */}
-                  <div className="w-full max-w-[460px] relative transition-all hover:scale-[1.01] duration-300">
-                    <div className="absolute inset-0 bg-gradient-to-r from-brand-cyan/25 via-brand-cyan/5 to-brand-cyan/25 rounded-2xl border-t border-x border-brand-cyan/35 blur-sm pointer-events-none" />
-                    <div className="relative bg-[#0d121c]/80 border border-brand-cyan/35 rounded-2xl p-2.5 md:py-3 md:px-4.5 shadow-[0_4px_30px_rgba(0,0,0,0.5)] overflow-hidden">
-                      <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-brand-cyan/60 to-transparent" />
-                      
-                      <div className="flex justify-between items-center relative z-10">
-                        <div className="flex items-center gap-2.5 font-sans">
-                          <div className="w-7 h-7 rounded-md bg-brand-cyan/15 border border-brand-cyan/35 flex items-center justify-center text-brand-cyan shrink-0">
-                            <DollarSign size={14} />
-                          </div>
-                          <div>
-                            <h3 className="text-xs font-bold text-white uppercase tracking-tight font-sans">Investimento Total</h3>
-                          </div>
-                        </div>
+              {funnelMode === 'channels' ? (
+                <>
+                  {/* Segmented Selector for Channels */}
+                  <div className="flex bg-[#0b0e14] border border-white/5 rounded-xl p-1 gap-2 self-start mb-1">
+                    {(['consolidated', 'meta', 'google'] as const).map((source) => (
+                      <button
+                        key={source}
+                        onClick={() => setFunnelSource(source)}
+                        className={cn(
+                          "px-4 py-1.5 rounded-lg text-[10px] font-bold font-mono tracking-wide transition-all uppercase",
+                          funnelSource === source
+                            ? "bg-brand-cyan text-[#07090e] font-black italic shadow-md shadow-brand-cyan/10"
+                            : "text-white/40 hover:text-white/80"
+                        )}
+                      >
+                        {source === 'consolidated' ? 'Formatos Unificados (Meta + Google)' : source === 'meta' ? 'Meta Ads' : 'Google Ads'}
+                      </button>
+                    ))}
+                  </div>
 
-                        <div className="text-right">
-                          <span className="text-[7px] text-white/30 uppercase font-mono block font-bold">Investido</span>
-                          <span className="text-lg font-black font-mono text-white tracking-tight cyan-glow">
-                            R$ {selectedUnified.investment.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
-                          </span>
-                          <span className="text-[7.5px] text-white/50 block font-medium -mt-0.5">Junho de 2026</span>
+                  {/* Corpo Principal: Funil de Conversão Centralizado */}
+                  <div className="flex flex-col items-center justify-center w-full">
+                    
+                    {/* DESENHO DO FUNIL */}
+                    <div className="w-full flex flex-col items-center justify-center py-2 relative" key={funnelSource}>
+                      
+                      {/* ETAPA 1: INVESTIMENTO - TOPO REAL DO FUNIL */}
+                      <div className="w-full max-w-[460px] relative transition-all hover:scale-[1.01] duration-300">
+                        <div className="absolute inset-0 bg-gradient-to-r from-brand-cyan/25 via-brand-cyan/5 to-brand-cyan/25 rounded-2xl border-t border-x border-brand-cyan/35 blur-sm pointer-events-none" />
+                        <div className="relative bg-[#0d121c]/80 border border-brand-cyan/35 rounded-2xl p-2.5 md:py-3 md:px-4.5 shadow-[0_4px_30px_rgba(0,0,0,0.5)] overflow-hidden">
+                          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-brand-cyan/60 to-transparent" />
+                          
+                          <div className="flex justify-between items-center relative z-10">
+                            <div className="flex items-center gap-2.5 font-sans">
+                              <div className="w-7 h-7 rounded-md bg-brand-cyan/15 border border-brand-cyan/35 flex items-center justify-center text-brand-cyan shrink-0">
+                                <DollarSign size={14} />
+                              </div>
+                              <div>
+                                <h3 className="text-xs font-bold text-white uppercase tracking-tight font-sans">Investimento Total</h3>
+                              </div>
+                            </div>
+
+                            <div className="text-right">
+                              <span className="text-[7px] text-white/30 uppercase font-mono block font-bold">Investido</span>
+                              <span className="text-lg font-black font-mono text-white tracking-tight cyan-glow">
+                                R$ {selectedUnified.investment.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                              </span>
+                              <span className="text-[7.5px] text-white/50 block font-medium -mt-0.5">Junho de 2026</span>
+                            </div>
+                          </div>
+
+                          {funnelSource === 'consolidated' && (
+                            <div className="flex justify-between w-full mt-2 pt-2 border-t border-white/[0.04] text-[8.5px] font-mono text-white/50">
+                              <span className="flex items-center gap-1">
+                                <span className="h-1.5 w-1.5 bg-brand-cyan rounded-full shrink-0" />
+                                Meta Ads: <strong className="text-white/80 font-mono">R$ 97.379,56</strong> (76,0%)
+                              </span>
+                              <span className="flex items-center gap-1">
+                                <span className="h-1.5 w-1.5 bg-emerald-400 rounded-full shrink-0" />
+                                Google Ads: <strong className="text-white/80 font-mono">R$ 30.712,84</strong> (24,0%)
+                              </span>
+                            </div>
+                          )}
                         </div>
                       </div>
 
-                      {funnelSource === 'consolidated' && (
-                        <div className="flex justify-between w-full mt-2 pt-2 border-t border-white/[0.04] text-[8.5px] font-mono text-white/50">
-                          <span className="flex items-center gap-1">
-                            <span className="h-1.5 w-1.5 bg-brand-cyan rounded-full shrink-0" />
-                            Meta Ads: <strong className="text-white/80 font-mono">R$ 89.474,60</strong> (79,0%)
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <span className="h-1.5 w-1.5 bg-emerald-400 rounded-full shrink-0" />
-                            Google Ads: <strong className="text-white/80 font-mono">R$ 23.746,99</strong> (21.0%)
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
+                      {/* Transition Indicator 1 */}
+                      <div className="my-[4px] flex flex-col items-center relative z-20">
+                        <div className="w-[1.2px] h-3.5 bg-gradient-to-b from-brand-cyan/60 to-brand-cyan/40" />
+                      </div>
 
-                  {/* Transition Indicator 1 */}
-                  <div className="my-[4px] flex flex-col items-center relative z-20">
-                    <div className="w-[1.2px] h-3.5 bg-gradient-to-b from-brand-cyan/60 to-brand-cyan/40" />
-                  </div>
+                      {/* ETAPA 2: ALCANCE */}
+                      <div className="w-full max-w-[410px] relative transition-all hover:scale-[1.01] duration-300">
+                        <div className="absolute inset-0 bg-gradient-to-r from-brand-cyan/20 via-transparent to-brand-cyan/20 rounded-2xl border-t border-x border-brand-cyan/25 blur-xs pointer-events-none" />
+                        <div className="relative bg-[#0b0e15]/90 border border-brand-cyan/25 rounded-2xl p-2.5 md:py-3 md:px-4.5 shadow-[0_4px_30px_rgba(0,0,0,0.6)]">
+                          
+                          <div className="flex justify-between items-center relative z-10">
+                            <div className="flex items-center gap-2.5 font-sans">
+                              <div className="w-7 h-7 rounded-md bg-brand-cyan/10 border border-brand-cyan/20 flex items-center justify-center text-brand-cyan shrink-0">
+                                <Users size={14} />
+                              </div>
+                              <div>
+                                <h3 className="text-xs font-bold text-white/90 uppercase tracking-tight font-sans">Alcance</h3>
+                              </div>
+                            </div>
 
-                  {/* ETAPA 2: ALCANCE */}
-                  <div className="w-full max-w-[410px] relative transition-all hover:scale-[1.01] duration-300">
-                    <div className="absolute inset-0 bg-gradient-to-r from-brand-cyan/20 via-transparent to-brand-cyan/20 rounded-2xl border-t border-x border-brand-cyan/25 blur-xs pointer-events-none" />
-                    <div className="relative bg-[#0b0e15]/90 border border-brand-cyan/25 rounded-2xl p-2.5 md:py-3 md:px-4.5 shadow-[0_4px_30px_rgba(0,0,0,0.6)]">
-                      
-                      <div className="flex justify-between items-center relative z-10">
-                        <div className="flex items-center gap-2.5 font-sans">
-                          <div className="w-7 h-7 rounded-md bg-brand-cyan/10 border border-brand-cyan/20 flex items-center justify-center text-brand-cyan shrink-0">
-                            <Users size={14} />
+                            <div className="text-right">
+                              <span className="text-[7px] text-white/30 uppercase font-mono block font-bold">Público Único</span>
+                              <span className="text-lg font-black font-mono text-brand-cyan">
+                                {selectedUnified.reach.toLocaleString('pt-BR')}
+                              </span>
+                              <span className="text-[7.5px] text-brand-cyan/70 block font-medium -mt-0.5">Pessoas</span>
+                            </div>
                           </div>
-                          <div>
-                            <h3 className="text-xs font-bold text-white/90 uppercase tracking-tight font-sans">Alcance</h3>
-                          </div>
-                        </div>
 
-                        <div className="text-right">
-                          <span className="text-[7px] text-white/30 uppercase font-mono block font-bold">Público Único</span>
-                          <span className="text-lg font-black font-mono text-brand-cyan">
-                            {selectedUnified.reach.toLocaleString('pt-BR')}
-                          </span>
-                          <span className="text-[7.5px] text-brand-cyan/70 block font-medium -mt-0.5">Pessoas</span>
+                          {funnelSource === 'consolidated' && (
+                            <div className="flex justify-between w-full mt-2 pt-2 border-t border-white/[0.04] text-[8.5px] font-mono text-white/50">
+                              <span className="flex items-center gap-1">
+                                <span className="h-1.5 w-1.5 bg-brand-cyan rounded-full shrink-0" />
+                                Meta: <strong className="text-white/80 font-mono">809.461</strong> (51,3%)
+                              </span>
+                              <span className="flex items-center gap-1">
+                                <span className="h-1.5 w-1.5 bg-emerald-400 rounded-full shrink-0" />
+                                Google: <strong className="text-white/80 font-mono">769.390</strong> (48,7%)
+                              </span>
+                            </div>
+                          )}
                         </div>
                       </div>
 
-                      {funnelSource === 'consolidated' && (
-                        <div className="flex justify-between w-full mt-2 pt-2 border-t border-white/[0.04] text-[8.5px] font-mono text-white/50">
-                          <span className="flex items-center gap-1">
-                            <span className="h-1.5 w-1.5 bg-brand-cyan rounded-full shrink-0" />
-                            Meta: <strong className="text-white/80 font-mono">809.461</strong> (51,3%)
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <span className="h-1.5 w-1.5 bg-emerald-400 rounded-full shrink-0" />
-                            Google: <strong className="text-white/80 font-mono">769.390</strong> (48,7%)
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
+                      {/* Transition Indicator 2 */}
+                      <div className="my-[4px] flex flex-col items-center relative z-20">
+                        <div className="w-[1.2px] h-3.5 bg-gradient-to-b from-brand-cyan/40 to-brand-cyan/20" />
+                        <span className="absolute text-[6.5px] font-mono font-black text-brand-cyan/70 bg-[#07090e] px-1.5 py-[1px] rounded border border-brand-cyan/10 -translate-y-0.5 whitespace-nowrap">
+                          CTR Geral: {selectedUnified.ctr}
+                        </span>
+                      </div>
 
-                  {/* Transition Indicator 2 */}
-                  <div className="my-[4px] flex flex-col items-center relative z-20">
-                    <div className="w-[1.2px] h-3.5 bg-gradient-to-b from-brand-cyan/40 to-brand-cyan/20" />
-                    <span className="absolute text-[6.5px] font-mono font-black text-brand-cyan/70 bg-[#07090e] px-1.5 py-[1px] rounded border border-brand-cyan/10 -translate-y-0.5 whitespace-nowrap">
-                      CTR Geral: {selectedUnified.ctr}
-                    </span>
-                  </div>
+                      {/* ETAPA 3: CLIQUE NO LINK */}
+                      <div className="w-full max-w-[310px] relative transition-all hover:scale-[1.01] duration-300">
+                        <div className="absolute inset-0 bg-gradient-to-r from-brand-cyan/10 via-transparent to-brand-cyan/10 rounded-2xl border-t border-x border-brand-cyan/15 blur-xs pointer-events-none" />
+                        <div className="relative bg-[#080a0f]/95 border border-brand-cyan/15 rounded-2xl p-2.5 md:py-3 md:px-4 shadow-[0_4px_30px_rgba(0,0,0,0.6)]">
+                          
+                          <div className="flex justify-between items-center relative z-10">
+                            <div className="flex items-center gap-2.5 font-sans">
+                              <div className="w-7 h-7 rounded-md bg-brand-cyan/5 border border-brand-cyan/10 flex items-center justify-center text-brand-cyan shrink-0">
+                                <MousePointer2 size={13} className="-rotate-90" />
+                              </div>
+                              <div>
+                                <h3 className="text-xs font-bold text-white/80 uppercase tracking-tight font-sans">Clique no Link</h3>
+                              </div>
+                            </div>
 
-                  {/* ETAPA 3: CLIQUE NO LINK */}
-                  <div className="w-full max-w-[310px] relative transition-all hover:scale-[1.01] duration-300">
-                    <div className="absolute inset-0 bg-gradient-to-r from-brand-cyan/10 via-transparent to-brand-cyan/10 rounded-2xl border-t border-x border-brand-cyan/15 blur-xs pointer-events-none" />
-                    <div className="relative bg-[#080a0f]/95 border border-brand-cyan/15 rounded-2xl p-2.5 md:py-3 md:px-4 shadow-[0_4px_30px_rgba(0,0,0,0.6)]">
-                      
-                      <div className="flex justify-between items-center relative z-10">
-                        <div className="flex items-center gap-2.5 font-sans">
-                          <div className="w-7 h-7 rounded-md bg-brand-cyan/5 border border-brand-cyan/10 flex items-center justify-center text-brand-cyan shrink-0">
-                            <MousePointer2 size={13} className="-rotate-90" />
+                            <div className="text-right">
+                              <span className="text-[7px] text-white/30 uppercase font-mono block font-bold">Volume</span>
+                              <span className="text-base font-black font-mono text-white/90">
+                                {selectedUnified.clicks.toLocaleString('pt-BR')}
+                              </span>
+                              <span className="text-[7.5px] text-white/50 block font-medium -mt-0.5 font-sans">Cliques</span>
+                            </div>
                           </div>
-                          <div>
-                            <h3 className="text-xs font-bold text-white/80 uppercase tracking-tight font-sans">Clique no Link</h3>
-                          </div>
-                        </div>
 
-                        <div className="text-right">
-                          <span className="text-[7px] text-white/30 uppercase font-mono block font-bold">Volume</span>
-                          <span className="text-base font-black font-mono text-white/90">
-                            {selectedUnified.clicks.toLocaleString('pt-BR')}
-                          </span>
-                          <span className="text-[7.5px] text-white/50 block font-medium -mt-0.5 font-sans">Cliques</span>
+                          {funnelSource === 'consolidated' && (
+                            <div className="flex justify-between w-full mt-2 pt-2 border-t border-white/[0.04] text-[8.5px] font-mono text-white/50">
+                              <span className="flex items-center gap-1">
+                                <span className="h-1.5 w-1.5 bg-brand-cyan rounded-full shrink-0" />
+                                Meta: <strong className="text-white/80 font-mono">75.385</strong> (CTR: 9,31%)
+                              </span>
+                              <span className="flex items-center gap-1">
+                                <span className="h-1.5 w-1.5 bg-emerald-400 rounded-full shrink-0" />
+                                Google: <strong className="text-white/80 font-mono">4.172</strong> (CTR: 0,54%)
+                              </span>
+                            </div>
+                          )}
                         </div>
                       </div>
 
-                      {funnelSource === 'consolidated' && (
-                        <div className="flex justify-between w-full mt-2 pt-2 border-t border-white/[0.04] text-[8.5px] font-mono text-white/50">
-                          <span className="flex items-center gap-1">
-                            <span className="h-1.5 w-1.5 bg-brand-cyan rounded-full shrink-0" />
-                            Meta: <strong className="text-white/80 font-mono">75.385</strong> (CTR: 9,31%)
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <span className="h-1.5 w-1.5 bg-emerald-400 rounded-full shrink-0" />
-                            Google: <strong className="text-white/80 font-mono">4.172</strong> (CTR: 0,54%)
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
+                      {/* Transition Indicator 3 */}
+                      <div className="my-[4px] flex flex-col items-center relative z-20">
+                        <div className="w-[1.2px] h-3.5 bg-gradient-to-b from-brand-cyan/30 to-brand-cyan/10" />
+                        <span className="absolute text-[6.5px] font-mono font-black text-brand-cyan/70 bg-[#07090e] px-1.5 py-[1px] rounded border border-brand-cyan/10 -translate-y-0.5 whitespace-nowrap">
+                          Tx. Carregamento (Loading): {selectedUnified.loadingRate}
+                        </span>
+                      </div>
 
-                  {/* Transition Indicator 3 */}
-                  <div className="my-[4px] flex flex-col items-center relative z-20">
-                    <div className="w-[1.2px] h-3.5 bg-gradient-to-b from-brand-cyan/30 to-brand-cyan/10" />
-                    <span className="absolute text-[6.5px] font-mono font-black text-brand-cyan/70 bg-[#07090e] px-1.5 py-[1px] rounded border border-brand-cyan/10 -translate-y-0.5 whitespace-nowrap">
-                      Tx. Carregamento (Loading): {selectedUnified.loadingRate}
-                    </span>
-                  </div>
+                      {/* ETAPA 4: VISUALIZAÇÃO DA PÁGINA DE DESTINO */}
+                      <div className="w-full max-w-[260px] relative transition-all hover:scale-[1.01] duration-300">
+                        <div className="absolute inset-0 bg-gradient-to-r from-brand-cyan/15 via-transparent to-brand-cyan/15 rounded-2xl border-t border-x border-brand-cyan/10 blur-xs pointer-events-none" />
+                        <div className="relative bg-[#07090e]/95 border border-brand-cyan/10 rounded-2xl p-2.5 md:py-3 md:px-3 shadow-[0_4px_30px_rgba(0,0,0,0.6)]">
+                          
+                          <div className="flex justify-between items-center relative z-10">
+                            <div className="flex items-center gap-2 font-sans">
+                              <div className="w-6 h-6 rounded-md bg-brand-cyan/5 border border-brand-cyan/10 flex items-center justify-center text-brand-cyan shrink-0">
+                                <Layers size={11} />
+                              </div>
+                              <div>
+                                <h3 className="text-[11px] font-bold text-white/70 uppercase tracking-tight font-sans">Page Views</h3>
+                              </div>
+                            </div>
 
-                  {/* ETAPA 4: VISUALIZAÇÃO DA PÁGINA DE DESTINO */}
-                  <div className="w-full max-w-[260px] relative transition-all hover:scale-[1.01] duration-300">
-                    <div className="absolute inset-0 bg-gradient-to-r from-brand-cyan/15 via-transparent to-brand-cyan/15 rounded-2xl border-t border-x border-brand-cyan/10 blur-xs pointer-events-none" />
-                    <div className="relative bg-[#07090e]/95 border border-brand-cyan/10 rounded-2xl p-2.5 md:py-3 md:px-3 shadow-[0_4px_30px_rgba(0,0,0,0.6)]">
-                      
-                      <div className="flex justify-between items-center relative z-10">
-                        <div className="flex items-center gap-2 font-sans">
-                          <div className="w-6 h-6 rounded-md bg-brand-cyan/5 border border-brand-cyan/10 flex items-center justify-center text-brand-cyan shrink-0">
-                            <Layers size={11} />
+                            <div className="text-right">
+                              <span className="text-[7px] text-white/30 uppercase font-mono block font-bold">Visualizações</span>
+                              <span className="text-sm font-black font-mono text-white/80">
+                                {selectedUnified.visits.toLocaleString('pt-BR')}
+                              </span>
+                              <span className="text-[7.5px] text-white/50 block font-medium -mt-0.5 font-sans">Visualizações</span>
+                            </div>
                           </div>
-                          <div>
-                            <h3 className="text-[11px] font-bold text-white/70 uppercase tracking-tight font-sans">Page Views</h3>
-                          </div>
-                        </div>
 
-                        <div className="text-right">
-                          <span className="text-[7px] text-white/30 uppercase font-mono block font-bold">Visualizações</span>
-                          <span className="text-sm font-black font-mono text-white/80">
-                            {selectedUnified.visits.toLocaleString('pt-BR')}
-                          </span>
-                          <span className="text-[7.5px] text-white/50 block font-medium -mt-0.5 font-sans">Visualizações</span>
+                          {funnelSource === 'consolidated' && (
+                            <div className="flex justify-between w-full mt-2 pt-2 border-t border-white/[0.04] text-[8.5px] font-mono text-white/50">
+                              <span className="flex items-center gap-1">
+                                <span className="h-1.5 w-1.5 bg-brand-cyan rounded-full shrink-0" />
+                                Meta: <strong className="text-white/80 font-mono">10.436</strong> (Tx: 13,84%)
+                              </span>
+                              <span className="flex items-center gap-1">
+                                <span className="h-1.5 w-1.5 bg-emerald-400 rounded-full shrink-0" />
+                                Google: <strong className="text-white/80 font-mono">530</strong> (Tx: 12,70%)
+                              </span>
+                            </div>
+                          )}
                         </div>
                       </div>
 
-                      {funnelSource === 'consolidated' && (
-                        <div className="flex justify-between w-full mt-2 pt-2 border-t border-white/[0.04] text-[8.5px] font-mono text-white/50">
-                          <span className="flex items-center gap-1">
-                            <span className="h-1.5 w-1.5 bg-brand-cyan rounded-full shrink-0" />
-                            Meta: <strong className="text-white/80 font-mono">10.436</strong> (Tx: 13,84%)
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <span className="h-1.5 w-1.5 bg-emerald-400 rounded-full shrink-0" />
-                            Google: <strong className="text-white/80 font-mono">530</strong> (Tx: 12,70%)
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
+                      {/* Transition Indicator 4 */}
+                      <div className="my-[4px] flex flex-col items-center relative z-20">
+                        <div className="w-[1.2px] h-3.5 bg-gradient-to-b from-brand-cyan/25 to-brand-cyan/10" />
+                        <span className="absolute text-[6.5px] font-mono font-black text-emerald-400 bg-[#07090e] px-1.5 py-[1px] rounded border border-emerald-500/10 -translate-y-0.5 whitespace-nowrap">
+                          Conversão LP: {selectedUnified.conversionRate}
+                        </span>
+                      </div>
 
-                  {/* Transition Indicator 4 */}
-                  <div className="my-[4px] flex flex-col items-center relative z-20">
-                    <div className="w-[1.2px] h-3.5 bg-gradient-to-b from-brand-cyan/25 to-brand-cyan/10" />
-                    <span className="absolute text-[6.5px] font-mono font-black text-emerald-400 bg-[#07090e] px-1.5 py-[1px] rounded border border-emerald-500/10 -translate-y-0.5 whitespace-nowrap">
-                      Conversão LP: {selectedUnified.conversionRate}
-                    </span>
-                  </div>
+                      {/* ETAPA 5: LEADS - BASE DO FUNIL */}
+                      <div className="w-full max-w-[215px] relative transition-all hover:scale-[1.01] duration-300">
+                        <div className="absolute inset-0 bg-brand-cyan/10 blur-md rounded-2xl opacity-40 pointer-events-none" />
+                        <div className="relative bg-[#22d3ee]/[0.02] border-2 border-brand-cyan/45 rounded-2xl p-2.5 md:py-3 md:px-3 shadow-[0_10px_30px_rgba(34,211,238,0.08)] overflow-hidden">
+                          <div className="absolute -right-12 -bottom-12 w-24 h-24 bg-brand-cyan/10 blur-2xl rounded-full pointer-events-none" />
+                          
+                          <div className="flex justify-between items-center relative z-10">
+                            <div className="flex items-center gap-2 font-sans">
+                              <div className="w-6 h-6 rounded-md bg-[#22d3ee]/[0.15] border border-brand-cyan/[0.35] flex items-center justify-center text-brand-cyan shrink-0 animate-pulse">
+                                <Target size={12} />
+                              </div>
+                              <div>
+                                <h3 className="text-[11px] font-black text-white uppercase tracking-tight font-sans">Conversões</h3>
+                              </div>
+                            </div>
 
-                  {/* ETAPA 5: LEADS - BASE DO FUNIL */}
-                  <div className="w-full max-w-[215px] relative transition-all hover:scale-[1.01] duration-300">
-                    <div className="absolute inset-0 bg-brand-cyan/10 blur-md rounded-2xl opacity-40 pointer-events-none" />
-                    <div className="relative bg-[#22d3ee]/[0.02] border-2 border-brand-cyan/45 rounded-2xl p-2.5 md:py-3 md:px-3 shadow-[0_10px_30px_rgba(34,211,238,0.08)] overflow-hidden">
-                      <div className="absolute -right-12 -bottom-12 w-24 h-24 bg-brand-cyan/10 blur-2xl rounded-full pointer-events-none" />
-                      
-                      <div className="flex justify-between items-center relative z-10">
-                        <div className="flex items-center gap-2 font-sans">
-                          <div className="w-6 h-6 rounded-md bg-[#22d3ee]/[0.15] border border-brand-cyan/[0.35] flex items-center justify-center text-brand-cyan shrink-0 animate-pulse">
-                            <Target size={12} />
+                            <div className="text-right">
+                              <span className="text-[7px] text-white/40 uppercase font-mono block font-black">Total Leads</span>
+                              <span className="text-lg font-black font-mono text-brand-cyan cyan-glow">
+                                {selectedUnified.leads.toLocaleString('pt-BR')}
+                              </span>
+                              <span className="text-[7.5px] text-brand-cyan font-black block -mt-0.5 font-sans">Leads</span>
+                            </div>
                           </div>
-                          <div>
-                            <h3 className="text-[11px] font-black text-white uppercase tracking-tight font-sans">Conversões</h3>
-                          </div>
-                        </div>
 
-                        <div className="text-right">
-                          <span className="text-[7px] text-white/40 uppercase font-mono block font-black">Total Leads</span>
-                          <span className="text-lg font-black font-mono text-brand-cyan cyan-glow">
-                            {selectedUnified.leads.toLocaleString('pt-BR')}
-                          </span>
-                          <span className="text-[7.5px] text-brand-cyan font-black block -mt-0.5 font-sans">Leads</span>
+                          {funnelSource === 'consolidated' && (
+                            <div className="flex justify-between w-full mt-2 pt-2 border-t border-white/[0.04] text-[8.5px] font-mono text-white/50">
+                              <span className="flex items-center gap-1">
+                                <span className="h-1.5 w-1.5 bg-brand-cyan rounded-full shrink-0" />
+                                Meta: <strong className="text-white/80 font-mono">1.391</strong> (95,0%)
+                              </span>
+                              <span className="flex items-center gap-1">
+                                <span className="h-1.5 w-1.5 bg-emerald-400 rounded-full shrink-0" />
+                                Google: <strong className="text-white/80 font-mono">73</strong> (5,0%)
+                              </span>
+                            </div>
+                          )}
                         </div>
                       </div>
 
-                      {funnelSource === 'consolidated' && (
-                        <div className="flex justify-between w-full mt-2 pt-2 border-t border-white/[0.04] text-[8.5px] font-mono text-white/50">
-                          <span className="flex items-center gap-1">
-                            <span className="h-1.5 w-1.5 bg-brand-cyan rounded-full shrink-0" />
-                            Meta: <strong className="text-white/80 font-mono">1.391</strong> (95,0%)
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <span className="h-1.5 w-1.5 bg-emerald-400 rounded-full shrink-0" />
-                            Google: <strong className="text-white/80 font-mono">73</strong> (5,0%)
+                    </div>
+
+                  </div>
+                </>
+              ) : (
+                <>
+                  {/* Side-by-Side LP vs CRM Funnel Comparison */}
+                  <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-5 pt-1" id="funnel-comparison-container">
+                    
+                    {/* COLUNA 1: CAMPANHA LP */}
+                    <div className="bg-[#0b0e14]/60 border border-brand-cyan/15 rounded-2xl p-4 flex flex-col items-center hover:border-brand-cyan/40 transition-all duration-300" id="funnel-col-lp">
+                      <div className="w-full flex items-center justify-between border-b border-white/5 pb-2 mb-3">
+                        <div className="flex items-center gap-1.5">
+                          <span className="h-2 w-2 rounded-full bg-brand-cyan shadow-[0_0_8px_rgba(0,242,255,0.5)]" />
+                          <h4 className="text-[11px] font-black uppercase tracking-wider text-white">Campanha LP A</h4>
+                        </div>
+                        <span className="text-[8px] font-mono font-bold bg-brand-cyan/10 text-brand-cyan px-1.5 py-0.5 rounded border border-brand-cyan/25">
+                          Geração Landing Page
+                        </span>
+                      </div>
+
+                      {/* Funnel LP Diagram */}
+                      <div className="w-full flex flex-col items-center justify-center space-y-1">
+                        
+                        {/* Passo 1: Investimento */}
+                        <div className="w-full relative transition-all hover:scale-[1.01] duration-300">
+                          <div className="relative bg-[#0d121c]/60 border border-brand-cyan/20 rounded-xl p-2">
+                            <div className="flex justify-between items-center text-xs">
+                              <span className="text-[8px] text-white/50 uppercase font-mono font-bold">Investimento</span>
+                              <span className="font-bold font-mono text-white">R$ {lpFunnelData.investment.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Setinha LP 1 */}
+                        <div className="h-2 w-[1px] bg-brand-cyan/25" />
+
+                        {/* Passo 2: Alcance */}
+                        <div className="w-full relative transition-all hover:scale-[1.01] duration-300">
+                          <div className="relative bg-[#0b0e15]/70 border border-brand-cyan/15 rounded-xl p-2">
+                            <div className="flex justify-between items-center text-xs">
+                              <span className="text-[8px] text-white/50 uppercase font-mono font-bold">Alcance</span>
+                              <span className="font-bold font-mono text-white/80">{lpFunnelData.reach.toLocaleString('pt-BR')}</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Setinha LP 2 + CTR */}
+                        <div className="flex flex-col items-center relative z-10 w-full">
+                          <div className="h-3.5 w-[1px] bg-brand-cyan/20" />
+                          <span className="absolute text-[6px] font-mono font-black text-brand-cyan/70 bg-[#07090e] px-1 py-[0.5px] rounded border border-brand-cyan/10 -translate-y-0.5">
+                            CTR: {lpFunnelData.ctr}
                           </span>
                         </div>
-                      )}
+
+                        {/* Passo 3: Cliques */}
+                        <div className="w-full relative transition-all hover:scale-[1.01] duration-300">
+                          <div className="relative bg-[#080a0f]/80 border border-brand-cyan/10 rounded-xl p-2">
+                            <div className="flex justify-between items-center text-xs">
+                              <span className="text-[8px] text-white/50 uppercase font-mono font-bold">Cliques</span>
+                              <span className="font-bold font-mono text-white/70">{lpFunnelData.clicks.toLocaleString('pt-BR')}</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Setinha LP 3 + Loading */}
+                        <div className="flex flex-col items-center relative z-10 w-full">
+                          <div className="h-3.5 w-[1px] bg-brand-cyan/20" />
+                          <span className="absolute text-[6px] font-mono font-black text-brand-cyan/70 bg-[#07090e] px-1 py-[0.5px] rounded border border-brand-cyan/10 -translate-y-0.5">
+                            Carregamento: {lpFunnelData.loadingRate}
+                          </span>
+                        </div>
+
+                        {/* Passo 4: Visitas */}
+                        <div className="w-full relative transition-all hover:scale-[1.01] duration-300">
+                          <div className="relative bg-[#07090e]/90 border border-brand-cyan/10 rounded-xl p-2">
+                            <div className="flex justify-between items-center text-xs">
+                              <span className="text-[8px] text-white/50 uppercase font-mono font-bold">Page Views (Visitas)</span>
+                              <span className="font-bold font-mono text-white/60">{lpFunnelData.visits.toLocaleString('pt-BR')}</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Setinha LP 4 + Conversão */}
+                        <div className="flex flex-col items-center relative z-10 w-full">
+                          <div className="h-3.5 w-[1px] bg-brand-cyan/20" />
+                          <span className="absolute text-[6px] font-mono font-black text-emerald-400 bg-[#07090e] px-1 py-[0.5px] rounded border border-emerald-500/10 -translate-y-0.5">
+                            Conversão LP: {lpFunnelData.conversionRate}
+                          </span>
+                        </div>
+
+                        {/* Passo 5: Leads */}
+                        <div className="w-full relative transition-all hover:scale-[1.01] duration-300">
+                          <div className="relative bg-brand-cyan/5 border border-brand-cyan/35 rounded-xl p-2 shadow-[0_0_15px_rgba(34,211,238,0.02)]">
+                            <div className="flex justify-between items-center text-xs">
+                              <span className="text-[8px] text-brand-cyan uppercase font-mono font-bold">Leads Gerados</span>
+                              <span className="font-black font-mono text-brand-cyan cyan-glow">{lpFunnelData.leads.toLocaleString('pt-BR')}</span>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+
+                      {/* Métricas de Eficiência LP */}
+                      <div className="w-full mt-3 pt-2.5 border-t border-white/5 grid grid-cols-2 gap-2 text-center">
+                        <div className="bg-white/[0.015] border border-white/5 rounded-lg p-1.5">
+                          <span className="text-[7px] text-white/40 uppercase block font-mono">CPL Médio</span>
+                          <span className="text-xs font-black font-mono text-white mt-0.5 block">
+                            R$ {lpFunnelData.cpl.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                          </span>
+                        </div>
+                        <div className="bg-white/[0.015] border border-white/5 rounded-lg p-1.5">
+                          <span className="text-[7px] text-white/40 uppercase block font-mono">Conversão Global</span>
+                          <span className="text-xs font-bold text-white/70 block mt-0.5 font-mono">1,91%</span>
+                        </div>
+                      </div>
+
                     </div>
+
+                    {/* COLUNA 2: CAMPANHA CRM */}
+                    <div className="bg-[#0b0e14]/60 border border-emerald-500/15 rounded-2xl p-4 flex flex-col items-center hover:border-emerald-400/40 transition-all duration-300" id="funnel-col-crm">
+                      <div className="w-full flex items-center justify-between border-b border-white/5 pb-2 mb-3">
+                        <div className="flex items-center gap-1.5">
+                          <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]" />
+                          <h4 className="text-[11px] font-black uppercase tracking-wider text-white">Campanha CRM</h4>
+                        </div>
+                        <span className="text-[8px] font-mono font-bold bg-emerald-400/10 text-emerald-400 px-1.5 py-0.5 rounded border border-emerald-500/25">
+                          Esteira Integrada
+                        </span>
+                      </div>
+
+                      {/* Funnel CRM Diagram */}
+                      <div className="w-full flex flex-col items-center justify-center space-y-1">
+                        
+                        {/* Passo 1: Investimento */}
+                        <div className="w-full relative transition-all hover:scale-[1.01] duration-300">
+                          <div className="relative bg-[#0d121c]/60 border border-emerald-500/20 rounded-xl p-2">
+                            <div className="flex justify-between items-center text-xs">
+                              <span className="text-[8px] text-white/50 uppercase font-mono font-bold">Investimento</span>
+                              <span className="font-bold font-mono text-white">R$ {crmFunnelData.investment.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Setinha CRM 1 */}
+                        <div className="h-2 w-[1px] bg-emerald-500/25" />
+
+                        {/* Passo 2: Alcance */}
+                        <div className="w-full relative transition-all hover:scale-[1.01] duration-300">
+                          <div className="relative bg-[#0b0e15]/70 border border-emerald-500/15 rounded-xl p-2">
+                            <div className="flex justify-between items-center text-xs">
+                              <span className="text-[8px] text-white/50 uppercase font-mono font-bold">Alcance</span>
+                              <span className="font-bold font-mono text-white/80">{crmFunnelData.reach.toLocaleString('pt-BR')}</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Setinha CRM 2 + CTR */}
+                        <div className="flex flex-col items-center relative z-10 w-full">
+                          <div className="h-3.5 w-[1px] bg-emerald-500/20" />
+                          <span className="absolute text-[6px] font-mono font-black text-emerald-400 bg-[#07090e] px-1 py-[0.5px] rounded border border-emerald-500/10 -translate-y-0.5">
+                            CTR: {crmFunnelData.ctr}
+                          </span>
+                        </div>
+
+                        {/* Passo 3: Cliques */}
+                        <div className="w-full relative transition-all hover:scale-[1.01] duration-300">
+                          <div className="relative bg-[#080a0f]/80 border border-emerald-500/10 rounded-xl p-2">
+                            <div className="flex justify-between items-center text-xs">
+                              <span className="text-[8px] text-white/50 uppercase font-mono font-bold">Cliques</span>
+                              <span className="font-bold font-mono text-white/70">{crmFunnelData.clicks.toLocaleString('pt-BR')}</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Setinha CRM 3 + Loading */}
+                        <div className="flex flex-col items-center relative z-10 w-full">
+                          <div className="h-3.5 w-[1px] bg-emerald-500/20" />
+                          <span className="absolute text-[6px] font-mono font-black text-emerald-400 bg-[#07090e] px-1 py-[0.5px] rounded border border-emerald-500/10 -translate-y-0.5">
+                            Carregamento: {crmFunnelData.loadingRate}
+                          </span>
+                        </div>
+
+                        {/* Passo 4: Visitas */}
+                        <div className="w-full relative transition-all hover:scale-[1.01] duration-300">
+                          <div className="relative bg-[#07090e]/90 border border-emerald-500/10 rounded-xl p-2">
+                            <div className="flex justify-between items-center text-xs">
+                              <span className="text-[8px] text-white/50 uppercase font-mono font-bold">Atendimentos (Visitas)</span>
+                              <span className="font-bold font-mono text-white/60">{crmFunnelData.visits.toLocaleString('pt-BR')}</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Setinha CRM 4 + Conversão */}
+                        <div className="flex flex-col items-center relative z-10 w-full">
+                          <div className="h-3.5 w-[1px] bg-emerald-500/20" />
+                          <span className="absolute text-[6px] font-mono font-black text-emerald-400 bg-[#07090e] px-1 py-[0.5px] rounded border border-emerald-500/10 -translate-y-0.5">
+                            Conversão CRM: {crmFunnelData.conversionRate}
+                          </span>
+                        </div>
+
+                        {/* Passo 5: Leads */}
+                        <div className="w-full relative transition-all hover:scale-[1.01] duration-300">
+                          <div className="relative bg-emerald-500/5 border border-emerald-500/35 rounded-xl p-2 shadow-[0_0_15px_rgba(52,211,153,0.02)]">
+                            <div className="flex justify-between items-center text-xs">
+                              <span className="text-[8px] text-emerald-400 uppercase font-mono font-bold">Leads Gerados</span>
+                              <span className="font-black font-mono text-emerald-400 emerald-glow">{crmFunnelData.leads.toLocaleString('pt-BR')}</span>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+
+                      {/* Métricas de Eficiência CRM */}
+                      <div className="w-full mt-3 pt-2.5 border-t border-white/5 grid grid-cols-2 gap-2 text-center">
+                        <div className="bg-white/[0.015] border border-white/5 rounded-lg p-1.5">
+                          <span className="text-[7px] text-white/40 uppercase block font-mono">CPL Médio</span>
+                          <span className="text-xs font-black font-mono text-emerald-400 mt-0.5 block">
+                            R$ {crmFunnelData.cpl.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                          </span>
+                        </div>
+                        <div className="bg-emerald-500/5 border border-emerald-500/10 rounded-lg p-1.5">
+                          <span className="text-[7px] text-emerald-400 uppercase block font-mono">Eficiência Relativa</span>
+                          <span className="text-[10px] font-black text-emerald-400 block mt-0.5">
+                            -29,4% CPL!
+                          </span>
+                        </div>
+                      </div>
+
+                    </div>
+
                   </div>
 
-                </div>
-
-              </div>
+                  {/* Comparativo Resumo / Insight */}
+                  <div className="w-full bg-white/[0.015] border border-white/5 p-3 rounded-xl mt-3 flex items-start gap-3" id="funnel-comparison-insight">
+                    <TrendingUp size={16} className="text-brand-cyan shrink-0 mt-0.5" />
+                    <div>
+                      <h5 className="text-[11px] font-bold text-white uppercase tracking-wider">Destaque de Eficiência da Operação</h5>
+                      <p className="text-[9.5px] text-white/60 mt-0.5 leading-relaxed">
+                        A <strong className="text-emerald-400">Campanha de CRM</strong> apresentou alta performance técnica com um <strong className="text-emerald-400">CPL 29.4% menor</strong> (R$ 58,08 vs R$ 82,23 da LP) e uma <strong className="text-emerald-400">taxa de conversão superior (15,26% vs 12,72%)</strong>. Isso se deu principalmente pelo CTR superior de 11,04% em canais de menor fricção, enquanto a <strong className="text-brand-cyan">Campanha de LP A</strong> destaca-se pela alta qualificação do lead gerado, absorvendo maior volume absoluto inicial com robustez de página.
+                      </p>
+                    </div>
+                  </div>
+                </>
+              )}
               
             </div>
           )}

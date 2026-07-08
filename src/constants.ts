@@ -31,12 +31,13 @@ export interface CampaignData {
   week2: MetricSet;
   week3: MetricSet;
   week4?: MetricSet;
+  week5?: MetricSet;
   week1Bases?: BaseDetail[]; // Detailed bases specifically for Contratação in Semana 2
 }
 
 export const PERFORMANCE_DATA = {
   client: "Confiauto Proteção Veicular",
-  period: "01 a 29 de Junho de 2026",
+  period: "01 de Junho a 07 de Julho de 2026",
   campaigns: [
     {
       id: "lp_original",
@@ -64,6 +65,11 @@ export const PERFORMANCE_DATA = {
         investment: 3803.28,
         leads: 96,
         cpl: 39.61
+      },
+      week5: {
+        investment: 4997.55,
+        leads: 106,
+        cpl: 47.14
       }
     },
     {
@@ -92,6 +98,11 @@ export const PERFORMANCE_DATA = {
         investment: 12171.34,
         leads: 342,
         cpl: 35.58
+      },
+      week5: {
+        investment: 4914.22,
+        leads: 35,
+        cpl: 140.41
       }
     },
     {
@@ -120,6 +131,11 @@ export const PERFORMANCE_DATA = {
         investment: 264.61,
         leads: 78,
         cpl: 3.39
+      },
+      week5: {
+        investment: 635.00,
+        leads: 129,
+        cpl: 4.92
       },
       week1Bases: [
         {
@@ -168,6 +184,11 @@ export const PERFORMANCE_DATA = {
         investment: 353.07,
         visits: 1266,
         cpv: 0.28
+      },
+      week5: {
+        investment: 253.65,
+        visits: 1006,
+        cpv: 0.25
       }
     },
     {
@@ -196,6 +217,11 @@ export const PERFORMANCE_DATA = {
         investment: 557.69,
         reach: 234741,
         cpm: 2.31
+      },
+      week5: {
+        investment: 562.79,
+        reach: 270851,
+        cpm: 2.08
       }
     }
   ] as CampaignData[]
