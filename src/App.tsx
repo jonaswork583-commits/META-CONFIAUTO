@@ -57,109 +57,109 @@ export default function App() {
   // Hardcoded consolidated funnel from July 1 to 8, kept as is (per user's request to update later)
   const lpFullFunnel = {
     label: "Campanha LP A (Landing Page)",
-    period: "01 a 08 de Julho de 2026",
+    period: "Compilado do Mês",
     color: "brand-cyan",
     colorHex: "#22d3ee",
     investment: {
-      total: 13729.59,
-      meta: 5185.00,
-      google: 8544.59,
-      metaPercent: "37,8%",
-      googlePercent: "62,2%"
+      total: 25765.65,
+      meta: 11230.68,
+      google: 14534.97,
+      metaPercent: "43,6%",
+      googlePercent: "56,4%"
     },
     reach: {
-      total: 127064,
-      meta: 117707,
-      google: 9357,
-      metaPercent: "92,6%",
-      googlePercent: "7,4%"
+      total: 224335,
+      meta: 207391,
+      google: 16944,
+      metaPercent: "92,5%",
+      googlePercent: "7,5%"
     },
     clicks: {
-      total: 2342,
-      meta: 1229,
-      google: 1113,
-      metaPercent: "52,5%",
-      googlePercent: "47,5%",
-      ctrGeral: "1,84%",
-      metaCtr: "1,04%",
-      googleCtr: "11,89%"
+      total: 4966,
+      meta: 2965,
+      google: 2001,
+      metaPercent: "59,7%",
+      googlePercent: "40,3%",
+      ctrGeral: "2,21%",
+      metaCtr: "1,43%",
+      googleCtr: "11,81%"
     },
     visits: {
-      total: 720,
-      meta: 720,
-      google: 0,
-      metaPercent: "100,0%",
-      googlePercent: "0,0%",
-      loadingRate: "30,74%",
-      metaRate: "58,58%",
-      googleRate: "0,00%"
+      total: 3394,
+      meta: 1746,
+      google: 1648,
+      metaPercent: "51,4%",
+      googlePercent: "48,6%",
+      loadingRate: "68,34%",
+      metaRate: "58,89%",
+      googleRate: "82,36%"
     },
     leads: {
-      total: 199,
-      meta: 107,
-      google: 92,
-      metaPercent: "53,8%",
-      googlePercent: "46,2%",
-      conversionRate: "27,64%",
-      metaConversion: "14,86%",
-      googleConversion: "—",
-      cplGeral: 69.00,
-      metaCpl: 48.46,
-      googleCpl: 92.88
+      total: 363,
+      meta: 216,
+      google: 147,
+      metaPercent: "59,5%",
+      googlePercent: "40,5%",
+      conversionRate: "10,69%",
+      metaConversion: "12,37%",
+      googleConversion: "8,92%",
+      cplGeral: 70.98,
+      metaCpl: 51.99,
+      googleCpl: 98.88
     }
   };
 
   const crmFullFunnel = {
     label: "Campanha de CRM (Esteira Direta)",
-    period: "01 a 08 de Julho de 2026",
+    period: "Compilado do Mês",
     color: "emerald-400",
     colorHex: "#34d399",
     investment: {
-      total: 7070.68,
-      meta: 4992.85,
-      google: 2077.83,
-      metaPercent: "70,6%",
-      googlePercent: "29,4%"
+      total: 18796.50,
+      meta: 15387.04,
+      google: 3409.46,
+      metaPercent: "81,9%",
+      googlePercent: "18,1%"
     },
     reach: {
-      total: 126547,
-      meta: 122368,
-      google: 4179,
-      metaPercent: "96,7%",
-      googlePercent: "3,3%"
+      total: 307882,
+      meta: 301029,
+      google: 6853,
+      metaPercent: "97,8%",
+      googlePercent: "2,2%"
     },
     clicks: {
-      total: 1375,
-      meta: 1077,
-      google: 298,
-      metaPercent: "78,3%",
-      googlePercent: "21,7%",
-      ctrGeral: "1,09%",
-      metaCtr: "0,88%",
-      googleCtr: "7,13%"
+      total: 4819,
+      meta: 4285,
+      google: 534,
+      metaPercent: "88,9%",
+      googlePercent: "11,1%",
+      ctrGeral: "1,57%",
+      metaCtr: "1,42%",
+      googleCtr: "7,79%"
     },
     visits: {
-      total: 35,
-      meta: 35,
-      google: 0,
-      metaPercent: "100,0%",
-      googlePercent: "0,0%",
-      loadingRate: "2,55%",
-      metaRate: "3,25%",
-      googleRate: "0,00%"
+      total: 301,
+      meta: 167,
+      google: 134,
+      metaPercent: "55,5%",
+      googlePercent: "44,5%",
+      loadingRate: "6,25%",
+      metaRate: "3,90%",
+      googleRate: "25,09%"
     },
     leads: {
-      total: 35,
-      meta: 35,
-      google: 0,
-      metaPercent: "100,0%",
-      googlePercent: "0,0%",
-      conversionRate: "100,00%",
-      metaConversion: "100,00%",
-      googleConversion: "0,00%",
-      cplGeral: 202.02,
-      metaCpl: 142.65,
-      googleCpl: 0.00
+      total: 133,
+      meta: 129,
+      google: 4,
+      metaPercent: "97,0%",
+      googlePercent: "3,0%",
+      conversionRate: "44,19%",
+      metaConversion: "77,25%",
+      googleConversion: "2,99%",
+      cplGeral: 141.33,
+      metaCpl: 119.28,
+      googleCpl: 852.37
     }
   };
 
@@ -1063,7 +1063,7 @@ export default function App() {
                           <span className="text-lg font-black font-mono text-white tracking-tight cyan-glow">
                             R$ {selectedCampaignFunnel.investment.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                           </span>
-                          <span className="text-[7.5px] text-white/50 block font-medium -mt-0.5">Junho de 2026</span>
+                          <span className="text-[7.5px] text-white/50 block font-medium -mt-0.5">{selectedCampaignFunnel.period}</span>
                         </div>
                       </div>
 
