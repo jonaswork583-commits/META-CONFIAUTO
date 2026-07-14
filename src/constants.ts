@@ -33,7 +33,7 @@ export interface CampaignData {
 
 export const PERFORMANCE_DATA = {
   client: "Confiauto Proteção Veicular",
-  period: "01 a 12 de Julho de 2026",
+  period: "29 de Junho a 12 de Julho de 2026",
   campaigns: [
     {
       id: "lp_original",
@@ -43,9 +43,9 @@ export const PERFORMANCE_DATA = {
       metricLabel: "Leads",
       unitLabel: "CPL",
       week1: {
-        investment: 4997.55,
-        leads: 106,
-        cpl: 47.14
+        investment: 4534.36,
+        leads: 115,
+        cpl: 39.42
       },
       week2: {
         investment: 6696.32,
@@ -61,9 +61,9 @@ export const PERFORMANCE_DATA = {
       metricLabel: "Leads",
       unitLabel: "CPL",
       week1: {
-        investment: 4914.22,
-        leads: 35,
-        cpl: 140.41
+        investment: 7363.56,
+        leads: 94,
+        cpl: 78.34
       },
       week2: {
         investment: 8023.48,
@@ -79,9 +79,9 @@ export const PERFORMANCE_DATA = {
       metricLabel: "Leads",
       unitLabel: "CPL",
       week1: {
-        investment: 635.00,
-        leads: 129,
-        cpl: 4.92
+        investment: 413.41,
+        leads: 87,
+        cpl: 4.75
       },
       week2: {
         investment: 848.58,
@@ -97,9 +97,9 @@ export const PERFORMANCE_DATA = {
       metricLabel: "Visitas no Perfil",
       unitLabel: "CPV",
       week1: {
-        investment: 253.65,
-        visits: 1006,
-        cpv: 0.25
+        investment: 348.64,
+        visits: 1358,
+        cpv: 0.26
       },
       week2: {
         investment: 6.15,
@@ -115,9 +115,9 @@ export const PERFORMANCE_DATA = {
       metricLabel: "Pessoas Alcançadas",
       unitLabel: "CPM",
       week1: {
-        investment: 562.79,
-        reach: 270851,
-        cpm: 2.08
+        investment: 566.97,
+        reach: 266028,
+        cpm: 2.13
       },
       week2: {
         investment: 552.76,
@@ -126,6 +126,133 @@ export const PERFORMANCE_DATA = {
       }
     }
   ] as CampaignData[]
+};
+
+export interface AudienceData {
+  name: string;
+  investment: number;
+  leads: number;
+  cpl: number;
+  desc: string;
+}
+
+export const LP_AUDIENCES_DATA = {
+  week1: [
+    {
+      name: "Público Semelhante aos Leads Concluídos",
+      investment: 1727.20,
+      leads: 42,
+      cpl: 41.12,
+      desc: "Público semelhante aos leads que já converteram"
+    },
+    {
+      name: "Público dos Estáticos",
+      investment: 1062.38,
+      leads: 37,
+      cpl: 28.71,
+      desc: "Anúncios estáticos com foco em benefícios diretos"
+    },
+    {
+      name: "Público Aberto",
+      investment: 1053.95,
+      leads: 26,
+      cpl: 40.54,
+      desc: "Segmentação ampla para expansão de topo de funil"
+    },
+    {
+      name: "Público de Remarketing",
+      investment: 690.83,
+      leads: 10,
+      cpl: 69.08,
+      desc: "Reimpacto em usuários que visitaram mas não converteram"
+    }
+  ] as AudienceData[],
+  week2: [
+    {
+      name: "Estáticos",
+      investment: 1779.31,
+      leads: 35,
+      cpl: 50.83,
+      desc: "Anúncios estáticos com foco em benefícios diretos"
+    },
+    {
+      name: "Público Aberto",
+      investment: 1969.17,
+      leads: 30,
+      cpl: 65.63,
+      desc: "Segmentação ampla para expansão de topo de funil"
+    },
+    {
+      name: "LAL Leads Concluídos",
+      investment: 2245.73,
+      leads: 28,
+      cpl: 80.20,
+      desc: "Público semelhante aos leads que já converteram"
+    },
+    {
+      name: "Remarketing",
+      investment: 702.11,
+      leads: 8,
+      cpl: 87.76,
+      desc: "Reimpacto em usuários que visitaram mas não converteram"
+    }
+  ] as AudienceData[]
+};
+
+export const CRM_AUDIENCES_DATA = {
+  week1: [
+    {
+      name: "Público Aberto",
+      investment: 2226.11,
+      leads: 46,
+      cpl: 48.39,
+      desc: "Foco em audiência ampla e expansão de funil direto"
+    },
+    {
+      name: "Público Semelhante a Leads Concluídos",
+      investment: 2588.11,
+      leads: 31,
+      cpl: 83.49,
+      desc: "Semelhante a perfis de conversão de leads finalizados"
+    },
+    {
+      name: "Público de Remarketing",
+      investment: 2549.31,
+      leads: 17,
+      cpl: 149.96,
+      desc: "Reimpacto na esteira de usuários interessados no CRM"
+    }
+  ] as AudienceData[],
+  week2: [
+    {
+      name: "Público de Estáticos",
+      investment: 1255.55,
+      leads: 4,
+      cpl: 313.88,
+      desc: "Anúncios estáticos com foco em criativos institucionais"
+    },
+    {
+      name: "Público Aberto",
+      investment: 1372.90,
+      leads: 8,
+      cpl: 171.61,
+      desc: "Foco em audiência ampla e expansão de funil direto"
+    },
+    {
+      name: "LAL Leads Concluídos",
+      investment: 2688.80,
+      leads: 12,
+      cpl: 224.06,
+      desc: "Semelhante a perfis de conversão de leads finalizados"
+    },
+    {
+      name: "Remarketing",
+      investment: 2706.23,
+      leads: 11,
+      cpl: 246.02,
+      desc: "Reimpacto na esteira de usuários interessados no CRM"
+    }
+  ] as AudienceData[]
 };
 
 export interface GoogleCampaign {

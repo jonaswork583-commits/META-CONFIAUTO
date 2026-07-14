@@ -28,7 +28,7 @@ import {
   ResponsiveContainer 
 } from 'recharts';
 import { cn } from '@/src/lib/utils';
-import { PERFORMANCE_DATA, CampaignData } from './constants';
+import { PERFORMANCE_DATA, CampaignData, LP_AUDIENCES_DATA, CRM_AUDIENCES_DATA } from './constants';
 
 const SlideWrapper = ({ children, slideKey }: { children: React.ReactNode; slideKey: number }) => (
   <AnimatePresence mode="wait">
@@ -51,6 +51,8 @@ const SlideWrapper = ({ children, slideKey }: { children: React.ReactNode; slide
 export default function App() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [funnelCampaign, setFunnelCampaign] = useState<'lp' | 'crm'>('lp');
+  const [lpAudienceWeek, setLpAudienceWeek] = useState<'week1' | 'week2'>('week2');
+  const [crmAudienceWeek, setCrmAudienceWeek] = useState<'week1' | 'week2'>('week2');
 
   // Hardcoded consolidated funnel from July 1 to 8, kept as is (per user's request to update later)
   const lpFullFunnel = {
@@ -271,14 +273,14 @@ export default function App() {
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="bg-white/[0.015] border border-white/5 p-4 rounded-xl flex flex-col justify-between">
-                    <span className="text-[9px] text-white/40 font-bold uppercase tracking-wider">Semana 1 (01-07 Jul)</span>
+                    <span className="text-[9px] text-white/40 font-bold uppercase tracking-wider">Semana 1 (29 Jun - 05 Jul)</span>
                     <span className="text-lg font-black font-mono mt-2 text-white/80">
                       R$ {totalWeek1Investment.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </span>
                   </div>
 
                   <div className="bg-white/[0.015] border border-white/5 p-4 rounded-xl flex flex-col justify-between">
-                    <span className="text-[9px] text-brand-cyan font-black uppercase tracking-wider">Semana Passada (06-12 Jul)</span>
+                    <span className="text-[9px] text-brand-cyan font-black uppercase tracking-wider">06 a 12 de Julho</span>
                     <span className="text-lg font-black font-mono mt-2 text-brand-cyan cyan-glow">
                       R$ {totalWeek2Investment.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </span>
@@ -296,7 +298,7 @@ export default function App() {
                   <span>Análise de Variação Semanal</span>
                   <div className="flex flex-wrap gap-2">
                     <span className="px-2 py-1 rounded-md border border-brand-cyan/25 bg-brand-cyan/10 text-brand-cyan font-black">
-                      Variação S1 ➔ Semana Passada: +{(((totalWeek2Investment - totalWeek1Investment) / totalWeek1Investment) * 100).toFixed(1)}%
+                      Variação S1 ➔ 06-12 Jul: +{(((totalWeek2Investment - totalWeek1Investment) / totalWeek1Investment) * 100).toFixed(1)}%
                     </span>
                   </div>
                 </div>
@@ -395,13 +397,13 @@ export default function App() {
                     
                     <div className="grid grid-cols-3 gap-2 mt-2 pt-2 border-t border-white/[0.03] items-center">
                       <div>
-                        <span className="text-[8px] text-white/40 uppercase font-mono block">S1 (01-07 Jul)</span>
+                        <span className="text-[8px] text-white/40 uppercase font-mono block">S1 (29 Jun - 05 Jul)</span>
                         <p className="text-xs font-semibold font-mono text-white/70 mt-1">
                           R$ {campaign.week1.investment.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                         </p>
                       </div>
                       <div>
-                        <span className="text-[8px] text-brand-cyan uppercase font-mono block">Semana Passada</span>
+                        <span className="text-[8px] text-brand-cyan uppercase font-mono block">06 - 12 Jul</span>
                         <p className="text-xs font-black font-mono text-brand-cyan mt-1">
                           R$ {campaign.week2.investment.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                         </p>
@@ -429,13 +431,13 @@ export default function App() {
 
                     <div className="grid grid-cols-3 gap-2 mt-2 pt-2 border-t border-white/[0.03] items-center">
                       <div>
-                        <span className="text-[8px] text-white/40 uppercase font-mono block">S1 (01-07 Jul)</span>
+                        <span className="text-[8px] text-white/40 uppercase font-mono block">S1 (29 Jun - 05 Jul)</span>
                         <p className="text-xs font-semibold font-mono text-white/70 mt-1">
                           {w1Val?.toLocaleString('pt-BR')}
                         </p>
                       </div>
                       <div>
-                        <span className="text-[8px] text-brand-cyan uppercase font-mono block">Semana Passada</span>
+                        <span className="text-[8px] text-brand-cyan uppercase font-mono block">06 - 12 Jul</span>
                         <p className="text-xs font-black font-mono text-brand-cyan mt-1">
                           {w2Val?.toLocaleString('pt-BR')}
                         </p>
@@ -463,13 +465,13 @@ export default function App() {
 
                     <div className="grid grid-cols-3 gap-2 mt-2 pt-2 border-t border-white/[0.03] items-center">
                       <div>
-                        <span className="text-[8px] text-white/40 uppercase font-mono block">S1 (01-07 Jul)</span>
+                        <span className="text-[8px] text-white/40 uppercase font-mono block">S1 (29 Jun - 05 Jul)</span>
                         <p className="text-xs font-semibold font-mono text-white/70 mt-1">
                           R$ {w1UnitVal?.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                         </p>
                       </div>
                       <div>
-                        <span className="text-[8px] text-emerald-400 uppercase font-mono block">Semana Passada</span>
+                        <span className="text-[8px] text-emerald-400 uppercase font-mono block">06 - 12 Jul</span>
                         <p className="text-xs font-black font-mono text-emerald-400 mt-1">
                           R$ {w2UnitVal?.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                         </p>
@@ -491,258 +493,283 @@ export default function App() {
           })()}
 
           {/* SLIDE 2: PÚBLICOS DA CAMPANHA DE LP */}
-          {currentSlide === 2 && (
-            <div className="w-full max-w-5xl px-4 flex flex-col justify-center gap-6 animate-fade-in select-none" id="slide-audiences-lp">
-              {/* Header do Slide */}
-              <div className="flex flex-col sm:flex-row justify-between sm:items-end gap-3 border-b border-white/5 pb-4">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="px-2.5 py-0.5 rounded text-[9px] font-black tracking-widest uppercase bg-brand-cyan/10 text-brand-cyan border border-brand-cyan/20">
-                      Análise de Públicos
-                    </span>
-                    <span className="text-white/40 text-[9px] font-mono tracking-wider">
-                      Slide {currentSlide} de {totalSlides - 1} • Campanha LP A
-                    </span>
+          {currentSlide === 2 && (() => {
+            const currentLPData = LP_AUDIENCES_DATA[lpAudienceWeek];
+            const totalLpLeads = lpAudienceWeek === 'week1' ? 115 : 101;
+            const totalLpInvestment = lpAudienceWeek === 'week1' ? 4534.36 : 6696.32;
+            const lpCplMedio = lpAudienceWeek === 'week1' ? 39.42 : 66.30;
+            const lpPeriodLabel = lpAudienceWeek === 'week1' ? "29 de Junho a 05 de Julho" : "06 a 12 de Julho";
+
+            return (
+              <div className="w-full max-w-5xl px-4 flex flex-col justify-center gap-6 animate-fade-in select-none" id="slide-audiences-lp">
+                {/* Header do Slide */}
+                <div className="flex flex-col sm:flex-row justify-between sm:items-end gap-3 border-b border-white/5 pb-4">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="px-2.5 py-0.5 rounded text-[9px] font-black tracking-widest uppercase bg-brand-cyan/10 text-brand-cyan border border-brand-cyan/20">
+                        Análise de Públicos
+                      </span>
+                      <span className="text-white/40 text-[9px] font-mono tracking-wider">
+                        Slide {currentSlide} de {totalSlides - 1} • Campanha LP A
+                      </span>
+                    </div>
+                    <h2 className="text-2xl md:text-3xl font-black italic uppercase tracking-tighter text-white font-display mt-2 sm:mt-2.5">
+                      DESEMPENHO DE PÚBLICOS: LP A
+                    </h2>
+                    <p className="text-white/50 text-[10px] md:text-xs tracking-wide font-medium mt-1">
+                      Análise detalhada por tipo de público para a Campanha de Landing Page ({lpPeriodLabel})
+                    </p>
                   </div>
-                  <h2 className="text-2xl md:text-3xl font-black italic uppercase tracking-tighter text-white font-display mt-2 sm:mt-2.5">
-                    DESEMPENHO DE PÚBLICOS: LP A
-                  </h2>
-                  <p className="text-white/50 text-[10px] md:text-xs tracking-wide font-medium mt-1">
-                    Análise detalhada por tipo de público para a Campanha de Landing Page (06 a 12 de Julho)
-                  </p>
+
+                  <div className="bg-white/[0.015] border border-white/5 rounded-xl px-4 py-2 flex items-center gap-4 shrink-0">
+                    <div className="text-right">
+                      <span className="text-[8px] text-white/30 uppercase tracking-[0.15em] font-extrabold block">Leads LP</span>
+                      <span className="text-base font-black text-brand-cyan cyan-glow font-mono leading-none">{totalLpLeads} Leads</span>
+                    </div>
+                    <div className="h-6 w-[1px] bg-white/15" />
+                    <div className="text-right">
+                      <span className="text-[8px] text-white/30 uppercase tracking-[0.15em] font-extrabold block">CPL Médio</span>
+                      <span className="text-xs font-mono font-bold text-white/70">R$ {lpCplMedio.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                    </div>
+                  </div>
                 </div>
 
-                <div className="bg-white/[0.015] border border-white/5 rounded-xl px-4 py-2 flex items-center gap-4 shrink-0">
-                  <div className="text-right">
-                    <span className="text-[8px] text-white/30 uppercase tracking-[0.15em] font-extrabold block">Leads LP</span>
-                    <span className="text-base font-black text-brand-cyan cyan-glow font-mono leading-none">101 Leads</span>
-                  </div>
-                  <div className="h-6 w-[1px] bg-white/15" />
-                  <div className="text-right">
-                    <span className="text-[8px] text-white/30 uppercase tracking-[0.15em] font-extrabold block">CPL Médio</span>
-                    <span className="text-xs font-mono font-bold text-white/70">R$ 66,30</span>
-                  </div>
+                {/* Seletor de Semanas para LP */}
+                <div className="flex bg-[#0b0e14] border border-white/5 rounded-xl p-1 gap-2 self-start">
+                  <button
+                    onClick={() => setLpAudienceWeek('week1')}
+                    className={cn(
+                      "px-4 py-1.5 rounded-lg text-[10px] font-bold font-mono tracking-wide transition-all uppercase",
+                      lpAudienceWeek === 'week1'
+                        ? "bg-brand-cyan text-[#07090e] font-black italic shadow-md shadow-brand-cyan/10"
+                        : "text-white/40 hover:text-white/80"
+                    )}
+                  >
+                    Semana 1 (29 Jun - 05 Jul)
+                  </button>
+                  <button
+                    onClick={() => setLpAudienceWeek('week2')}
+                    className={cn(
+                      "px-4 py-1.5 rounded-lg text-[10px] font-bold font-mono tracking-wide transition-all uppercase",
+                      lpAudienceWeek === 'week2'
+                        ? "bg-brand-cyan text-[#07090e] font-black italic shadow-md shadow-brand-cyan/10"
+                        : "text-white/40 hover:text-white/80"
+                    )}
+                  >
+                    06 a 12 de Julho
+                  </button>
                 </div>
-              </div>
 
-              {/* Bento Grid de Públicos */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full mt-2">
-                {[
-                  {
-                    name: "Estáticos",
-                    investment: 1779.31,
-                    leads: 35,
-                    cpl: 50.83,
-                    desc: "Anúncios estáticos com foco em benefícios diretos",
-                    color: "border-brand-cyan/20 text-brand-cyan bg-brand-cyan/5"
-                  },
-                  {
-                    name: "Público Aberto",
-                    investment: 1969.17,
-                    leads: 30,
-                    cpl: 65.63,
-                    desc: "Segmentação ampla para expansão de topo de funil",
-                    color: "border-emerald-500/20 text-emerald-400 bg-emerald-500/5"
-                  },
-                  {
-                    name: "LAL Leads Concluídos",
-                    investment: 2245.73,
-                    leads: 28,
-                    cpl: 80.20,
-                    desc: "Público semelhante aos leads que já converteram",
-                    color: "border-purple-500/20 text-purple-400 bg-purple-500/5"
-                  },
-                  {
-                    name: "Remarketing",
-                    investment: 702.11,
-                    leads: 8,
-                    cpl: 87.76,
-                    desc: "Reimpacto em usuários que visitaram mas não converteram",
-                    color: "border-amber-500/20 text-amber-400 bg-amber-500/5"
-                  }
-                ].map((pub, idx) => {
-                  const share = ((pub.investment / 6696.32) * 100).toFixed(1);
-                  return (
-                    <div 
-                      key={idx}
-                      className="bg-white/[0.01] border border-white/5 rounded-2xl p-5 flex flex-col justify-between hover:border-white/10 transition-all duration-300 relative overflow-hidden"
-                    >
-                      <div className="space-y-1">
-                        <span className="text-[8px] text-white/40 uppercase tracking-widest font-mono block">Público {idx + 1}</span>
-                        <h4 className="text-sm font-black text-white tracking-tight uppercase italic">{pub.name}</h4>
-                        <p className="text-[9.5px] text-white/50 leading-snug">{pub.desc}</p>
-                      </div>
+                {/* Bento Grid de Públicos */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full mt-2">
+                  {currentLPData.map((pub, idx) => {
+                    const share = ((pub.investment / totalLpInvestment) * 100).toFixed(1);
+                    return (
+                      <div 
+                        key={idx}
+                        className="bg-white/[0.01] border border-white/5 rounded-2xl p-5 flex flex-col justify-between hover:border-white/10 transition-all duration-300 relative overflow-hidden"
+                      >
+                        <div className="space-y-1">
+                          <span className="text-[8px] text-white/40 uppercase tracking-widest font-mono block">Público {idx + 1}</span>
+                          <h4 className="text-sm font-black text-white tracking-tight uppercase italic">{pub.name}</h4>
+                          <p className="text-[9.5px] text-white/50 leading-snug">{pub.desc}</p>
+                        </div>
 
-                      <div className="mt-5 space-y-3">
-                        {/* Investimento */}
-                        <div className="flex justify-between items-end border-b border-white/[0.03] pb-1.5">
-                          <span className="text-[8px] text-white/40 uppercase font-mono">Investimento</span>
-                          <div className="text-right">
-                            <span className="text-xs font-bold font-mono text-white">R$ {pub.investment.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
-                            <span className="text-[8px] text-white/30 font-mono block">Share: {share}%</span>
+                        <div className="mt-5 space-y-3">
+                          {/* Investimento */}
+                          <div className="flex justify-between items-end border-b border-white/[0.03] pb-1.5">
+                            <span className="text-[8px] text-white/40 uppercase font-mono">Investimento</span>
+                            <div className="text-right">
+                              <span className="text-xs font-bold font-mono text-white">R$ {pub.investment.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
+                              <span className="text-[8px] text-white/30 font-mono block">Share: {share}%</span>
+                            </div>
+                          </div>
+
+                          {/* Leads */}
+                          <div className="flex justify-between items-end border-b border-white/[0.03] pb-1.5">
+                            <span className="text-[8px] text-white/40 uppercase font-mono">Leads</span>
+                            <span className="text-xs font-bold font-mono text-white">{pub.leads}</span>
+                          </div>
+
+                          {/* CPL */}
+                          <div className="flex justify-between items-center">
+                            <span className="text-[8px] text-white/40 uppercase font-mono">CPL</span>
+                            <span className="px-2 py-0.5 rounded text-[10px] font-black font-mono bg-brand-cyan/15 text-brand-cyan border border-brand-cyan/25">
+                              R$ {pub.cpl.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                            </span>
                           </div>
                         </div>
 
-                        {/* Leads */}
-                        <div className="flex justify-between items-end border-b border-white/[0.03] pb-1.5">
-                          <span className="text-[8px] text-white/40 uppercase font-mono">Leads</span>
-                          <span className="text-xs font-bold font-mono text-white">{pub.leads}</span>
-                        </div>
-
-                        {/* CPL */}
-                        <div className="flex justify-between items-center">
-                          <span className="text-[8px] text-white/40 uppercase font-mono">CPL</span>
-                          <span className="px-2 py-0.5 rounded text-[10px] font-black font-mono bg-brand-cyan/15 text-brand-cyan border border-brand-cyan/25">
-                            R$ {pub.cpl.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
-                          </span>
+                        {/* Share Progress Bar */}
+                        <div className="w-full bg-white/5 h-1 rounded-full mt-4 overflow-hidden">
+                          <div className="bg-brand-cyan h-full rounded-full" style={{ width: `${share}%` }} />
                         </div>
                       </div>
+                    );
+                  })}
+                </div>
 
-                      {/* Share Progress Bar */}
-                      <div className="w-full bg-white/5 h-1 rounded-full mt-4 overflow-hidden">
-                        <div className="bg-brand-cyan h-full rounded-full" style={{ width: `${share}%` }} />
-                      </div>
-                    </div>
-                  );
-                })}
+                {/* Conclusão/Análise Box */}
+                <div className="bg-white/[0.015] border border-white/5 p-3.5 rounded-xl flex items-start gap-3 mt-1">
+                  <TrendingUp size={16} className="text-brand-cyan shrink-0 mt-0.5" />
+                  <p className="text-[10px] leading-relaxed text-white/60">
+                    <strong className="text-brand-cyan font-bold uppercase">Direcional Estratégico:</strong>{" "}
+                    {lpAudienceWeek === 'week1' ? (
+                      <>
+                        O público de <strong className="text-white">Estáticos</strong> liderou a eficiência com um excelente CPL de <strong className="text-brand-cyan font-mono">R$ 28,71</strong> (gerando 37 leads). O público <strong className="text-white">Aberto</strong> também operou com extrema eficiência (CPL de <strong className="text-brand-cyan font-mono">R$ 40,54</strong>). O público de <strong className="text-white">Semelhante aos Leads Concluídos (LAL)</strong> absorveu a maior fatia de verba (R$ 1.727,20) e gerou o maior volume absoluto de conversões (42 leads).
+                      </>
+                    ) : (
+                      <>
+                        O público de <strong className="text-white">Estáticos</strong> liderou a eficiência com um excelente CPL de <strong className="text-brand-cyan font-mono">R$ 50,83</strong> e gerou o maior volume de leads absolutos (35 leads). O público <strong className="text-white">Aberto</strong> também apresentou excelente custo-benefício (CPL de <strong className="text-brand-cyan font-mono">R$ 65,63</strong>), mostrando que a campanha possui forte tração para captação de novas audiências frias.
+                      </>
+                    )}
+                  </p>
+                </div>
               </div>
-
-              {/* Conclusão/Análise Box */}
-              <div className="bg-white/[0.015] border border-white/5 p-3.5 rounded-xl flex items-start gap-3 mt-1">
-                <TrendingUp size={16} className="text-brand-cyan shrink-0 mt-0.5" />
-                <p className="text-[10px] leading-relaxed text-white/60">
-                  <strong className="text-brand-cyan font-bold uppercase">Direcional Estratégico:</strong> O público de <strong className="text-white">Estáticos</strong> liderou a eficiência com um excelente CPL de <strong className="text-brand-cyan font-mono">R$ 50,83</strong> e gerou o maior volume de leads absolutos (35 leads). O público <strong className="text-white">Aberto</strong> também apresentou excelente custo-benefício (CPL de <strong className="text-brand-cyan font-mono">R$ 65,63</strong>), mostrando que a campanha possui forte tração para captação de novas audiências frias.
-                </p>
-              </div>
-            </div>
-          )}
+            );
+          })()}
 
           {/* SLIDE 4: PÚBLICOS DA CAMPANHA DE CRM */}
-          {currentSlide === 4 && (
-            <div className="w-full max-w-5xl px-4 flex flex-col justify-center gap-6 animate-fade-in select-none" id="slide-audiences-crm">
-              {/* Header do Slide */}
-              <div className="flex flex-col sm:flex-row justify-between sm:items-end gap-3 border-b border-white/5 pb-4">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="px-2.5 py-0.5 rounded text-[9px] font-black tracking-widest uppercase bg-[#34d399]/10 text-[#34d399] border border-[#34d399]/20">
-                      Análise de Públicos
-                    </span>
-                    <span className="text-white/40 text-[9px] font-mono tracking-wider">
-                      Slide {currentSlide} de {totalSlides - 1} • Campanha CRM
-                    </span>
+          {currentSlide === 4 && (() => {
+            const currentCRMData = CRM_AUDIENCES_DATA[crmAudienceWeek];
+            const totalCrmLeads = crmAudienceWeek === 'week1' ? 94 : 35;
+            const totalCrmInvestment = crmAudienceWeek === 'week1' ? 7363.56 : 8023.48;
+            const crmCplMedio = crmAudienceWeek === 'week1' ? 78.34 : 229.32;
+            const crmPeriodLabel = crmAudienceWeek === 'week1' ? "29 de Junho a 05 de Julho" : "06 a 12 de Julho";
+
+            return (
+              <div className="w-full max-w-5xl px-4 flex flex-col justify-center gap-6 animate-fade-in select-none" id="slide-audiences-crm">
+                {/* Header do Slide */}
+                <div className="flex flex-col sm:flex-row justify-between sm:items-end gap-3 border-b border-white/5 pb-4">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="px-2.5 py-0.5 rounded text-[9px] font-black tracking-widest uppercase bg-[#34d399]/10 text-[#34d399] border border-[#34d399]/20">
+                        Análise de Públicos
+                      </span>
+                      <span className="text-white/40 text-[9px] font-mono tracking-wider">
+                        Slide {currentSlide} de {totalSlides - 1} • Campanha CRM
+                      </span>
+                    </div>
+                    <h2 className="text-2xl md:text-3xl font-black italic uppercase tracking-tighter text-white font-display mt-2 sm:mt-2.5">
+                      DESEMPENHO DE PÚBLICOS: CRM
+                    </h2>
+                    <p className="text-white/50 text-[10px] md:text-xs tracking-wide font-medium mt-1">
+                      Análise detalhada por tipo de público para a Campanha com captação direta de CRM ({crmPeriodLabel})
+                    </p>
                   </div>
-                  <h2 className="text-2xl md:text-3xl font-black italic uppercase tracking-tighter text-white font-display mt-2 sm:mt-2.5">
-                    DESEMPENHO DE PÚBLICOS: CRM
-                  </h2>
-                  <p className="text-white/50 text-[10px] md:text-xs tracking-wide font-medium mt-1">
-                    Análise detalhada por tipo de público para a Campanha com captação direta de CRM (06 a 12 de Julho)
-                  </p>
+
+                  <div className="bg-white/[0.015] border border-white/5 rounded-xl px-4 py-2 flex items-center gap-4 shrink-0">
+                    <div className="text-right">
+                      <span className="text-[8px] text-white/30 uppercase tracking-[0.15em] font-extrabold block">Leads CRM</span>
+                      <span className="text-base font-black text-[#34d399] cyan-glow font-mono leading-none">{totalCrmLeads} Leads</span>
+                    </div>
+                    <div className="h-6 w-[1px] bg-white/15" />
+                    <div className="text-right">
+                      <span className="text-[8px] text-white/30 uppercase tracking-[0.15em] font-extrabold block">CPL Médio</span>
+                      <span className="text-xs font-mono font-bold text-white/70">R$ {crmCplMedio.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                    </div>
+                  </div>
                 </div>
 
-                <div className="bg-white/[0.015] border border-white/5 rounded-xl px-4 py-2 flex items-center gap-4 shrink-0">
-                  <div className="text-right">
-                    <span className="text-[8px] text-white/30 uppercase tracking-[0.15em] font-extrabold block">Leads CRM</span>
-                    <span className="text-base font-black text-[#34d399] cyan-glow font-mono leading-none">35 Leads</span>
-                  </div>
-                  <div className="h-6 w-[1px] bg-white/15" />
-                  <div className="text-right">
-                    <span className="text-[8px] text-white/30 uppercase tracking-[0.15em] font-extrabold block">CPL Médio</span>
-                    <span className="text-xs font-mono font-bold text-white/70">R$ 229,32</span>
-                  </div>
+                {/* Seletor de Semanas para CRM */}
+                <div className="flex bg-[#0b0e14] border border-white/5 rounded-xl p-1 gap-2 self-start">
+                  <button
+                    onClick={() => setCrmAudienceWeek('week1')}
+                    className={cn(
+                      "px-4 py-1.5 rounded-lg text-[10px] font-bold font-mono tracking-wide transition-all uppercase",
+                      crmAudienceWeek === 'week1'
+                        ? "bg-[#34d399] text-[#07090e] font-black italic shadow-md shadow-emerald-500/10"
+                        : "text-white/40 hover:text-white/80"
+                    )}
+                  >
+                    Semana 1 (29 Jun - 05 Jul)
+                  </button>
+                  <button
+                    onClick={() => setCrmAudienceWeek('week2')}
+                    className={cn(
+                      "px-4 py-1.5 rounded-lg text-[10px] font-bold font-mono tracking-wide transition-all uppercase",
+                      crmAudienceWeek === 'week2'
+                        ? "bg-[#34d399] text-[#07090e] font-black italic shadow-md shadow-emerald-500/10"
+                        : "text-white/40 hover:text-white/80"
+                    )}
+                  >
+                    06 a 12 de Julho
+                  </button>
                 </div>
-              </div>
 
-              {/* Bento Grid de Públicos */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full mt-2">
-                {[
-                  {
-                    name: "Público de Estáticos",
-                    investment: 1255.55,
-                    leads: 4,
-                    cpl: 313.88,
-                    desc: "Anúncios estáticos com foco em criativos institucionais",
-                    color: "border-[#34d399]/20 text-[#34d399] bg-[#34d399]/5"
-                  },
-                  {
-                    name: "Público Aberto",
-                    investment: 1372.90,
-                    leads: 8,
-                    cpl: 171.61,
-                    desc: "Foco em audiência ampla e expansão de funil direto",
-                    color: "border-blue-500/20 text-blue-400 bg-blue-500/5"
-                  },
-                  {
-                    name: "LAL Leads Concluídos",
-                    investment: 2688.80,
-                    leads: 12,
-                    cpl: 224.06,
-                    desc: "Semelhante a perfis de conversão de leads finalizados",
-                    color: "border-purple-500/20 text-purple-400 bg-purple-500/5"
-                  },
-                  {
-                    name: "Remarketing",
-                    investment: 2706.23,
-                    leads: 11,
-                    cpl: 246.02,
-                    desc: "Reimpacto na esteira de usuários interessados no CRM",
-                    color: "border-amber-500/20 text-amber-400 bg-amber-500/5"
-                  }
-                ].map((pub, idx) => {
-                  const share = ((pub.investment / 8023.48) * 100).toFixed(1);
-                  return (
-                    <div 
-                      key={idx}
-                      className="bg-white/[0.01] border border-white/5 rounded-2xl p-5 flex flex-col justify-between hover:border-white/10 transition-all duration-300 relative overflow-hidden"
-                    >
-                      <div className="space-y-1">
-                        <span className="text-[8px] text-white/40 uppercase tracking-widest font-mono block">Público {idx + 1}</span>
-                        <h4 className="text-sm font-black text-white tracking-tight uppercase italic">{pub.name}</h4>
-                        <p className="text-[9.5px] text-white/50 leading-snug">{pub.desc}</p>
-                      </div>
+                {/* Bento Grid de Públicos (centers 3 cards in week 1 dynamically!) */}
+                <div className={cn(
+                  "grid gap-4 w-full mt-2",
+                  currentCRMData.length === 3 
+                    ? "grid-cols-1 sm:grid-cols-3 lg:grid-cols-3" 
+                    : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
+                )}>
+                  {currentCRMData.map((pub, idx) => {
+                    const share = ((pub.investment / totalCrmInvestment) * 100).toFixed(1);
+                    return (
+                      <div 
+                        key={idx}
+                        className="bg-white/[0.01] border border-white/5 rounded-2xl p-5 flex flex-col justify-between hover:border-white/10 transition-all duration-300 relative overflow-hidden"
+                      >
+                        <div className="space-y-1">
+                          <span className="text-[8px] text-white/40 uppercase tracking-widest font-mono block">Público {idx + 1}</span>
+                          <h4 className="text-sm font-black text-white tracking-tight uppercase italic">{pub.name}</h4>
+                          <p className="text-[9.5px] text-white/50 leading-snug">{pub.desc}</p>
+                        </div>
 
-                      <div className="mt-5 space-y-3">
-                        {/* Investimento */}
-                        <div className="flex justify-between items-end border-b border-white/[0.03] pb-1.5">
-                          <span className="text-[8px] text-white/40 uppercase font-mono">Investimento</span>
-                          <div className="text-right">
-                            <span className="text-xs font-bold font-mono text-white">R$ {pub.investment.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
-                            <span className="text-[8px] text-white/30 font-mono block">Share: {share}%</span>
+                        <div className="mt-5 space-y-3">
+                          {/* Investimento */}
+                          <div className="flex justify-between items-end border-b border-white/[0.03] pb-1.5">
+                            <span className="text-[8px] text-white/40 uppercase font-mono">Investimento</span>
+                            <div className="text-right">
+                              <span className="text-xs font-bold font-mono text-white">R$ {pub.investment.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
+                              <span className="text-[8px] text-white/30 font-mono block">Share: {share}%</span>
+                            </div>
+                          </div>
+
+                          {/* Leads */}
+                          <div className="flex justify-between items-end border-b border-white/[0.03] pb-1.5">
+                            <span className="text-[8px] text-white/40 uppercase font-mono">Leads</span>
+                            <span className="text-xs font-bold font-mono text-white">{pub.leads}</span>
+                          </div>
+
+                          {/* CPL */}
+                          <div className="flex justify-between items-center">
+                            <span className="text-[8px] text-white/40 uppercase font-mono">CPL</span>
+                            <span className="px-2 py-0.5 rounded text-[10px] font-black font-mono bg-emerald-500/15 text-[#34d399] border border-emerald-500/25">
+                              R$ {pub.cpl.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                            </span>
                           </div>
                         </div>
 
-                        {/* Leads */}
-                        <div className="flex justify-between items-end border-b border-white/[0.03] pb-1.5">
-                          <span className="text-[8px] text-white/40 uppercase font-mono">Leads</span>
-                          <span className="text-xs font-bold font-mono text-white">{pub.leads}</span>
-                        </div>
-
-                        {/* CPL */}
-                        <div className="flex justify-between items-center">
-                          <span className="text-[8px] text-white/40 uppercase font-mono">CPL</span>
-                          <span className="px-2 py-0.5 rounded text-[10px] font-black font-mono bg-emerald-500/15 text-[#34d399] border border-emerald-500/25">
-                            R$ {pub.cpl.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
-                          </span>
+                        {/* Share Progress Bar */}
+                        <div className="w-full bg-white/5 h-1 rounded-full mt-4 overflow-hidden">
+                          <div className="bg-[#34d399] h-full rounded-full" style={{ width: `${share}%` }} />
                         </div>
                       </div>
+                    );
+                  })}
+                </div>
 
-                      {/* Share Progress Bar */}
-                      <div className="w-full bg-white/5 h-1 rounded-full mt-4 overflow-hidden">
-                        <div className="bg-[#34d399] h-full rounded-full" style={{ width: `${share}%` }} />
-                      </div>
-                    </div>
-                  );
-                })}
+                {/* Conclusão/Análise Box */}
+                <div className="bg-white/[0.015] border border-white/5 p-3.5 rounded-xl flex items-start gap-3 mt-1">
+                  <TrendingUp size={16} className="text-[#34d399] shrink-0 mt-0.5" />
+                  <p className="text-[10px] leading-relaxed text-white/60">
+                    <strong className="text-[#34d399] font-bold uppercase">Direcional Estratégico:</strong>{" "}
+                    {crmAudienceWeek === 'week1' ? (
+                      <>
+                        O público <strong className="text-white">Aberto</strong> demonstrou excelente eficiência na esteira com CPL de <strong className="text-[#34d399] font-mono">R$ 48,39</strong> (gerando 46 leads). O público <strong className="text-white">LAL Leads Concluídos</strong> absorveu a maior verba (R$ 2.588,11) com custo por lead muito estável de <strong className="text-[#34d399] font-mono">R$ 83,49</strong> (gerando 31 leads), seguido pelo Remarketing.
+                      </>
+                    ) : (
+                      <>
+                        O público <strong className="text-white">Aberto</strong> demonstrou excelente eficiência na esteira com CPL de <strong className="text-[#34d399] font-mono">R$ 171,61</strong>. Os públicos de <strong className="text-white">LAL Leads Concluídos</strong> e <strong className="text-white">Remarketing</strong> acumularam a maior fatia de verba (juntos representam ~67,2% do investimento) com custos lineares de R$ 224,06 e R$ 246,02. O público de <strong className="text-white">Estáticos</strong> requer otimização urgente de criativos, operando a R$ 313,88 por lead.
+                      </>
+                    )}
+                  </p>
+                </div>
               </div>
-
-              {/* Conclusão/Análise Box */}
-              <div className="bg-white/[0.015] border border-white/5 p-3.5 rounded-xl flex items-start gap-3 mt-1">
-                <TrendingUp size={16} className="text-[#34d399] shrink-0 mt-0.5" />
-                <p className="text-[10px] leading-relaxed text-white/60">
-                  <strong className="text-[#34d399] font-bold uppercase">Direcional Estratégico:</strong> O público <strong className="text-white">Aberto</strong> demonstrou excelente eficiência na esteira com CPL de <strong className="text-[#34d399] font-mono">R$ 171,61</strong>. Os públicos de <strong className="text-white">LAL Leads Concluídos</strong> e <strong className="text-white">Remarketing</strong> acumularam a maior fatia de verba (juntos representam ~67,2% do investimento) com custos lineares de R$ 224,06 e R$ 246,02. O público de <strong className="text-white">Estáticos</strong> requer otimização urgente de criativos, operando a R$ 313,88 por lead.
-                </p>
-              </div>
-            </div>
-          )}
+            );
+          })()}
 
           {/* SLIDE 5: GRÁFICO DE CRESCIMENTO & TENDÊNCIA DE LEADS */}
           {currentSlide === 5 && (
@@ -774,7 +801,7 @@ export default function App() {
                   <div className="h-6 w-[1px] bg-white/10" />
                   <div className="text-right">
                     <span className="text-[8px] text-white/30 uppercase tracking-[0.15em] font-extrabold block">Estabilidade</span>
-                    <span className="text-xs font-mono font-bold text-white/70">~96,4% de retenção</span>
+                    <span className="text-xs font-mono font-bold text-white/70">~95% de retenção (LP)</span>
                   </div>
                 </div>
               </div>
@@ -795,8 +822,8 @@ export default function App() {
                     <ResponsiveContainer width="100%" height="100%">
                       <ComposedChart
                         data={[
-                          { name: 'Semana 1 (01-07 Jul)', lp: 106, crm: 35, total: 141 },
-                          { name: 'Semana Passada (06-12 Jul)', lp: 101, crm: 35, total: 136 }
+                          { name: 'S1 (29 Jun - 05 Jul)', lp: 115, crm: 94, total: 209 },
+                          { name: '06 - 12 Jul', lp: 101, crm: 35, total: 136 }
                         ]}
                         margin={{ top: 15, right: 15, bottom: 0, left: -20 }}
                       >
@@ -809,11 +836,11 @@ export default function App() {
                            fontWeight="bold"
                         />
                         <YAxis 
-                          stroke="rgba(255,255,255,0.3)" 
-                          fontSize={9} 
-                          fontFamily="monospace"
-                          domain={[0, 160]}
-                          label={{ value: 'Volume de Leads', angle: -90, position: 'insideLeft', fill: 'rgba(255,255,255,0.4)', fontSize: 9, offset: 5 }}
+                           stroke="rgba(255,255,255,0.3)" 
+                           fontSize={9} 
+                           fontFamily="monospace"
+                           domain={[0, 240]}
+                           label={{ value: 'Volume de Leads', angle: -90, position: 'insideLeft', fill: 'rgba(255,255,255,0.4)', fontSize: 9, offset: 5 }}
                         />
                         <Tooltip 
                           contentStyle={{ 
@@ -878,31 +905,31 @@ export default function App() {
                       {/* Semana 1 Box */}
                       <div className="bg-white/[0.015] p-3 rounded-xl border border-white/[0.03] flex items-center justify-between">
                         <div>
-                          <span className="text-[8px] text-white/40 uppercase font-mono block">Semana 1 (01-07 Jul)</span>
-                          <span className="text-lg font-black font-mono text-white mt-1">141 Leads</span>
+                          <span className="text-[8px] text-white/40 uppercase font-mono block">Semana 1 (29 Jun - 05 Jul)</span>
+                          <span className="text-lg font-black font-mono text-white mt-1">209 Leads</span>
                         </div>
                         <div className="text-right text-[8.5px] font-mono text-white/60">
-                          <p>LP: <strong className="text-brand-cyan">106</strong> (75%)</p>
-                          <p>CRM: <strong className="text-emerald-400">35</strong> (25%)</p>
+                          <p>LP: <strong className="text-brand-cyan">115</strong> (55%)</p>
+                          <p>CRM: <strong className="text-emerald-400">94</strong> (45%)</p>
                         </div>
                       </div>
 
                       {/* Semana Passada Box */}
                       <div className="bg-white/[0.015] p-3 rounded-xl border border-white/[0.03] flex items-center justify-between">
                         <div>
-                          <span className="text-[8px] text-brand-cyan uppercase font-mono block">Semana Passada (06-12 Jul)</span>
+                          <span className="text-[8px] text-brand-cyan uppercase font-mono block">06 a 12 de Julho</span>
                           <span className="text-lg font-black font-mono text-brand-cyan mt-1">136 Leads</span>
                         </div>
                         <div className="text-right text-[8.5px] font-mono text-white/60">
                           <p>LP: <strong className="text-brand-cyan">101</strong> (74%)</p>
-                          <p>CRM: <strong className="text-emerald-400">35</strong> (26%)</p>
+                          <p>CRM: <strong className="text-[#34d399]">35</strong> (26%)</p>
                         </div>
                       </div>
 
                       <div className="bg-white/[0.01] border border-white/[0.03] p-3 rounded-lg flex gap-2 items-start">
                         <TrendingUp size={14} className="text-brand-cyan shrink-0 mt-0.5" />
                         <p className="text-[9.5px] leading-snug text-white/60">
-                          <strong className="text-brand-cyan font-semibold">Consistência Operacional:</strong> A geração de leads manteve extrema consistência, com apenas uma variação sutil de 141 para 136 leads totais (-3,5%). O CRM se manteve com <strong className="text-white font-mono">35 leads exatos</strong> em ambas as semanas, enquanto a LP permaneceu operando acima da barreira de <strong className="text-white font-mono">100 leads semanais</strong>, assegurando fluxo contínuo de novas oportunidades para o time comercial.
+                          <strong className="text-brand-cyan font-semibold">Consistência e Volume:</strong> O volume consolidado de leads atingiu <strong className="text-white font-mono">209 leads</strong> na Semana 1 (29 Jun - 05 Jul), impulsionado pela excelente performance do CRM, e totalizou <strong className="text-white font-mono">136 leads</strong> de 06 a 12 de Julho. A variação decorreu principalmente da oscilação do CPL no CRM, enquanto a LP manteve estabilidade com 115 e 101 leads gerados, respectivamente.
                         </p>
                       </div>
                     </div>
