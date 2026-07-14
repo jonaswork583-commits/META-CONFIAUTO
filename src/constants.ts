@@ -29,15 +29,11 @@ export interface CampaignData {
   unitLabel: string; // "CPL", "CPV", "CPM"
   week1: MetricSet;
   week2: MetricSet;
-  week3: MetricSet;
-  week4?: MetricSet;
-  week5?: MetricSet;
-  week1Bases?: BaseDetail[]; // Detailed bases specifically for Contratação in Semana 2
 }
 
 export const PERFORMANCE_DATA = {
   client: "Confiauto Proteção Veicular",
-  period: "01 de Junho a 07 de Julho de 2026",
+  period: "01 a 12 de Julho de 2026",
   campaigns: [
     {
       id: "lp_original",
@@ -47,29 +43,14 @@ export const PERFORMANCE_DATA = {
       metricLabel: "Leads",
       unitLabel: "CPL",
       week1: {
-        investment: 15713.00,
-        leads: 160,
-        cpl: 98.21
-      },
-      week2: {
-        investment: 19767.70,
-        leads: 192,
-        cpl: 102.96
-      },
-      week3: {
-        investment: 13442.86,
-        leads: 148,
-        cpl: 90.83
-      },
-      week4: {
-        investment: 3803.28,
-        leads: 96,
-        cpl: 39.61
-      },
-      week5: {
         investment: 4997.55,
         leads: 106,
         cpl: 47.14
+      },
+      week2: {
+        investment: 6696.32,
+        leads: 101,
+        cpl: 66.30
       }
     },
     {
@@ -80,29 +61,14 @@ export const PERFORMANCE_DATA = {
       metricLabel: "Leads",
       unitLabel: "CPL",
       week1: {
-        investment: 5764.96,
-        leads: 23,
-        cpl: 250.6
-      },
-      week2: {
-        investment: 6867.68,
-        leads: 81,
-        cpl: 82.53
-      },
-      week3: {
-        investment: 13839.89,
-        leads: 269,
-        cpl: 51.45
-      },
-      week4: {
-        investment: 12171.34,
-        leads: 342,
-        cpl: 35.58
-      },
-      week5: {
         investment: 4914.22,
         leads: 35,
         cpl: 140.41
+      },
+      week2: {
+        investment: 8023.48,
+        leads: 35,
+        cpl: 229.32
       }
     },
     {
@@ -113,50 +79,15 @@ export const PERFORMANCE_DATA = {
       metricLabel: "Leads",
       unitLabel: "CPL",
       week1: {
-        investment: 1662.03,
-        leads: 314,
-        cpl: 5.29
-      },
-      week2: {
-        investment: 481.41,
-        leads: 126,
-        cpl: 3.82
-      },
-      week3: {
-        investment: 307.68,
-        leads: 80,
-        cpl: 3.85
-      },
-      week4: {
-        investment: 264.61,
-        leads: 78,
-        cpl: 3.39
-      },
-      week5: {
         investment: 635.00,
         leads: 129,
         cpl: 4.92
       },
-      week1Bases: [
-        {
-          name: "Base Cachoeiro",
-          investment: 73.26,
-          leads: 11,
-          cpl: 6.66
-        },
-        {
-          name: "Base São Geraldo",
-          investment: 75.20,
-          leads: 57,
-          cpl: 1.32
-        },
-        {
-          name: "Base Santa Maria",
-          investment: 146.10,
-          leads: 8,
-          cpl: 18.26
-        }
-      ]
+      week2: {
+        investment: 848.58,
+        leads: 148,
+        cpl: 5.73
+      }
     },
     {
       id: "trafego_perfil",
@@ -166,28 +97,13 @@ export const PERFORMANCE_DATA = {
       metricLabel: "Visitas no Perfil",
       unitLabel: "CPV",
       week1: {
-        investment: 678.55,
-        visits: 1871,
-        cpv: 0.36
-      },
-      week2: {
-        investment: 693.85,
-        visits: 561,
-        cpv: 1.24
-      },
-      week3: {
-        investment: 724.06,
-        visits: 1980,
-        cpv: 0.37
-      },
-      week4: {
-        investment: 353.07,
-        visits: 1266,
-        cpv: 0.28
-      },
-      week5: {
         investment: 253.65,
         visits: 1006,
+        cpv: 0.25
+      },
+      week2: {
+        investment: 6.15,
+        visits: 25,
         cpv: 0.25
       }
     },
@@ -199,29 +115,14 @@ export const PERFORMANCE_DATA = {
       metricLabel: "Pessoas Alcançadas",
       unitLabel: "CPM",
       week1: {
-        investment: 1128.8,
-        reach: 491540,
-        cpm: 2.3
-      },
-      week2: {
-        investment: 1073.39,
-        reach: 180184,
-        cpm: 5.96
-      },
-      week3: {
-        investment: 1149.26,
-        reach: 210140,
-        cpm: 5.47
-      },
-      week4: {
-        investment: 557.69,
-        reach: 234741,
-        cpm: 2.31
-      },
-      week5: {
         investment: 562.79,
         reach: 270851,
         cpm: 2.08
+      },
+      week2: {
+        investment: 552.76,
+        reach: 271435,
+        cpm: 2.04
       }
     }
   ] as CampaignData[]
@@ -302,4 +203,3 @@ export const GOOGLE_ADS_DATA: GoogleCampaign[] = [
     status: "testing"
   }
 ];
-
